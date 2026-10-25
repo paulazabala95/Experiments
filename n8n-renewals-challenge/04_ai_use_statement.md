@@ -4,11 +4,11 @@
 
 The brief invited any tools, including AI. Here is exactly what I did, what AI did, and how I checked it.
 
-**Time:** about **[X] hours** of my own time over two sessions. Part 3 builds on an n8n workflow I created on 13 October, before this exercise.
+**Time:** about **4 hours** of my own time over two sessions. Part 3 builds on an n8n workflow I created on 13 October, before this exercise.
 
 ## What came from me
 
-These are the decisions the work is built on. I specified them, and corrected the AI where its first version didn't match how I run renewals.
+These are the decisions the work is built on. I specified them, and corrected the AI where its first version didn't match how I run renewals. I also used it as a sparring partner to check whether I was missing an option.
 
 | Area | My decision |
 |---|---|
@@ -17,7 +17,7 @@ These are the decisions the work is built on. I specified them, and corrected th
 | **Auto-renewals** | Their own statuses: blockers, at risk before or after the notice deadline. Over-usage opens an upsell opportunity, never an automatic charge. Under-usage flags the CSM. |
 | **Product lines and churn** | Each line is renewal, upsell, downgrade or churn. Original ARR is kept next to new ARR, and Salesforce recalculates everything else. Churn sits on the opportunity: **regrettable** means revenue lost for good; **non-regrettable** means revenue kept elsewhere at n8n (e.g. self-hosted → Cloud). Upsell is its own opportunity. |
 | **Commercial rules** | 5% uplift in year 1, announced in one bulk notice each January. The price is locked from year 2 only for upfront multi-year deals. The Renewals Manager owns the numbers. A new renewal opportunity is created when the current one closes won. |
-| **Brightloop** | Two structures instead of a discount: downsize + multi-year lock, or keep the plan with a small buffer. Net 60 only with upfront payment; top SLA tier. (The ramp version came from testing the options with AI.) |
+| **Brightloop** | Two structures instead of a discount: downsize + multi-year lock, or keep the plan with a small buffer. Net 60 only with upfront payment; top SLA tier. |
 | **Automation** | **The workflow never prices; everything mirrors the CRM/CPQ.** Extend my existing workflow rather than build a duplicate. A human approves every customer-facing email. |
 
 ## What AI (Claude) did
