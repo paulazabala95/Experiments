@@ -28,7 +28,17 @@
 
 ## Numbers to have to hand
 
-- Book €375k · Oct €69k / Nov €184k / Dec €122k
-- On time €248k · Late €101k · Lost €26k · GRR 93% · NRR 96%
-- Brightloop: list €37.8k · ask €27k · target €36k × 2 years · floor €33,264 × 2 years · ramp €32.4k/€37.8k · Tier 2 about €28.8k (assumed)
-- Notice dates: Halden 8 Oct (passed) · Pixelforge 3 Oct (passed) · Lumen 22 Oct · Quanta ~19 Nov
+- **Book:** €375k · Oct €69k / Nov €184k / Dec €122k · today = Tue 20 Oct 2026
+- **Forecast (status × countdown):** weighted today €138k (on time €74k, late but still in Q4 €64k) → €256k by 30 Oct if this week's actions land
+- **Lost:** regrettable −€23k (Halden −€15k, Quanta −€8k) + price concession −€2.7k (Brightloop) · GRR 93% · NRR 96.5%
+- **Brightloop:**
+  - list €37,800 (year 1) / €39,690 (year 2) · ask €27,000 (28.6% off list)
+  - **ramp:** €34,020 + €37,706 = €71,726 → 7.4% vs list, Finance; below today's €72,000 over 2 years
+  - **downsize + lock:** €28,800 × 2 = €57,600 (2.4%) or × 3 = €86,400 (4.8%), upfront, net 60 (Finance)
+  - **floor on the current plan:** 12% total = a 2-year total of at least €68,191 · buffer (ramp only): up to 10% at the year-2 anniversary, VP pre-approval
+- **Why 7.4% and not 15%:** discounts on different years are averaged, not added. 10% of €37,800 + 5% of €39,690 = €5,764 out of €77,490.
+- **Notice dates:** Halden 8 Oct (from the brief) · Pixelforge 3 Oct, Lumen 22 Oct, Quanta ~19 Nov (an assumed 30 days)
+
+## Time spent
+
+The brief says about 2 hours. Be honest in the debrief: say how long you spent, and that AI let you go further than 2 hours of manual work would. Say you prioritised Parts 1 and 2 and kept the automation small.

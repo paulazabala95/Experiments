@@ -1,6 +1,6 @@
 # How the renewal process lives in the CRM (Salesforce)
 
-The forecast, statuses, product lines, churn and alerts in Part 1 are CRM fields, formulas and Flows. They are not a spreadsheet, and not a separate tool. `renewal_tracker.xlsx` is a mock-up of this design. The only renewal step automated outside the CRM is quote and order-form generation (Part 3).
+The forecast, statuses, product lines, churn and alerts in Part 1 are CRM fields, formulas and Flows. They are not a spreadsheet, and not a separate tool. `renewal_tracker.xlsx` is a mock-up of this design. Outside the CRM, n8n only sends the approved CPQ quote, updates the status and chases the signature (Part 3). It never prices anything.
 
 | Workbook tab | Lives in Salesforce as |
 |---|---|
@@ -144,6 +144,7 @@ The Renewals Manager (who owns the renewal) edits **two things per line**: the *
 ## 4. Annual uplift communication
 
 The 5% uplift is in every contract. **One bulk notice goes to all customers in January**, saying the contractual uplift applies at each renewal date. No per-renewal notice is sent. The uplifted price is shown again where the customer sees it before paying:
+
 - **Manual renewals:** in the quote, at T−60.
 - **Auto-renewals:** in an invoice preview, about 45 days before the renewal date.
 
@@ -166,7 +167,7 @@ The 5% uplift is in every contract. **One bulk notice goes to all customers in J
 | When | Condition | Action |
 |---|---|---|
 | T−90 | Open renewal | CSM task: health and usage review. Manual → Engaging customer. |
-| T−60 | Manual | Renewals task: **send quote**. This triggers Part 3. |
+| T−60 | Manual | Renewals task: **create the quote in the CPQ**. Once it's approved, Part 3 sends it. |
 | T−45 | Manual, still before Quoted | Alert to Renewals and manager: quote lead time missed |
 | T−45 | Auto | Invoice preview check: payment method valid, billing entity correct, uplifted price shown |
 | Notice Deadline − 14 | Auto | CSM and Renewals: check cancellation risk before the customer's last day to give notice |

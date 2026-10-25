@@ -16,7 +16,7 @@ The book by renewal month (my base report, and what every alert keys off):
 | Q4 2026 | Dec | 3 | €122k | – | 1 |
 | **Total** | | **10** | **€375k** | **€21k** | **5** |
 
-The 60-day quote policy has already been missed on at least five manual renewals. That is a process gap, not a problem with individual deals, and Part 3 fixes it.
+The 60-day quote policy has already been missed on at least five manual renewals. That is a process gap, not a problem with individual deals. The CRM's 60-day quote task and Part 3 address it.
 
 ## Ranked actions
 
@@ -39,7 +39,7 @@ The 60-day quote policy has already been missed on at least five manual renewals
 2. **Tessera Finance (€50k).** To the Legal lead: redlines have been open for 6+ weeks, and I need a response date of 30 Oct and agreement to renew on the current MSA.
 3. **Vantage Freight (€21k, overdue).** To my manager: what is our grace period before access is restricted? I'd propose day 14 for exec-to-exec contact and day 30 for formal notice under the contract.
 4. **Brightloop.** Not an escalation, but a pre-approval request to Finance (up to 12% on a 2-year deal, net 60). I want room to trade during the call.
-5. **Process.** At least five manual renewals inside 60 days still have no quote, which breaks the quote policy. The fix is a 60-day quote task and alert in the CRM, plus Part 3, which makes producing the quote itself a few minutes' work.
+5. **Process.** At least five manual renewals inside 60 days still have no quote, which breaks the quote policy. The fix is a 60-day quote task and alert in the CRM, plus Part 3, which sends the approved quote and chases the signature.
 
 ## Forecast: driven by Renewal Status × countdown
 
@@ -64,7 +64,8 @@ Each renewal's **Renewal Status** is set from *what we know* today. Its probabil
 **Notice deadlines.** The brief gives a 30-day cancellation notice only for Halden (deadline 8 Oct, already passed). For the three auto-renewals I've **assumed 30 days**, to confirm against each contract. That gives Pixelforge 3 Oct and Lumen 22 Oct (both effectively passed), and Quanta ~19 Nov. The 5% uplift is contractual and announced to all customers in one notice each January, so it applies to the auto-renewals too.
 
 **Usage rule.** n8n prices by workflow executions, not users.
-- **Over-usage** (+20% or more, e.g. Kestrel at +40%): renew as is, add an Upsell line, and set a task to propose the right tier. No automatic charge unless the contract has an overage clause. It's upside, not in the forecast.
+
+- **Over-usage** (+20% or more, e.g. Kestrel at +40%): renew as is, open a linked Upsell opportunity, and set a task to propose the right tier. No automatic charge unless the contract has an overage clause. It's upside, not in the forecast.
 - **Under-usage** (−20% or more, e.g. Halden and Quanta): flag the CSM for an adoption plan. Auto-renewals move to *At risk*.
 
 | Q4 forecast (today) | Weighted new ARR | Unweighted |
@@ -109,10 +110,6 @@ Each action in the triage moves a status. If this week's actions land, this is t
 
 Halden alone ranges from €0 to €45k. There's no relationship with the new owner, usage is down 35%, and I don't yet know whether the 8 Oct notice date locked in the renewal. Quanta is second: if a cancellation notice lands before ~19 Nov (an assumed 30-day notice), that's €40k, not €8k. On timing, **Tessera** is the least certain: Late versus on time depends on Legal and their security team.
 
-## How the CRM supports this (my standard setup)
+## How the CRM supports this
 
-- **Renewal Status picklist** (Not started → Engaging customer → Negotiation → Quoted → Waiting for PO → PO received, plus Cancelled), with written exit criteria for each status. I'd add **Closed won**.
-- **Probability = status × countdown**, as above, with separate auto-renewal statuses, an overdue column and the in-quarter rule.
-- **Product lines on each renewal opportunity:** the Renewals Manager only sets the line type (*Renewal / Upsell / Downgrade / Churn*) and the new numbers. Salesforce recalculates the rest: Original ARR is kept for comparison, and new ARR adds the uplift, prices any change at list, then applies the discount. The difference shows **green or red**, and an approval column reads policy C.
-- **Churn on the opportunity:** the churned amount rolls up from the lines, and the owner sets a **Churn Category** (Regrettable or Non-regrettable) and a granular **Churn Reason**. Upsell opens its own linked opportunity. Full design in `01b_crm_design.md`.
-- **Indexation:** 5% on every renewal line in year 1. On multi-year deals paid upfront the price is locked from year 2; paid annually, 5% applies every year.
+Statuses, the probability matrix, product lines (renewal, upsell, downgrade, churn, with original vs new ARR), the 5% uplift and price lock, churn category and reason, alerts and reports all live in Salesforce. **The full design is in the appendix (`crm_design_appendix.pdf`), and `renewal_tracker.xlsx` is a working mock-up of it.**
