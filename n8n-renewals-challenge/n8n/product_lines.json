@@ -1,0 +1,112 @@
+[
+ {
+  "Opportunity": "Vantage Freight",
+  "Product": "n8n Business (annual)",
+  "LineType": "Renewal",
+  "OriginalARR": 21000,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-10-15",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Northwind Logistics",
+  "Product": "n8n Enterprise Cloud",
+  "LineType": "Renewal",
+  "OriginalARR": 48000,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-10-29",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Pixelforge",
+  "Product": "n8n Business (annual)",
+  "LineType": "Renewal",
+  "OriginalARR": 26000,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-11-02",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Halden Health",
+  "Product": "n8n Enterprise Cloud",
+  "LineType": "Downgrade",
+  "OriginalARR": 45000,
+  "ChangeAtList": -15000,
+  "RenewalDate": "2026-11-07",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Brightloop",
+  "Product": "n8n Enterprise (Tier 3)",
+  "LineType": "Renewal",
+  "OriginalARR": 36000,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-12-14",
+  "Champion": "Sam",
+  "ChampionEmail": "sam@brightloop.example"
+ },
+ {
+  "Opportunity": "Tessera Finance",
+  "Product": "n8n Enterprise Cloud",
+  "LineType": "Renewal",
+  "OriginalARR": 50000,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-11-18",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Lumen Retail",
+  "Product": "n8n Business (annual)",
+  "LineType": "Renewal",
+  "OriginalARR": 28000,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-11-21",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Kestrel Analytics",
+  "Product": "n8n Business (annual)",
+  "LineType": "Renewal",
+  "OriginalARR": 35000,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-11-28",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Kestrel Analytics",
+  "Product": "Execution tier upgrade",
+  "LineType": "Upsell",
+  "OriginalARR": 0,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-11-28",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Marlowe Insurance",
+  "Product": "n8n Enterprise Cloud",
+  "LineType": "Renewal",
+  "OriginalARR": 46000,
+  "ChangeAtList": 0,
+  "RenewalDate": "2026-12-09",
+  "Champion": "",
+  "ChampionEmail": ""
+ },
+ {
+  "Opportunity": "Quanta Labs",
+  "Product": "n8n Enterprise Cloud",
+  "LineType": "Downgrade",
+  "OriginalARR": 40000,
+  "ChangeAtList": -8000,
+  "RenewalDate": "2026-12-19",
+  "Champion": "",
+  "ChampionEmail": ""
+ }
+]

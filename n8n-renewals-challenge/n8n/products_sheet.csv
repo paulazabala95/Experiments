@@ -1,0 +1,12 @@
+Opportunity,Product,LineType,OriginalARR,ChangeAtList,RenewalDate,Champion,ChampionEmail
+Vantage Freight,n8n Business (annual),Renewal,21000,0,2026-10-15,,
+Northwind Logistics,n8n Enterprise Cloud,Renewal,48000,0,2026-10-29,,
+Pixelforge,n8n Business (annual),Renewal,26000,0,2026-11-02,,
+Halden Health,n8n Enterprise Cloud,Downgrade,45000,-15000,2026-11-07,,
+Brightloop,n8n Enterprise (Tier 3),Renewal,36000,0,2026-12-14,Sam,sam@brightloop.example
+Tessera Finance,n8n Enterprise Cloud,Renewal,50000,0,2026-11-18,,
+Lumen Retail,n8n Business (annual),Renewal,28000,0,2026-11-21,,
+Kestrel Analytics,n8n Business (annual),Renewal,35000,0,2026-11-28,,
+Kestrel Analytics,Execution tier upgrade,Upsell,0,0,2026-11-28,,
+Marlowe Insurance,n8n Enterprise Cloud,Renewal,46000,0,2026-12-09,,
+Quanta Labs,n8n Enterprise Cloud,Downgrade,40000,-8000,2026-12-19,,
