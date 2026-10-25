@@ -1,0 +1,360 @@
+<title>Renewals Challenge: Paula Zabala</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a renewals desk brief. One reading column, sticky section bar, data in tables; the Renewal Status picklist is the recurring visual device. */
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --ink: #1b2130;
+  --muted: #5a6275;
+  --line: #dde1e8;
+  --accent: #0e6f6a;
+  --accent-soft: #e2f1ef;
+  --warn: #9a5b00;
+  --warn-soft: #fbefd9;
+  --bad: #a3243b;
+  --bad-soft: #f8e1e5;
+  --good: #1f6b3a;
+  --good-soft: #dff1e4;
+  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161f; --surface: #1a2030; --ink: #e7eaf0; --muted: #a2aabb; --line: #2c3446;
+    --accent: #5cc4bb; --accent-soft: #173a3a; --warn: #f0b45a; --warn-soft: #3a2c14;
+    --bad: #f08a9b; --bad-soft: #3d1d26; --good: #7fd49a; --good-soft: #193524;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161f; --surface: #1a2030; --ink: #e7eaf0; --muted: #a2aabb; --line: #2c3446;
+  --accent: #5cc4bb; --accent-soft: #173a3a; --warn: #f0b45a; --warn-soft: #3a2c14;
+  --bad: #f08a9b; --bad-soft: #3d1d26; --good: #7fd49a; --good-soft: #193524;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { padding-block: 40px 24px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.15; margin: 0; }
+h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; margin-top: 8px; }
+h2 { font-size: 26px; font-weight: 700; }
+h3 { font-size: 18px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+.lede { font-size: 18px; color: var(--muted); margin-top: 12px; }
+nav.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-block: 1px solid var(--line); }
+nav.bar .wrap { display: flex; gap: 4px; overflow-x: auto; padding-block: 8px; scrollbar-width: none; }
+nav.bar a { font-family: var(--display); font-weight: 600; font-size: 15px; color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 6px; white-space: nowrap; }
+nav.bar a:hover, nav.bar a:focus-visible { color: var(--ink); background: var(--accent-soft); outline: none; }
+section { padding-block: 40px 8px; scroll-margin-top: calc(56px + env(safe-area-inset-top, 0px)); }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.kpi .v { font-family: var(--display); font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kpi .l { font-size: 14px; color: var(--muted); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; min-width: 0; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+ul.tight { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; max-width: 70ch; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+th { text-align: left; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.rank { font-family: var(--mono); color: var(--muted); }
+tr.total td { font-weight: 700; background: var(--accent-soft); }
+.mono { font-family: var(--mono); font-size: 13px; }
+.small { font-size: 13.5px; color: var(--muted); }
+.pill { display: inline-block; font-family: var(--mono); font-size: 11.5px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.pill.bad { background: var(--bad-soft); color: var(--bad); }
+.pill.good { background: var(--good-soft); color: var(--good); }
+.esc { color: var(--bad); font-weight: 600; }
+.heat td.p { text-align: center; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 13px; }
+.h0 { background: var(--bad-soft); color: var(--bad); }
+.h1 { background: var(--warn-soft); color: var(--warn); }
+.h2 { background: var(--accent-soft); color: var(--accent); }
+.h3 { background: var(--good-soft); color: var(--good); }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; max-width: 70ch; }
+blockquote.email { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; max-width: 72ch; }
+blockquote.email p { max-width: none; }
+.flow { font-family: var(--mono); font-size: 13px; white-space: pre; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; line-height: 1.6; }
+footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
+@media (max-width: 520px) { body { font-size: 15.5px; } .kpi .v { font-size: 24px; } }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<header class="top">
+  <div class="wrap stack">
+    <span class="eyebrow">n8n · Renewals Specialist challenge · scenario date Tue 20 Oct 2026</span>
+    <h1>Ten renewals, one stuck negotiation, and a motion that scales</h1>
+    <p class="lede">Paula Zabala. Ten renewals worth €375k, one overdue and nine due within 60 days, plus Brightloop. I set the date to mid-October so the brief's timing holds.</p>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Sections">
+  <div class="wrap">
+    <a href="#summary">Summary</a>
+    <a href="#triage">1 · Triage</a>
+    <a href="#forecast">1 · Forecast</a>
+    <a href="#brightloop">2 · Brightloop</a>
+    <a href="#automation">3 · Automation</a>
+    <a href="#files">Files &amp; AI use</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<section id="summary">
+  <div class="head"><span class="eyebrow">Summary</span><h2>The answers, on one screen</h2></div>
+  <div class="kpis">
+    <div class="kpi"><span class="v">€138k</span><span class="l">Weighted forecast today (status × days to renewal)</span></div>
+    <div class="kpi"><span class="v">€256k</span><span class="l">Weighted by 30 Oct if this week's actions land</span></div>
+    <div class="kpi"><span class="v">93% · 96.5%</span><span class="l">Gross and net retention on €375k</span></div>
+    <div class="kpi"><span class="v">3</span><span class="l">Escalations today: Halden, Tessera, Vantage (€116k)</span></div>
+  </div>
+  <div class="cols" style="margin-top:16px">
+    <div class="panel stack">
+      <h3>Part 1: Triage and forecast</h3>
+      <ul class="tight">
+        <li>Ranked by <b>slack</b> (days left against work still needed) × ARR at risk.</li>
+        <li>Northwind, Vantage and Pixelforge each need about an hour today to remove most of their risk.</li>
+        <li>Lost: <b>€23k regrettable</b> contraction (Halden, Quanta) plus a €2.7k price concession.</li>
+        <li>Least sure about: <b>Halden</b>.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Part 2: Brightloop</h3>
+      <ul class="tight">
+        <li>No termination right, auto-renewal stays, no 25% discount.</li>
+        <li>Procurement chooses: <b>ramp</b> (€34,020 → €37,706, keep the plan) or <b>downsize + lock</b> (€28,800 a year, upfront).</li>
+        <li>Walk-away: no more than 12% off the current plan.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Part 3: Automation</h3>
+      <ul class="tight">
+        <li>The workflow <b>never prices</b>: everything mirrors the CRM and CPQ.</li>
+        <li>It sends the approved quote with an AI-drafted email after human approval, sets <i>Quoted</i>, and chases the signature.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="triage">
+  <div class="head"><span class="eyebrow">Part 1</span><h2>What I do first, who owns it, by when</h2>
+    <p class="small">The book: October 2 renewals / €69k · November 5 / €184k · December 3 / €122k. Only 1 of 7 manual renewals had its quote out by day 60, against a policy of 60 days.</p></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>#</th><th>Customer</th><th class="n">ARR</th><th>Due</th><th>Why now</th><th>Next action</th><th>Owner</th><th>Date</th></tr></thead>
+      <tbody>
+        <tr><td class="rank">1</td><td><b>Northwind Logistics</b></td><td class="n">€48k</td><td>29 Oct · 9d</td><td>Biggest near-term ARR, no quote, signed 3 days late last year</td><td>Quote and order form out today at €50.4k for e-signature; confirm the signatory; book signature for 27 Oct</td><td>Me</td><td>20 Oct</td></tr>
+        <tr><td class="rank">2</td><td><b>Vantage Freight</b></td><td class="n">€21k</td><td><span class="pill bad">overdue 5d</span></td><td>Shared inbox, no named contact</td><td>CSM pulls the instance owner and admins; I call a named person and agree a signing date <div class="esc">Escalate: manager, grace period before access is restricted</div></td><td>Me · CSM</td><td>21 Oct</td></tr>
+        <tr><td class="rank">3</td><td><b>Pixelforge</b> <span class="pill">auto</span></td><td class="n">€26k</td><td>2 Nov · 13d</td><td>Expired card: the auto-renewal will fail on a green account</td><td>Billing contact today; card-update link or switch to invoice; Finance holds dunning. Renews at €27.3k with the uplift.</td><td>CSM · Me · Finance</td><td>22 Oct</td></tr>
+        <tr><td class="rank">4</td><td><b>Halden Health</b></td><td class="n">€45k</td><td>7 Nov · 18d</td><td>Red, usage −35%, champion left, new owner unknown</td><td>Exec sponsor meets the new owner this week; Legal checks the 8 Oct notice date; right-sized option ready <div class="esc">Escalate: manager and VP CS</div></td><td>CSM · Me</td><td>23 Oct</td></tr>
+        <tr><td class="rank">5</td><td><b>Tessera Finance</b></td><td class="n">€50k</td><td>18 Nov · 29d</td><td>MSA redlines open since September; security review can block the PO</td><td>Security pack today; renew on the current MSA and negotiate the MSA in parallel <div class="esc">Escalate: Legal lead, response by 30 Oct</div></td><td>Legal · Me</td><td>23 Oct</td></tr>
+        <tr><td class="rank">6</td><td><b>Brightloop</b></td><td class="n">€36k</td><td>14 Dec · 55d</td><td>Live negotiation; procurement sets the pace</td><td>Reply to Sam today; Finance pre-approval; call with Sam and Priya Thu/Fri</td><td>Me</td><td>20 Oct</td></tr>
+        <tr><td class="rank">7</td><td><b>Marlowe Insurance</b></td><td class="n">€46k</td><td>9 Dec · 50d</td><td>No DPA and questionnaire means no PO</td><td>Send the DPA and questionnaire (AI first draft, Security reviews) with the quote; work back from their PO lead time</td><td>Me · Legal</td><td>27 Oct</td></tr>
+        <tr><td class="rank">8</td><td><b>Kestrel Analytics</b></td><td class="n">€35k</td><td>28 Nov · 39d</td><td>Usage +40%, near the execution cap</td><td>Like-for-like quote at €36.75k, plus a linked upsell opportunity for the next tier</td><td>CSM · Me</td><td>28 Oct</td></tr>
+        <tr><td class="rank">9</td><td><b>Lumen Retail</b> <span class="pill">auto</span></td><td class="n">€28k</td><td>21 Nov · 32d</td><td>Would invoice the wrong legal entity</td><td>New entity details; Legal decides billing change or assignment; Finance updates before the invoice run</td><td>Me · Finance</td><td>22 Oct</td></tr>
+        <tr><td class="rank">10</td><td><b>Quanta Labs</b> <span class="pill">auto</span></td><td class="n">€40k</td><td>19 Dec · 60d</td><td>Usage −20%, silent, Q1 budget cuts</td><td>CSM and exec sponsor via a new contact; offer right-sizing or a 2-year lock before the ~19 Nov notice deadline</td><td>CSM · Me</td><td>30 Oct</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small" style="margin-top:10px">Process escalation: 5 of 7 manual renewals had no quote inside 60 days. Fixed with a 60-day quote task in the CRM, plus Part 3.</p>
+</section>
+
+<section id="forecast">
+  <div class="head"><span class="eyebrow">Part 1</span><h2>A forecast driven by Renewal Status × days to renewal</h2>
+    <p class="small">Status is set from what we know today. Weighted = new ARR from the product lines (5% uplift, downgrades at list) × probability. The second column shows where this week's actions take it by 30 Oct.</p></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Customer</th><th class="n">New ARR</th><th>Status today</th><th class="n">Prob.</th><th class="n">Weighted</th><th>Target by 30 Oct</th><th class="n">Weighted 30 Oct</th></tr></thead>
+      <tbody>
+        <tr><td>Vantage <span class="pill bad">overdue</span></td><td class="n">€22,050</td><td><span class="pill">Quoted</span></td><td class="n">50%</td><td class="n">€11,025</td><td><span class="pill">Waiting for PO</span></td><td class="n">€15,435</td></tr>
+        <tr><td>Northwind</td><td class="n">€50,400</td><td><span class="pill warn">Engaging customer</span></td><td class="n">25%</td><td class="n">€12,600</td><td><span class="pill good">PO received</span></td><td class="n">€47,880</td></tr>
+        <tr><td>Pixelforge <span class="pill">auto</span></td><td class="n">€27,300</td><td><span class="pill warn">Billing blocker</span></td><td class="n">60%</td><td class="n">€16,380</td><td><span class="pill good">Renewing: no blockers</span></td><td class="n">€26,481</td></tr>
+        <tr><td>Halden</td><td class="n">€30,000</td><td><span class="pill bad">Not started</span></td><td class="n">10%</td><td class="n">€3,000</td><td><span class="pill warn">Engaging customer</span></td><td class="n">€7,500</td></tr>
+        <tr><td>Tessera</td><td class="n">€52,500</td><td><span class="pill warn">Negotiation</span></td><td class="n">40%</td><td class="n">€21,000</td><td><span class="pill">Quoted</span></td><td class="n">€39,375</td></tr>
+        <tr><td>Lumen <span class="pill">auto</span></td><td class="n">€29,400</td><td><span class="pill warn">Billing blocker</span></td><td class="n">70%</td><td class="n">€20,580</td><td><span class="pill good">Renewing: no blockers</span></td><td class="n">€28,518</td></tr>
+        <tr><td>Kestrel</td><td class="n">€36,750</td><td><span class="pill bad">Not started</span></td><td class="n">20%</td><td class="n">€7,350</td><td><span class="pill">Quoted</span></td><td class="n">€27,563</td></tr>
+        <tr><td>Marlowe</td><td class="n">€48,300</td><td><span class="pill warn">Engaging customer</span></td><td class="n">35%</td><td class="n">€16,905</td><td><span class="pill">Quoted</span></td><td class="n">€33,810</td></tr>
+        <tr><td>Brightloop</td><td class="n">€33,264</td><td><span class="pill warn">Negotiation</span></td><td class="n">50%</td><td class="n">€16,632</td><td><span class="pill warn">Negotiation</span></td><td class="n">€16,632</td></tr>
+        <tr><td>Quanta <span class="pill">auto</span></td><td class="n">€32,000</td><td><span class="pill bad">At risk: before notice</span></td><td class="n">40%</td><td class="n">€12,800</td><td><span class="pill bad">At risk: before notice</span></td><td class="n">€12,800</td></tr>
+        <tr class="total"><td>Total</td><td class="n">€361,964</td><td></td><td></td><td class="n">€138,272</td><td></td><td class="n">€255,994</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cols" style="margin-top:16px">
+    <div class="panel stack">
+      <h3>Today, by bucket</h3>
+      <ul class="tight">
+        <li><b>On time:</b> €74k weighted (Lumen, Kestrel, Marlowe, Brightloop, Quanta)</li>
+        <li><b>Late but still in Q4:</b> €64k (Vantage, Northwind, Pixelforge, Halden, Tessera)</li>
+        <li><b>Overdue rule:</b> overdue renewals are their own league. They count only if they close before quarter end, otherwise 0% for that quarter.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Lost, from the product lines</h3>
+      <ul class="tight">
+        <li><b>Regrettable</b> (revenue lost for good): −€23k. Halden right-sized −€15k, Quanta budget cut −€8k.</li>
+        <li><b>Non-regrettable</b> (revenue kept elsewhere at n8n, e.g. self-hosted → Cloud): €0 in this slice.</li>
+        <li><b>Price concession:</b> −€2.7k (Brightloop).</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-top:28px; margin-bottom:10px">The probability matrix</h3>
+  <p class="small" style="margin-bottom:10px">Manual renewals: later statuses rise as the date approaches, early statuses fall. Auto-renewals: a clean renewal rises, an open blocker or risk falls.</p>
+  <div class="tbl heat">
+    <table>
+      <thead><tr><th>Status</th><th class="n">&gt;90d</th><th class="n">61–90</th><th class="n">31–60</th><th class="n">0–30</th><th class="n">Overdue</th></tr></thead>
+      <tbody>
+        <tr><td>Not started</td><td class="p h1">35%</td><td class="p h1">30%</td><td class="p h0">20%</td><td class="p h0">10%</td><td class="p h0">5%</td></tr>
+        <tr><td>Engaging customer</td><td class="p h2">50%</td><td class="p h2">45%</td><td class="p h1">35%</td><td class="p h0">25%</td><td class="p h0">10%</td></tr>
+        <tr><td>Negotiation</td><td class="p h2">55%</td><td class="p h2">55%</td><td class="p h2">50%</td><td class="p h2">40%</td><td class="p h0">20%</td></tr>
+        <tr><td>Quoted</td><td class="p h2">60%</td><td class="p h2">65%</td><td class="p h2">70%</td><td class="p h2">75%</td><td class="p h2">50%</td></tr>
+        <tr><td>Waiting for PO</td><td class="p h2">75%</td><td class="p h3">80%</td><td class="p h3">85%</td><td class="p h3">90%</td><td class="p h2">70%</td></tr>
+        <tr><td>PO received</td><td class="p h3">90%</td><td class="p h3">95%</td><td class="p h3">97%</td><td class="p h3">99%</td><td class="p h3">95%</td></tr>
+        <tr><td><span class="pill">auto</span> Renewing: no blockers</td><td class="p h3">90%</td><td class="p h3">92%</td><td class="p h3">95%</td><td class="p h3">97%</td><td class="p h2">40%</td></tr>
+        <tr><td><span class="pill">auto</span> Billing blocker</td><td class="p h3">80%</td><td class="p h2">75%</td><td class="p h2">70%</td><td class="p h2">60%</td><td class="p h2">40%</td></tr>
+        <tr><td><span class="pill">auto</span> At risk: before notice deadline</td><td class="p h2">50%</td><td class="p h2">45%</td><td class="p h2">40%</td><td class="p h1">35%</td><td class="p h0">20%</td></tr>
+        <tr><td><span class="pill">auto</span> At risk: deadline passed</td><td class="p h3">80%</td><td class="p h3">80%</td><td class="p h3">80%</td><td class="p h3">80%</td><td class="p h2">50%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="callout" style="margin-top:16px">Least certain: <b>Halden</b>, which could lose anywhere from €0 to €45k. Second is Quanta: a cancellation before ~19 Nov would make it −€40k, not −€8k. Notice periods for the auto-renewals are assumed at 30 days, to confirm against each contract.</p>
+</section>
+
+<section id="brightloop">
+  <div class="head"><span class="eyebrow">Part 2</span><h2>Brightloop: trade structure, not discount</h2>
+    <p class="small">Today €36,000. List path (5% a year, paid annually): €37,800 in year 1, €39,690 in year 2. Sam's ask: €27,000, which is 28.6% off list.</p></div>
+
+  <div class="tbl">
+    <table>
+      <thead><tr><th></th><th>Ramp: keep the plan, pay annually</th><th>Downsize + lock: pay upfront</th></tr></thead>
+      <tbody>
+        <tr><td><b>Plan</b></td><td>Current Enterprise plan</td><td>Lower execution allowance sized to real usage (price assumed ~20% lower)</td></tr>
+        <tr><td><b>Price</b></td><td>Year 1 <b>€34,020</b> · Year 2 <b>€37,706</b></td><td><b>€28,800 a year</b>, locked for 2 or 3 years</td></tr>
+        <tr><td><b>Contract value</b></td><td>€71,726: below today's €72,000 over 2 years</td><td>€57,600 (2 years) · €86,400 (3 years)</td></tr>
+        <tr><td><b>Concession</b></td><td>7.4% vs list path (averaged, not 10% + 5%) → Finance</td><td>List price; waived uplift 2.4% / 4.8%</td></tr>
+        <tr><td><b>Terms</b></td><td>Annual, net 30 or 45</td><td>Upfront, net 60 (Finance)</td></tr>
+        <tr><td><b>Both</b></td><td colspan="2">Top support tier · no downgrade during the term · auto-renewal applies only after the term, plus a 90-day reminder · offers valid until 30 Nov</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cols" style="margin-top:16px">
+    <div class="panel stack">
+      <h3>Walk-away</h3>
+      <ul class="tight">
+        <li><b>Never</b> a termination-for-convenience right or removing auto-renewal.</li>
+        <li>On the current plan, no more than 12% total off list: a 2-year total of at least <b>€68,191</b>.</li>
+        <li>Below that, they downsize at list. Honest contraction beats a price precedent for 220 other renewals.</li>
+        <li><b>In reserve</b> (ramp only): a downgrade buffer of up to 10% at the year-2 anniversary, pre-approved by the VP.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>What I give for what I get</h3>
+      <ul class="tight">
+        <li>Year-1 relief → 2-year term, signed by 30 Nov</li>
+        <li>Price lock from year 2 → upfront payment</li>
+        <li>Net 60 → upfront payment</li>
+        <li>Top support tier → multi-year term plus a joint support review</li>
+        <li>Downgrade buffer → they drop the termination-right demand</li>
+      </ul>
+      <p class="small">Before the call: Finance, VP CS, Legal, the CSM and the support lead are lined up.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-top:28px; margin-bottom:10px">My reply to Sam</h3>
+  <blockquote class="email">
+    <p class="mono">Subject: Brightloop renewal: two ways to make it fit your budget</p>
+    <p>Hi Sam,</p>
+    <p>Thank you for being this open about the budget pressure. That makes it much easier to find something that works.</p>
+    <p>First, the two support escalations this year. They took longer to resolve than they should have, and I'm sorry. I've asked our support lead to review both, and I'll bring what we find and what we're changing to our call.</p>
+    <p>On procurement's four points: I can't agree to them exactly as written. A 25% discount, removing auto-renewal and a termination-for-convenience right are outside what we offer on any Enterprise renewal. But I don't think we need them to reach a number your budget can carry. I'd like to walk you and Priya through two options: keep your current plan with a lower cost this year, or right-size to what you actually use and lock that price for two or three years. Both would come with our highest support tier.</p>
+    <p>Could we set up 30 minutes with you and Priya on Thursday or Friday? It would help to know the budget figure you need to land on (and whether the pressure is this year's spend or cash), who signs and by when, and what "evaluate alternatives" means in practice.</p>
+    <p>Best,<br>Paula</p>
+  </blockquote>
+
+  <h3 style="margin-top:28px; margin-bottom:10px">Call plan (15 minutes, I keep time) and expected surprises</h3>
+  <p class="small" style="margin-bottom:10px">Open (1) · Discovery: budget, cash or this year's cost, why executions fell (3) · Own the support issue (2) · Both options side by side (4) · Trade, "if… then…" only (3) · Close with owners, dates and signature by 30 Nov (2)</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>They say</th><th>I answer</th></tr></thead>
+      <tbody>
+        <tr><td>"A competitor is 40% cheaper."</td><td>Ask what's in scope; compare total cost of ownership including migration. I don't match price; I offer the ramp or the downsize.</td></tr>
+        <tr><td>"We'll self-host the free version."</td><td>A real option. Walk through what they'd lose (SSO, environments, Git, log streaming, SLA support) and the DevOps cost.</td></tr>
+        <tr><td>"Net 60 is company policy."</td><td>"I can do net 60 when it's paid upfront: that's the downsize + lock option."</td></tr>
+        <tr><td>"We want the lock but pay annually."</td><td>"The lock comes with upfront payment. Paying annually, the ramp gives you this year's relief instead."</td></tr>
+        <tr><td>"All four points or no deal."</td><td>"I can't do the exit clause or remove auto-renewal for anyone. What problem are they solving?" Then solve that problem: the buffer, the reminder, and the clause applying only after the term.</td></tr>
+        <tr><td>"3 years for 25% off."</td><td>"That changes the picture; I'll take it to my VP within 48 hours." I don't commit on the call.</td></tr>
+        <tr><td>Priya: "Our budget is €30k."</td><td>Downsize + lock fits (€28.8k). If they need the full plan, I check a 12% ramp year 1 (8.4% total, within Finance's limit).</td></tr>
+        <tr><td>Silence until 14 Dec</td><td>Offers expire on 30 Nov; if nothing is signed by 1 Dec, I escalate exec to exec.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="automation">
+  <div class="head"><span class="eyebrow">Part 3</span><h2>Get the approved quote out, signed and tracked</h2>
+    <p class="small">Once a quote is approved, the rest is repetition: email, order form, send, update the CRM, chase. That's the work that doesn't scale to 221 renewals a quarter.</p></div>
+  <p class="callout"><b>My rule: the workflow never prices anything.</b> The CRM and CPQ own the quote, the order form and every number; the workflow mirrors them. At my current company there was no CPQ, so I built an agent that ran our quote tool with deterministic pricing and a human approving every quote. Here I assume n8n has a CPQ.</p>
+  <div class="flow" style="margin-top:16px" role="img" aria-label="Workflow: daily trigger reads renewals and approved CPQ quotes, then routes to upsell, on track, chase, risk or quote not ready.">Every day 8:00 ─► Renewals (unsigned, ≤90 days) ─┐
+               └► Approved quotes from CPQ ──────┴► Match quote to renewal ─► Route
+   On track / Upsell ► AI drafts email (offer copied word for word) ► Renewals Manager approves ► send with order form ► Status = Quoted
+   Chase signature ──► AI follow-up at day 3 and day 7 ─────────────► Renewals Manager approves ► send
+   Risk ─────────────► alert to the CSM, no customer email
+   Quote not ready ──► reminder to finish the quote in the CPQ</div>
+  <div class="cols" style="margin-top:16px">
+    <div class="panel stack">
+      <h3>Built and tested</h3>
+      <ul class="tight">
+        <li>An extended copy of my existing n8n renewal-alerts workflow. The JSON is attached to the email and can be imported.</li>
+        <li>Prototype data: Google Sheet tabs standing in for Salesforce and the CPQ. In production, the order form goes out for e-signature.</li>
+        <li>Tested on five accounts, one per route, with no real emails sent.</li>
+      </ul>
+    </div>
+    <div class="panel stack">
+      <h3>Human in the loop, and how I'd know it works</h3>
+      <ul class="tight">
+        <li>A person approves every customer-facing email. Pricing and terms stay in the CPQ. At-risk accounts go to the CSM.</li>
+        <li>Quoted by day 60: 1 of 7 → <b>100%</b> · approved quote to sent: <b>same day</b> · emails with a wrong number: <b>0</b> · AI drafts approved without edits, tracked weekly.</li>
+        <li>Lesson from testing: an early draft leaked internal notes. Autonomy is earned, not switched on from day one.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="files">
+  <div class="head"><span class="eyebrow">Files &amp; AI use</span><h2>Attached to the email</h2></div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>File</th><th>What it is</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">n8n_renewals_challenge_Paula_Zabala.pdf</td><td>The full submission: Parts 1–3 in detail</td></tr>
+        <tr><td class="mono">brightloop_one_pager.pdf</td><td>The one-page negotiation plan</td></tr>
+        <tr><td class="mono">renewal_tracker.xlsx</td><td>The model behind every number: triage, pipeline, product lines, churn, monthly report, probability matrix</td></tr>
+        <tr><td class="mono">crm_design_appendix.pdf</td><td>How the process lives in Salesforce: fields, formulas, guardrails, alerts, reports</td></tr>
+        <tr><td class="mono">ai_use_statement.pdf</td><td>What came from me, what AI did, how I checked it</td></tr>
+        <tr><td class="mono">workflow .json</td><td>The n8n workflow, importable into your instance</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="callout" style="margin-top:16px"><b>How I used AI.</b> The process, the rules and the commercial calls are mine. An AI assistant pressure-tested the maths, drafted text I edited, and built the Excel model and n8n workflow from my specifications. I reviewed every number. About 4 hours of my own time.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">Paula Zabala · n8n Renewals Specialist challenge. Customers, figures and policies are fictional, from the brief. The smaller-plan price and auto-renewal notice periods are assumptions.</div>
+</footer>
