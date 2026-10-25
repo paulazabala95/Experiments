@@ -37,6 +37,8 @@
 
 ## B. One-page negotiation plan
 
+*The printable one-page version is `onepager/brightloop_one_pager.pdf`. The detail is below.*
+
 **Where we start**
 - Today's price is **€36,000**. The list path, paid annually with the 5% uplift, is **€37,800 in year 1 and €39,690 in year 2**.
 - Sam's ask of €27,000 is 28.6% below list, which would need VP CS.
