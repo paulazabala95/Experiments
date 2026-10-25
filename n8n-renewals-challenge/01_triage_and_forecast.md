@@ -39,28 +39,57 @@ The 60-day quote policy has already been missed on at least five manual renewals
 2. **Tessera Finance (€50k).** To the Legal lead: redlines have been open for 6+ weeks, and I need a response date of 30 Oct and agreement to renew on the current MSA.
 3. **Vantage Freight (€21k, overdue).** To my manager: what is our grace period before access is restricted? I'd propose day 14 for exec-to-exec contact and day 30 for formal notice under the contract.
 4. **Brightloop.** Not an escalation, but a pre-approval request to Finance (up to 12% on a 2-year deal, net 60). I want room to trade during the call.
-5. **Process.** At least five manual renewals inside 60 days still have no quote, which breaks the quote policy. I'd show my manager the weekday alert (Part 3) as the fix.
+5. **Process.** At least five manual renewals inside 60 days still have no quote, which breaks the quote policy. The fix is a 60-day quote task and alert in the CRM, plus Part 3, which makes producing the quote itself a few minutes' work.
 
-## Forecast (vs. €375k base ARR)
+## Forecast: driven by Renewal Status × countdown
 
-| Bucket | Base ARR | % | New ARR incl. uplift | Accounts |
-|---|---|---|---|---|
-| **Closes on time** | **€248k** | 66% | €256k | Northwind, Pixelforge, Lumen, Kestrel, Marlowe, Brightloop (€33.3k kept), Quanta (€32k kept) |
-| **Closes late** | **€101k** | 27% | €105k | Vantage (already late), Tessera (MSA/security), Halden (right-sized to €30k) |
-| **Lost** (churn + contraction) | **€26k** | 7% | – | Halden −€15k, Quanta −€8k, Brightloop −€2.7k |
+Each renewal has a **Renewal Status** that reflects where it should be given its date, once this week's actions above are done. Northwind, 9 days out, is *Waiting for PO* (quote out today, champion signs), not *Not started*. Its probability comes from the status × days-to-renewal matrix: late statuses rise as the date gets closer, and early statuses fall, because no progress near the date is the risk. **Weighted new ARR = new ARR from the product lines × probability.**
 
-- **Gross retention 93%, net retention 96%.** The 5% uplift adds about €13k, but it is lost on Pixelforge (notice missed) and on the two downgrades.
-- **Kestrel upsell is upside, not commit.** It is worth roughly +€10–15k if they move up a tier.
-- **Range:** best case about €400k new ARR (everything renews with uplift, plus the Kestrel upsell). Worst case about €285k (Halden and Quanta churn, Brightloop downgrades to Tier 2).
-- **Cross-check:** the system-weighted forecast (Renewal Status × days left × health) is only **€89k today**, because statuses lag the dates. If this week's actions land, it rises to **€224k on time**, which is close to my on-time call. If the two numbers stay more than 10% apart, I review those deals.
+| Customer | Days | Renewal Status | Probability | New ARR | Weighted | Bucket |
+|---|---|---|---|---|---|---|
+| Vantage Freight | −5 | Quoted | 50% (overdue) | €22,050 | €11,025 | Late |
+| Northwind Logistics | 9 | Waiting for PO | 90% | €50,400 | €45,360 | On time |
+| Pixelforge (auto) | 13 | Waiting for PO | 90% | €26,000 | €23,400 | On time |
+| Halden Health | 18 | Engaging customer | 25% | €30,000 | €7,500 | Late |
+| Tessera Finance | 29 | Negotiation | 40% | €52,500 | €21,000 | Late |
+| Lumen Retail (auto) | 32 | Waiting for PO | 85% | €29,400 | €24,990 | On time |
+| Kestrel Analytics | 39 | Quoted | 70% | €36,750 | €25,725 | On time |
+| Marlowe Insurance | 50 | Quoted | 70% | €48,300 | €33,810 | On time |
+| Brightloop | 55 | Negotiation | 50% | €33,264 | €16,632 | On time |
+| Quanta Labs (auto) | 60 | Engaging customer | 35% | €32,000 | €11,200 | On time |
+| **Total** | | | | **€360,664** | **€220,642** | |
 
-### The number I'm least sure about: Lost (€26k)
+Halden and Quanta stay at early statuses on purpose. There is no evidence yet to move them, and moving them would inflate the forecast.
 
-Halden alone could lose anywhere from €0 to €45k. We have no relationship with the new owner, usage is down 35%, and I don't yet know whether the notice date legally locked in the renewal. Quanta is second: it auto-renews before the Q1 cuts, so the real risk is a cancellation notice landing before ~19 Nov. My second-least-certain number is **timing on Tessera**: on time versus late depends on Legal and their security team, not on me.
+**Overdue rule.** Overdue renewals use their own, lower probability column and are always **Late**. They still count in the quarter **only if the expected close date is on or before quarter end**. Vantage is overdue since 15 Oct but expected by 6 Nov, so it counts in Q4. A renewal that slips past quarter end counts 0% for that quarter and returns next quarter as a late renewal. So I report two numbers: **quarter retention** (did we keep the revenue?) and **on-time rate** (did we close by the renewal date?).
+
+| Q4 forecast | Weighted new ARR | Unweighted |
+|---|---|---|
+| **On time** | **€181k** | €256k (7 renewals) |
+| **Late, still in Q4** (overdue, or before *Quoted* inside 30 days) | **€40k** | €105k (Vantage, Halden, Tessera) |
+| Slips past quarter end | €0 | none today |
+| **Total weighted forecast** | **€221k** | €361k |
+
+**Lost.** This comes from the product lines, and churn is split by type:
+
+| | Amount | Accounts |
+|---|---|---|
+| **Regrettable** churn/contraction (revenue lost to n8n for good) | **−€23k** | Halden −€15k (right-sized), Quanta −€8k (budget cut) |
+| **Non-regrettable** (a line churns but is replaced by another n8n product, e.g. self-hosted Enterprise → n8n Cloud) | €0 | none in this slice |
+| Price concession below current price | −€2.7k | Brightloop (2 years at the Finance floor) |
+
+- **Gross retention 93%** (base less regrettable churn and concessions). **Net retention 96%** (new ARR / base, including the 5% uplift).
+- **Kestrel upsell is upside, not in the forecast.** It's worth roughly +€10–15k if they move up a tier.
+- The gap between €361k and the €221k weighted forecast is **risk, not loss**. Moving each deal to the next status closes it, which is what the ranked actions above are for.
+
+### The number I'm least sure about: Lost (€23k regrettable)
+
+Halden alone ranges from €0 to €45k. There's no relationship with the new owner, usage is down 35%, and I don't yet know whether the 8 Oct notice date locked in the renewal. Quanta is second: if a cancellation notice lands before ~19 Nov, that's €40k, not €8k. On timing, **Tessera** is the least certain: Late versus on time depends on Legal and their security team.
 
 ## How the CRM supports this (my standard setup)
 
-- **Renewal Status picklist** (Not started → Engaging customer → Negotiation → Quoted → Waiting for PO → PO received, plus Cancelled). I'd add **Closed won**, and give each status written exit criteria so the reps all use it the same way.
-- **Probability = status × countdown.** A later status closer to the date means a higher probability. An *early* status close to the date means a *lower* one, because the cycle can't finish in time. That is the signal managers usually miss. The value is multiplied by CSM health. Auto-renewals with no blocker get an 80% floor.
-- **Product lines on each renewal opportunity** are tagged *Renewal / Upsell / Downgrade / Cross-sell / Churn*. Original ARR is kept for comparison. New ARR adds the 5% uplift to the renewed base, prices any change at list, then applies the discount. The difference shows **green or red**. An approval column reads policy C (Finance or VP). The opportunity roll-up calculates churn, contraction, upsell, discount and new ARR automatically, so the forecast never relies on someone retyping a number.
-- **Indexation:** the default is a 5% uplift on every 1-year renewal line. On 2-year deals, the uplift can be waived within the multi-year 5% allowance with no approval.
+- **Renewal Status picklist** (Not started → Engaging customer → Negotiation → Quoted → Waiting for PO → PO received, plus Cancelled), with written exit criteria for each status. I'd add **Closed won**.
+- **Probability = status × countdown**, as above, plus an overdue column and the in-quarter rule.
+- **Product lines on each renewal opportunity** are tagged *Renewal / Upsell / Downgrade / Cross-sell / Churn*. Original ARR is kept for comparison. New ARR adds the 5% uplift to the renewed base, prices any change at list, then applies the discount. The difference shows **green or red**. An approval column reads policy C.
+- **Churn type on each line:** a Churn or Downgrade line with a *Replaced by* product is **non-regrettable**; otherwise it's **regrettable**. The opportunity roll-up calculates regrettable churn, non-regrettable churn, upsell, uplift, price concession and new ARR automatically.
+- **Indexation:** 5% by default on every 1-year renewal line. On 2-year deals it can be waived inside the 5% multi-year allowance with no approval.
