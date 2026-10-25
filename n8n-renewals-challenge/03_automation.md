@@ -1,50 +1,83 @@
 # Part 3: Scaling the renewal motion
 
-## The step I automate: daily renewal triage, forecast scoring and escalation
+## The step I automate: quote and order-form generation
 
-**Why this step:** there are 221 Q4 renewals and four overwhelmed CSMs. The failure in this book is *timing*, not negotiation skill. Quotes go out late (Northwind has none at 9 days out), auto-renewals fail silently (Pixelforge's expired card), notice dates pass unnoticed (Halden, Pixelforge, Lumen), and the forecast is a guess. Triage, the first thing I did by hand in Part 1, is the job a machine should do every morning. I built a **working prototype in n8n**.
+**Why this step**
+- **It's the root cause in this book.** 5 of the 7 manual renewals had no quote inside 60 days (Northwind, Halden, Tessera, Kestrel, Marlowe), against a policy of quoting at 60 days. At 221 renewals a quarter, producing quotes by hand doesn't scale. The quotes go out late, and then everything after them is late too.
+- **It's rules-based, so it's safe to automate.** The uplift, the price lock on upfront multi-year deals, the policy C approvals and the fixed clauses are exactly where people make mistakes under time pressure.
+- **It's real integration work:** CRM → pricing → approval → document → e-signature → back to CRM. That's what n8n is for. The forecast, statuses and alerts live in the CRM itself (`01b_crm_design.md`), so they don't need a workflow.
 
-**Workflow:** *Renewal forecast and escalation engine* (in my n8n Cloud: https://paulazabala95.app.n8n.cloud/workflow/mvDDTTwQYTpurdtP). The source is in `n8n/`. It is built on my existing *Daily renewal alerts* workflow, which drafts customer emails with AI and sends them only after a CSM approves.
+**I've done this before.** At my current company there was no CPQ tool, so I built *Roberto*, a renewal quotation agent. It ran our existing quote spreadsheet as the source of truth, with deterministic pricing and a human approving every quote. It cut about a week of quote work per quarter to hours. **Here I assume n8n has a CPQ.** So pricing and approvals belong in the CPQ, n8n orchestrates the steps around it, and AI moves to the one part that needs language: the cover email.
+
+## The workflow (working prototype)
+
+**Renewal quote and order form**, in my n8n Cloud: https://paulazabala95.app.n8n.cloud/workflow/mvDDTTwQYTpurdtP (source in `n8n/`)
 
 ```
-Weekdays 7:30 ─► Read renewal pipeline (CRM / Sheet)
-                 └► Score renewals + raise alerts (Code)
-                     ├► Write scores back to the pipeline (CRM hygiene)
-                     ├► Build daily brief ─► Email to Renewals Specialist
-                     └► P1? ─► Escalation email to owner + manager
+Quote request ─► Read product lines ─► Price + order form (CPQ stand-in) ─► Draft cover email (AI)
+                                                                               │
+          Mark renewal as Quoted ◄─ Send order form ◄─ Approved? ◄─ Review and approve (human)
 ```
 
-| | |
-|---|---|
-| **Trigger** | Schedule, weekdays at 7:30. In production, also a CRM trigger when Renewal Status, Renewal Date or Amount changes. |
-| **Systems** | Prototype: Google Sheets (pipeline) and Gmail. Production: **Salesforce** (renewal opportunities and product lines), **Stripe/billing** (card status, invoice entity), the **product usage warehouse** (90-day execution trend), **Slack** (#renewals-alerts, DMs to owners), and e-signature status. |
-| **What it calculates** | Days to renewal, 30/60/90 window, month and quarter, the status × countdown probability (the same matrix as the workbook) × health, and weighted new ARR including the 5% uplift. |
-| **Alerts** | OVERDUE · QUOTE_LEAD_TIME (manual, ≤60 days, no quote) · SIGNATURE_RISK (≤14 days, not with procurement) · PAYMENT_BLOCKER (auto-renewal with an expired card or wrong entity) · NOTICE_WINDOW (date to send the uplift notice or watch for cancellation) · HEALTH_RISK · UPSELL_SIGNAL · BLOCKER_OPEN · CRM_HYGIENE (no status, owner or ARR) |
-| **Output** | One brief per day grouped by quarter and month, with actions sorted P1 → P3. One escalation email per P1 account. The calculated fields are written back to the pipeline so the forecast report is always current. |
+| | Prototype | Production |
+|---|---|---|
+| **Trigger** | Form: renewal, term (1–3 years), annual or upfront payment, discount for year 1 and year 2+, plan change, payment terms, what we know | The CRM's **T−60 task** for every manual renewal, or a "Generate quote" button on the opportunity |
+| **Data** | Google Sheet (`Products` tab) | Salesforce renewal opportunity and product lines |
+| **Pricing and approvals** | A deterministic code step that reproduces the rules (below) | **The CPQ**, with its approval chain |
+| **Cover email** | AI (Basic LLM chain, low-cost model) | Same |
+| **Human approval** | Gmail email with Approve and Reject buttons | Same, or Slack. Finance or the VP are added when the CPQ flags them. |
+| **Send and update** | Email the order form; set Status = Quoted | Send for **e-signature**; attach the quote file to the opportunity (which the *Quoted* validation rule requires); set the status |
 
-**Tested** on the 10 accounts in this book (pinned data, so no emails were sent). It raised 5 P1s (Vantage, Northwind, Pixelforge, Halden, Tessera) and 5 P2s. That matches my manual triage in Part 1, which took me about an hour. The workflow takes seconds and runs every day.
+**The pricing rules (deterministic, never AI)**
+- **Year 1:** 5% uplift on renewal lines; upsell and downgrade lines at list.
+- **Multi-year:** price **locked from year 2 if paid upfront**, +5% a year if paid annually.
+- **Discount:** set separately for year 1 and year 2+, so a ramp can be quoted.
+- **Approver under policy C:** based on the total discount against the annual list path. Net 60 goes to Finance, and a 3-year term is flagged for Finance to confirm.
+- **Order form:** the auto-renewal clause applies after the committed term, there's no termination for convenience, and no downgrade during the term.
 
-## What a human still checks
+## Where AI is used, and where a human stays in the loop
 
-- **The forecast call.** The workflow gives a *system-weighted* number. I make the commit / late / lost call and record it in the CRM. When the two differ by more than 10%, I review that deal.
-- **Every P1:** I confirm an owner and a date by 10:00.
-- **Anything going to a customer:** AI drafts the emails, and a person approves before sending. This is the approval step in my existing workflow.
-- **Commercial terms:** discounts, approvals and contract changes are never automated.
-- **Recalibration:** every quarter I compare the probability matrix with actual outcomes and adjust it.
+| Step | Who does it | Why |
+|---|---|---|
+| Prices, schedule, approver | **Rules** (CPQ) | Commercial terms must be exact and repeatable. No AI. |
+| Cover email | **AI** | Personal wording at scale, from what we know about the account. It's the only free-text step. |
+| Approve before sending | **Human** (Renewals Manager; Finance or VP when flagged) | Nothing reaches a customer without a person's approval |
+| Negotiation, exceptions, at-risk accounts | **Human** | Judgement. At-risk accounts get a call before any quote. |
+
+**The AI has guardrails.**
+- It gets a ready-made offer sentence to copy exactly, so it never writes or changes a number.
+- Account notes are marked internal, for tone only.
+- It's told never to mention discounts, approvals or policy.
+
+**What the first test taught me:** before these guardrails, the draft repeated internal notes to the customer ("budget cut", "executions down 10%") and pasted unformatted numbers. The human check caught it, and the fix went into the prompt and the data I give the model. That's the case for keeping a person on every customer-facing output, at least until the workflow has a track record.
+
+## Tested on this book
+
+| Scenario | Quote | Approver |
+|---|---|---|
+| Northwind, 1 year | €50,400 | None: send straight to review |
+| Brightloop **ramp**, 2 years, annual | Year 1 €34,020 · Year 2 €37,706 · total €71,726 (7.4%) | Finance |
+| Brightloop **downsize + lock**, 2 years, upfront, net 60 | €28,800 × 2 · total €57,600 (2.4% waived uplift) | Finance (net 60) |
+| Brightloop **downsize + lock**, 3 years, upfront, net 60 | €28,800 × 3 · total €86,400 (4.8%) | Finance (net 60, 3-year term) |
+| Brightloop at Sam's 25% ask | Year 1 ≈ €27,000 (28.6%) | VP CS |
+
+These match the Part 2 negotiation plan exactly. During the call, I can produce any option Priya picks within minutes, already approved and ready to sign.
 
 ## How I'd know it works
 
-| Metric | Today | Target after 1 quarter |
+| Metric | Today | Target |
 |---|---|---|
-| Manual renewals quoted by day 60 | about 50% (5 of the 7 manual renewals in this book had no quote) | **100%** |
-| Overdue renewals (count / ARR) | 1 / €21k | **0** at quarter end |
-| Forecast accuracy (call vs. actual, by month) | unknown | within **±5%** |
-| Auto-renewals failing on payment | unknown | **0**: caught at day 45 |
-| P1 alerts actioned within 24 hours | – | **≥90%**. Below that, the alerts are noise and I tune them. |
-| Specialist and CSM hours on triage | ~1 hour a day each | **<10 minutes a day** |
+| Manual renewals quoted by day 60 | 1 of 7 in this book (Brightloop; Vantage was quoted at day 44) | **100%** |
+| Time to produce a quote | 30–60 minutes each | **under 5 minutes**, plus the review |
+| Pricing or approval errors on quotes sent | not measured | **0** |
+| Quote to approval turnaround | not measured | **under 24 hours** |
+| AI drafts sent without edits | – | tracked weekly; when it's consistently high, consider removing the check for standard renewals |
 
-## Next iterations
+## What I'd build next
 
-1. **AI security-questionnaire assistant** (for Marlowe and Tessera): answers drafted from the trust centre and past answers, then reviewed by Security.
-2. **Quote and order-form generation** from the opportunity's product lines (uplift and approval rules built in), sent for e-signature automatically when the approval column reads "None".
-3. **A Slack bot** ("/renewal Brightloop") that returns status, probability, blockers and the next action from the CRM.
+Each step widens what runs on its own as the workflow earns trust:
+
+1. **Graduated autonomy.** Standard renewals with no discount, a green account and Approver = None go straight to e-signature. Anything negotiated or at risk keeps the human check.
+2. **At-risk routing.** Before quoting, check health, usage and notice deadline. At-risk accounts get a CSM call task instead of a quote.
+3. **Expansion variant.** When usage is above the plan, produce the renewal quote plus an upsell variant, and open the linked Upsell opportunity.
+4. **AI security-questionnaire assistant** (Marlowe, Tessera): answers drafted from the trust centre and past answers, reviewed by Security.
