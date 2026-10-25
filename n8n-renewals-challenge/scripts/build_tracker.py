@@ -66,11 +66,11 @@ def title(ws, text, sub=None):
 pr = wb.active
 pr.title = "Probability"
 title(pr, "Renewal probability: Renewal Status x days to renewal",
-      "Late statuses (Quoted and after) rise as the date gets closer. Early statuses (Not started, Engaging, "
-      "Negotiation) fall as the date gets closer: no progress near the date is the risk. Blue = editable.")
+      "Manual: late statuses (Quoted and after) rise as the date gets closer; early statuses fall. Auto-renewal: a "
+      "clean renewal rises; an open blocker or risk falls as the date gets closer. Blue = editable.")
 BUCKETS = ["Overdue", "0-30", "31-60", "61-90", ">90"]
-header(pr, 4, ["Renewal Status"] + BUCKETS + ["Exit criteria (what must be true to be in this status)"],
-       [22, 11, 11, 11, 11, 11, 70])
+header(pr, 4, ["Renewal Status"] + BUCKETS + ["Exit criteria (what must be true to be in this status)", "Applies to"],
+       [30, 11, 11, 11, 11, 11, 70, 11])
 MATRIX = [
     ("--None--", [0, 0, 0, 0, 0], "Not allowed. Every open renewal must have a status."),
     ("Not started", [0.05, 0.10, 0.20, 0.30, 0.35], "Renewal opportunity exists; no customer contact about the renewal yet."),
@@ -81,7 +81,20 @@ MATRIX = [
     ("PO received", [0.95, 0.99, 0.97, 0.95, 0.90], "PO or signature in hand; only booking and invoicing remain."),
     ("Closed won", [1, 1, 1, 1, 1], "Signed, booked, invoiced. (Suggested addition to the picklist.)"),
     ("Cancelled", [0, 0, 0, 0, 0], "Customer gave notice or will not renew."),
+    # Auto-renewals: probability depends on whether anything stands between today and a clean renewal.
+    ("Renewing: no blockers", [0.40, 0.97, 0.95, 0.92, 0.90],
+     "Valid payment method, correct billing entity, uplift notice sent, usage stable or growing. (Overdue = payment failed: move to Billing blocker.)"),
+    ("Billing blocker", [0.40, 0.60, 0.70, 0.75, 0.80],
+     "Expired card, wrong legal entity, PO required. Admin fix, usually recoverable."),
+    ("At risk: before notice deadline", [0.20, 0.35, 0.40, 0.45, 0.50],
+     "Usage down 20%+, silence or budget cuts, and the customer can still give notice."),
+    ("At risk: notice deadline passed", [0.50, 0.80, 0.80, 0.80, 0.80],
+     "Same signals, but no notice was given: the contract has renewed. Risk shifts to payment."),
+    ("Notice received", [0, 0.10, 0.10, 0.10, 0.10],
+     "Customer gave non-renewal or downgrade notice. Becomes a manual save negotiation."),
+    ("Renewed", [1, 1, 1, 1, 1], "Invoiced and paid."),
 ]
+AUTO_FROM = 10  # index in MATRIX where auto-renewal statuses start
 for i, (s, ps, crit) in enumerate(MATRIX, start=5):
     pr.cell(row=i, column=1, value=s).font = BOLD
     for j, p in enumerate(ps, start=2):
@@ -89,16 +102,26 @@ for i, (s, ps, crit) in enumerate(MATRIX, start=5):
         inp(c)
         c.number_format = "0%"
     pr.cell(row=i, column=7, value=crit).alignment = WRAP
-style_range(pr, 5, 13, 1, 7)
-pr.conditional_formatting.add("B5:F13", FormulaRule(formula=["B5>=0.8"], fill=GRN_FILL))
-pr.conditional_formatting.add("B5:F13", FormulaRule(formula=["AND(B5>0,B5<0.4)"], fill=RED_FILL))
-pr["A15"] = "Overdue rule"
-pr["A15"].font = BOLD
-pr["B15"] = ("Overdue renewals use the Overdue column and are shown as Late. They still count in the quarter's forecast "
+    applies = "Auto" if i - 5 >= AUTO_FROM - 1 else ("Both" if s == "Cancelled" else "Manual")
+    pr.cell(row=i, column=8, value=applies)
+PE = 4 + len(MATRIX)  # last matrix row
+style_range(pr, 5, PE, 1, 8)
+pr.conditional_formatting.add(f"B5:F{PE}", FormulaRule(formula=["B5>=0.8"], fill=GRN_FILL))
+pr.conditional_formatting.add(f"B5:F{PE}", FormulaRule(formula=["AND(B5>0,B5<0.4)"], fill=RED_FILL))
+pr.conditional_formatting.add(f"H5:H{PE}", FormulaRule(formula=['H5="Auto"'], fill=AMB_FILL))
+OV = PE + 2
+pr.cell(row=OV, column=1, value="Overdue rule").font = BOLD
+pr.cell(row=OV + 4, column=1, value="Usage rule").font = BOLD
+pr.cell(row=OV + 4, column=2, value=(
+    "n8n prices by workflow executions (users are unlimited). Usage +20% or more: renew as is, add an Upsell line and a "
+    "CSM + Renewals task; never auto-charge unless the contract has an overage clause. Usage -20% or more: flag the CSM "
+    "for an adoption plan; on an auto-renewal, set At risk.")).alignment = WRAP
+pr.merge_cells(start_row=OV + 4, start_column=2, end_row=OV + 6, end_column=7)
+pr["B" + str(OV)] = ("Overdue renewals use the Overdue column and are shown as Late. They still count in the quarter's forecast "
              "only if the expected close date is on or before quarter end. If they slip past quarter end they count "
              "0% for that quarter and come back next quarter as a late renewal.")
-pr["B15"].alignment = WRAP
-pr.merge_cells("B15:G17")
+pr["B" + str(OV)].alignment = WRAP
+pr.merge_cells(start_row=OV, start_column=2, end_row=OV + 2, end_column=7)
 
 # ------------------------------------------------------------------- Pipeline
 pl = wb.create_sheet("Pipeline", 0)
@@ -110,15 +133,22 @@ inp(pl["B2"])
 pl["B2"].number_format = DATE
 pl["B2"].comment = Comment("Exercise date: Tue 20 Oct 2026, so Vantage is overdue and the other nine fall inside "
                            "60 days. Use =TODAY() in live use.", "Renewals")
-pl["D2"] = "Blue on yellow = input. Everything else is a formula."
-pl["D2"].font = Font(name=F, italic=True)
+pl["D2"] = "Target date"
+pl["D2"].font = BOLD
+pl["E2"] = date(2026, 10, 30)
+inp(pl["E2"])
+pl["E2"].number_format = DATE
+pl["G2"] = "Blue on yellow = input. Everything else is a formula. Columns AF-AH: the forecast after this week's actions."
+pl["G2"].font = Font(name=F, italic=True)
 
 cols = ["Customer", "Base ARR (€)", "Renewal date", "Type", "Usage 90d", "Health", "Renewal Status", "Blocker",
         "Expected close", "Days to renewal", "Window", "Overdue?", "Month", "Quarter", "Quarter end",
         "Probability", "Counts in quarter?", "Forecast prob.", "New ARR (€)", "Weighted new ARR (€)", "Forecast bucket",
-        "Next action", "Owner", "Due", "Rank", "Why first", "Also involved", "Escalate today"]
+        "Next action", "Owner", "Due", "Rank", "Why first", "Also involved", "Escalate today",
+        "Notice period (days)", "Notice deadline", "Usage signal", "Target status by 30 Oct", "Target prob.",
+        "Weighted after actions (€)"]
 header(pl, 4, cols, [20, 12, 13, 8, 9, 9, 18, 28, 13, 9, 9, 9, 9, 9, 12, 10, 10, 10, 13, 14, 13, 60, 10, 12,
-                     7, 50, 20, 40])
+                     7, 50, 20, 40, 10, 13, 34, 26, 10, 14])
 
 # Triage: rank by slack (days left vs work still needed) x ARR at risk. Owner is one of Me / CSM / Finance / Legal.
 TRIAGE = {
@@ -138,21 +168,33 @@ TRIAGE = {
                           "Me", "Legal, Security", ""),
     "Kestrel Analytics": (8, "Usage +40%, near the execution cap: expansion, and a throttling risk.",
                           "CSM", "Me", ""),
-    "Lumen Retail": (9, "Auto-renewal with the wrong billing entity; uplift notice due 22 Oct.",
+    "Lumen Retail": (9, "Auto-renewal with the wrong billing entity; uplift notice due 22 Oct (assumed 30-day notice).",
                      "Me", "Finance, Legal", ""),
-    "Quanta Labs": (10, "Auto-renewal, usage -20%, Q1 budget cuts, unresponsive. 60 days, but cancellation notice ~19 Nov.",
+    "Quanta Labs": (10, "Auto-renewal, usage -20%, Q1 budget cuts, unresponsive. 60 days, but the notice deadline is ~19 Nov (assumed 30-day notice).",
                     "CSM", "Me", ""),
 }
 
-# Status = where each renewal should be given its date (agreed with Paula).
-# Halden and Quanta stay early on purpose: no evidence to move them.
+# Status today = what we know (brief), agreed with Paula. Target = where this week's actions should get it by 30 Oct.
+# Notice period: 30 days is given for Halden; for the auto-renewals it is an assumption to confirm against the contract.
+STATUS = {
+    "Vantage Freight": ("Quoted", "Waiting for PO", None),
+    "Northwind Logistics": ("Engaging customer", "PO received", None),
+    "Pixelforge": ("Billing blocker", "Renewing: no blockers", 30),
+    "Halden Health": ("Not started", "Engaging customer", 30),
+    "Brightloop": ("Negotiation", "Negotiation", None),
+    "Tessera Finance": ("Negotiation", "Quoted", None),
+    "Lumen Retail": ("Billing blocker", "Renewing: no blockers", 30),
+    "Kestrel Analytics": ("Not started", "Quoted", None),
+    "Marlowe Insurance": ("Engaging customer", "Quoted", None),
+    "Quanta Labs": ("At risk: before notice deadline", "At risk: before notice deadline", 30),
+}
 P = [
     ("Vantage Freight", 21000, date(2026, 10, 15), "Manual", 0.00, "Yellow", "Quoted",
      "No named contact (shared inbox)", date(2026, 11, 6),
      "CSM pulls instance owner/admin emails from product data; I call and email the named person and agree a signing "
      "date. Manager confirms the grace period before access is restricted.", "Me + CSM", date(2026, 10, 21)),
     ("Northwind Logistics", 48000, date(2026, 10, 29), "Manual", 0.12, "Green", "Waiting for PO",
-     "Signed 3 days late last year", date(2026, 10, 29),
+     "No quote sent; signatory unknown; signed 3 days late last year", date(2026, 10, 29),
      "Quote and order form out today at €50.4k for e-signature; champion confirms signatory and PO need; signature "
      "booked for 27 Oct.", "Me", date(2026, 10, 20)),
     ("Pixelforge", 26000, date(2026, 11, 2), "Auto", 0.00, "Green", "Waiting for PO",
@@ -193,8 +235,10 @@ r0 = 5
 for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, _, due) in enumerate(P):
     r = r0 + i
     rank, why, owner, involved, esc = TRIAGE[cust]
+    status, target, notice = STATUS[cust]
     for c, v in {1: cust, 2: arr, 3: rdate, 4: typ, 5: use, 6: hl, 7: status, 8: blocker, 9: exp,
-                 22: action, 23: owner, 24: due, 25: rank, 26: why, 27: involved, 28: esc}.items():
+                 22: action, 23: owner, 24: due, 25: rank, 26: why, 27: involved, 28: esc,
+                 29: notice, 32: target}.items():
         cell = pl.cell(row=r, column=c, value=v)
         if c != 1:
             inp(cell)
@@ -204,7 +248,7 @@ for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, _, due) in
     pl.cell(row=r, column=13, value=f'=TEXT(C{r},"yyyy-mm")')
     pl.cell(row=r, column=14, value=f'="Q"&ROUNDUP(MONTH(C{r})/3,0)&" "&YEAR(C{r})')
     pl.cell(row=r, column=15, value=f"=EOMONTH(DATE(YEAR(C{r}),ROUNDUP(MONTH(C{r})/3,0)*3,1),0)")
-    pl.cell(row=r, column=16, value=(f"=INDEX(Probability!$B$5:$F$13,MATCH(G{r},Probability!$A$5:$A$13,0),"
+    pl.cell(row=r, column=16, value=(f"=INDEX(Probability!$B$5:$F${PE},MATCH(G{r},Probability!$A$5:$A${PE},0),"
                                      f"MATCH(K{r},Probability!$B$4:$F$4,0))"))
     pl.cell(row=r, column=17, value=f'=IF(I{r}<=O{r},"Yes","No")')
     pl.cell(row=r, column=18, value=f'=IF(Q{r}="Yes",P{r},0)')
@@ -212,26 +256,40 @@ for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, _, due) in
     pl.cell(row=r, column=20, value=f"=S{r}*R{r}")
     pl.cell(row=r, column=21, value=(f'=IF(G{r}="Cancelled","Lost",IF(Q{r}="No","Slips quarter",'
                                      f'IF(OR(J{r}<0,AND(J{r}<=30,OR(G{r}="--None--",G{r}="Not started",'
-                                     f'G{r}="Engaging customer",G{r}="Negotiation"))),"Late","On time")))'))
+                                     f'G{r}="Engaging customer",G{r}="Negotiation",G{r}="Billing blocker",'
+                                     f'G{r}="At risk: before notice deadline",G{r}="Notice received"))),"Late","On time")))'))
+    pl.cell(row=r, column=30, value=f'=IF(AC{r}="","",C{r}-AC{r})')
+    pl.cell(row=r, column=31, value=(f'=IF(E{r}>=0.2,"Over-usage: upsell line + CSM/Renewals task",'
+                                     f'IF(E{r}<=-0.2,"Under-usage: flag CSM"&IF(D{r}="Auto","; set At risk",""),""))'))
+    tw = (f'IF(C{r}-$E$2<0,"Overdue",IF(C{r}-$E$2<=30,"0-30",IF(C{r}-$E$2<=60,"31-60",'
+          f'IF(C{r}-$E$2<=90,"61-90",">90"))))')
+    pl.cell(row=r, column=33, value=(f"=IF(I{r}<=O{r},INDEX(Probability!$B$5:$F${PE},MATCH(AF{r},Probability!$A$5:$A${PE},0),"
+                                     f"MATCH({tw},Probability!$B$4:$F$4,0)),0)"))
+    pl.cell(row=r, column=34, value=f"=S{r}*AG{r}")
+    inp(pl.cell(row=r, column=29))
+    inp(pl.cell(row=r, column=32))
+    pl.cell(row=r, column=30).number_format = DATE
+    pl.cell(row=r, column=33).number_format = PCT
+    pl.cell(row=r, column=34).number_format = EUR
     for c in (2, 19, 20):
         pl.cell(row=r, column=c).number_format = EUR
     for c in (3, 9, 15, 24):
         pl.cell(row=r, column=c).number_format = DATE
     for c in (5, 16, 18):
         pl.cell(row=r, column=c).number_format = PCT
-    for c in (8, 22, 26, 27, 28):
+    for c in (8, 22, 26, 27, 28, 31, 32):
         pl.cell(row=r, column=c).alignment = WRAP
     pl.row_dimensions[r].height = 48
 rN = r0 + len(P) - 1
-style_range(pl, r0, rN, 1, 28)
+style_range(pl, r0, rN, 1, 34)
 t = rN + 1
 pl.cell(row=t, column=1, value="Total").font = BOLD
-for c in (2, 19, 20):
+for c in (2, 19, 20, 34):
     L = get_column_letter(c)
     cell = pl.cell(row=t, column=c, value=f"=SUM({L}{r0}:{L}{rN})")
     cell.font, cell.number_format = BOLD, EUR
 
-for rng, f1 in (("G", "=Probability!$A$5:$A$13"), ("F", '"Green,Yellow,Red"'), ("D", '"Manual,Auto"'),
+for rng, f1 in (("G", f"=Probability!$A$5:$A${PE}"), ("AF", f"=Probability!$A$5:$A${PE}"), ("F", '"Green,Yellow,Red"'), ("D", '"Manual,Auto"'),
                 ("W", '"Me,CSM,Finance,Legal"')):
     dv = DataValidation(type="list", formula1=f1)
     pl.add_data_validation(dv)
@@ -248,6 +306,15 @@ pl.conditional_formatting.add(f"U{r0}:U{rN}", FormulaRule(formula=[f'U{r0}="Late
 pl.conditional_formatting.add(f"U{r0}:U{rN}", FormulaRule(formula=[f'OR(U{r0}="Lost",U{r0}="Slips quarter")'], fill=RED_FILL))
 pl.conditional_formatting.add(f"U{r0}:U{rN}", FormulaRule(formula=[f'U{r0}="On time"'], fill=GRN_FILL))
 pl.conditional_formatting.add(f"AB{r0}:AB{rN}", FormulaRule(formula=[f'LEFT(AB{r0},3)="Yes"'], fill=RED_FILL, font=Font(name=F, bold=True, color="9C0006")))
+# Status must belong to the renewal type (manual vs auto)
+for Lc in ("G", "AF"):
+    pl.conditional_formatting.add(f"{Lc}{r0}:{Lc}{rN}", FormulaRule(
+        formula=[f'AND({Lc}{r0}<>"",INDEX(Probability!$H$5:$H${PE},MATCH({Lc}{r0},Probability!$A$5:$A${PE},0))<>"Both",'
+                 f'INDEX(Probability!$H$5:$H${PE},MATCH({Lc}{r0},Probability!$A$5:$A${PE},0))<>$D{r0})'],
+        fill=RED_FILL))
+pl.conditional_formatting.add(f"AE{r0}:AE{rN}", FormulaRule(formula=[f'LEFT(AE{r0},5)="Under"'], fill=AMB_FILL))
+pl.conditional_formatting.add(f"AE{r0}:AE{rN}", FormulaRule(formula=[f'LEFT(AE{r0},4)="Over"'], fill=GRN_FILL))
+pl.conditional_formatting.add(f"AD{r0}:AD{rN}", FormulaRule(formula=[f'AND(AD{r0}<>"",AD{r0}<$B$2)'], fill=RED_FILL))
 pl.freeze_panes = "B5"
 
 # Forecast block
@@ -283,8 +350,19 @@ pl.cell(row=k, column=1, value="Gross retention (base less regrettable churn and
 pl.cell(row=k, column=2, value=f"=(B{t}+B{lost}+B{lost+2})/B{t}").number_format = "0.0%"
 pl.cell(row=k + 1, column=1, value="Net retention (new ARR / base, incl. 5% uplift)")
 pl.cell(row=k + 1, column=2, value=f"=S{t}/B{t}").number_format = "0.0%"
+ff = k + 3
+pl.cell(row=ff, column=1, value="Forecast of the forecast").font = Font(name=F, bold=True, size=12)
+pl.cell(row=ff + 1, column=1, value="Weighted today (statuses from what we know)")
+pl.cell(row=ff + 1, column=2, value=f"=T{t}").number_format = EUR
+pl.cell(row=ff + 2, column=1, value="Weighted by 30 Oct, if this week's actions land")
+pl.cell(row=ff + 2, column=2, value=f"=AH{t}").number_format = EUR
+pl.cell(row=ff + 3, column=1, value="Uplift from this week's actions")
+pl.cell(row=ff + 3, column=2, value=f"=B{ff+2}-B{ff+1}").number_format = EUR
+for rr in (ff + 1, ff + 2, ff + 3):
+    pl.cell(row=rr, column=2).font = BOLD
 style_range(pl, f0 + 2, f0 + 5, 1, 4)
 style_range(pl, lost, k + 1, 1, 2)
+style_range(pl, ff + 1, ff + 3, 1, 2)
 
 # --------------------------------------------------------------------- Triage
 tr = wb.create_sheet("Triage", 1)
@@ -509,6 +587,11 @@ notes = [
                "and today's escalations. Sorted by rank; edit the rank on the Pipeline tab."),
     ("Probability", "Renewal Status x days to renewal. Late statuses rise as the date gets closer; early statuses fall. "
                     "Overdue has its own, lower column."),
+    ("Auto-renewals", "Own statuses: Renewing: no blockers / Billing blocker / At risk (before or after the notice deadline) / "
+                      "Notice received / Renewed. A red status cell means the status does not match the renewal type."),
+    ("Usage rule", "Usage +20%: renew as is plus an Upsell line and task (no automatic charge). Usage -20%: flag the CSM; "
+                   "auto-renewals move to At risk."),
+    ("Forecast of the forecast", "Weighted today vs weighted by 30 Oct if this week's actions move each status to its target."),
     ("Overdue rule", "Overdue renewals are Late. They count in the quarter only if the expected close date is on or before "
                      "quarter end; otherwise 0% for the quarter."),
     ("Forecast", "Weighted new ARR = new ARR from product lines x probability. Buckets: On time, Late (still in quarter), "

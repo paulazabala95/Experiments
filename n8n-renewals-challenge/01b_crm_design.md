@@ -19,7 +19,12 @@ The forecast, statuses, product lines and alerts in Part 1 are CRM fields, formu
 |---|---|---|
 | Renewal Date | Date | Contract end + 1 day. Never edited by reps. |
 | Close Date (standard) | Date | **Expected** close date, maintained by the owner. Drives the in-quarter rule and standard forecasting. |
-| Renewal Status | Picklist | Not started · Engaging customer · Negotiation · Quoted · Waiting for PO · PO received · **Closed won** (new) · Cancelled. Each has written exit criteria. |
+| Renewal Type | Picklist | Manual · Auto. From the contract. Sets the record type, so each type gets its own status path. |
+| Renewal Status | Picklist (values depend on record type) | **Manual:** Not started · Engaging customer · Negotiation · Quoted · Waiting for PO · PO received · **Closed won** (new) · Cancelled. **Auto:** Renewing: no blockers · Billing blocker · At risk: before notice deadline · At risk: notice deadline passed · Notice received · Renewed · Cancelled. Each has written exit criteria. |
+| Notice Period (days) | Number | From the contract. On an auto-renewal, this is the deadline for the customer to cancel and for us to send the uplift notice. |
+| Notice Deadline | Formula (date) | `Renewal_Date__c - Notice_Period_Days__c` |
+| Usage Change 90d | Percent | From the product usage data (workflow executions), synced daily |
+| Usage Signal | Formula (text) | `IF(Usage_Change_90d__c >= 0.2, "Over-usage", IF(Usage_Change_90d__c <= -0.2, "Under-usage", ""))`. Drives the usage rule in section 5. |
 | Days to Renewal | Formula (number) | `Renewal_Date__c - TODAY()` |
 | Renewal Window | Formula (text) | `IF(Days_to_Renewal__c < 0, "Overdue", IF(Days_to_Renewal__c <= 30, "0-30", IF(Days_to_Renewal__c <= 60, "31-60", IF(Days_to_Renewal__c <= 90, "61-90", ">90"))))` |
 | Overdue | Formula (checkbox) | `AND(Days_to_Renewal__c < 0, NOT(ISPICKVAL(Renewal_Status__c, "Closed won")), NOT(ISPICKVAL(Renewal_Status__c, "Cancelled")))` |
@@ -32,8 +37,10 @@ The forecast, statuses, product lines and alerts in Part 1 are CRM fields, formu
 | Weighted New ARR | Formula (currency) | `New_ARR__c * Forecast_Probability__c` |
 | Forecast Bucket | Formula (text) | On time / Late / Slips quarter / Lost. See below. |
 | Rank, Why First, Next Action, Next Action Owner (Renewals · CSM · Finance · Legal), Next Action Due, Escalate Today, Escalation Note | Number, text, picklist, date, checkbox | The triage fields. Reviewed every Monday, and daily for P1s. |
+| Target Status, Target Date | Picklist, date | Where the next actions should take the renewal, and by when. |
+| Target Probability, Weighted After Actions | Formula (percent, currency) | The same probability formula, applied to Target Status and the window at Target Date. Gives the **forecast of the forecast**. |
 
-**Renewal Probability.** Late statuses rise as the date gets closer, and early statuses fall:
+**Renewal Probability.** For manual renewals, late statuses rise as the date gets closer and early statuses fall. For auto-renewals, a clean renewal rises as the date gets closer, and an open blocker or risk falls:
 
 ```
 CASE(TEXT(Renewal_Status__c),
@@ -44,8 +51,16 @@ CASE(TEXT(Renewal_Status__c),
   "Waiting for PO",    CASE(Renewal_Window__c, "Overdue", 0.70, "0-30", 0.90, "31-60", 0.85, "61-90", 0.80, 0.75),
   "PO received",       CASE(Renewal_Window__c, "Overdue", 0.95, "0-30", 0.99, "31-60", 0.97, "61-90", 0.95, 0.90),
   "Closed won", 1,
+  "Renewing: no blockers",          CASE(Renewal_Window__c, "Overdue", 0.40, "0-30", 0.97, "31-60", 0.95, "61-90", 0.92, 0.90),
+  "Billing blocker",                CASE(Renewal_Window__c, "Overdue", 0.40, "0-30", 0.60, "31-60", 0.70, "61-90", 0.75, 0.80),
+  "At risk: before notice deadline", CASE(Renewal_Window__c, "Overdue", 0.20, "0-30", 0.35, "31-60", 0.40, "61-90", 0.45, 0.50),
+  "At risk: notice deadline passed", CASE(Renewal_Window__c, "Overdue", 0.50, 0.80),
+  "Notice received",                CASE(Renewal_Window__c, "Overdue", 0, 0.10),
+  "Renewed", 1,
   0)
 ```
+
+A Flow moves an auto-renewal from *At risk: before notice deadline* to *At risk: notice deadline passed* on the Notice Deadline, unless notice was received.
 
 If Finance wants to recalibrate every quarter without an admin, the matrix can move to a Custom Metadata type, with a Flow setting the field each night.
 
@@ -59,7 +74,10 @@ IF(ISPICKVAL(Renewal_Status__c, "Cancelled"), "Lost",
             OR(ISBLANK(TEXT(Renewal_Status__c)),
                ISPICKVAL(Renewal_Status__c, "Not started"),
                ISPICKVAL(Renewal_Status__c, "Engaging customer"),
-               ISPICKVAL(Renewal_Status__c, "Negotiation")))),
+               ISPICKVAL(Renewal_Status__c, "Negotiation"),
+               ISPICKVAL(Renewal_Status__c, "Billing blocker"),
+               ISPICKVAL(Renewal_Status__c, "At risk: before notice deadline"),
+               ISPICKVAL(Renewal_Status__c, "Notice received")))),
      "Late", "On time")))
 ```
 
@@ -118,7 +136,11 @@ IF(ISPICKVAL(Renewal_Status__c, "Cancelled"), "Lost",
 | T−90 | Open renewal | Task for the CSM: health and usage review. Status → Engaging customer. |
 | T−60 | Manual renewal | Task for Renewals: **send quote**. This triggers Part 3. |
 | T−45 | Manual, still before Quoted | Alert to Renewals and manager: quote lead time missed |
-| T−(notice + 14) | Auto-renewal | Task: send the uplift notice, confirm the payment method and billing entity, check cancellation risk |
+| Notice Deadline − 14 | Auto-renewal | Task: send the uplift notice, confirm the payment method and billing entity, check cancellation risk |
+| Notice Deadline | Auto-renewal, At risk, no notice received | Status → *At risk: notice deadline passed* |
+| Billing event | Card expired or payment failed (billing system) | Status → *Billing blocker*; task for Renewals and Finance |
+| Usage sync (daily) | Usage Signal = Over-usage | **No automatic charge** unless the contract has an overage clause. Add an Upsell line (upside, not in the forecast), plus a task for the CSM and Renewals to propose the right execution tier. |
+| Usage sync (daily) | Usage Signal = Under-usage | Task for the CSM: adoption plan. On an auto-renewal, status → *At risk*. |
 | T−30 | Not yet Waiting for PO | Alert to manager; Escalate Today candidate |
 | T−14 | Not yet PO received | Daily reminder to the owner |
 | T+1 | Overdue | Overdue flag; alert to manager; grace-period clock starts |
@@ -128,6 +150,7 @@ IF(ISPICKVAL(Renewal_Status__c, "Cancelled"), "Lost",
 
 - **Renewals by Quarter and Month:** grouped by Renewal Quarter → Renewal Month. Shows count, Original ARR, New ARR, Weighted New ARR, Overdue ARR and Regrettable Churn. This is the base report every other view filters.
 - **Forecast:** Weighted New ARR by Forecast Bucket (On time · Late · Slips quarter), plus quarter retention and on-time rate.
+- **Forecast of the forecast:** weighted today next to Weighted After Actions, by renewal. This shows the VP how much the plan is worth and which actions carry it.
 - **Churn by type:** Opportunity Products grouped by Churn Type → Line Type → product.
 - **Triage list view:** open renewals inside 60 days, sorted by Rank, showing Next Action, Owner, Due and Escalate Today.
 - **Dashboard for the VP:** gross and net retention, weighted forecast against target, overdue count and ARR, and the share of renewals quoted by day 60.
