@@ -1,0 +1,11 @@
+Customer,ARR,RenewalDate,Type,UsagePct,Health,Status,Blocker,Owner,NoticeDays,NewARR,DaysToRenewal,Window,Month,Quarter,FinalProb,WeightedARR,Severity,AlertCodes,LastChecked
+Vantage Freight,21000,2026-10-15,Manual,0,Yellow,Quoted,No named contact (shared inbox),Paula,30,22050,,,,,,,,,
+Northwind Logistics,48000,2026-10-29,Manual,0.12,Green,Not started,No quote sent; signed 3 days late last year,Paula,30,50400,,,,,,,,,
+Pixelforge,26000,2026-11-02,Auto,0,Green,Engaging customer,Card expired; billing contact unknown,Paula,30,26000,,,,,,,,,
+Halden Health,45000,2026-11-07,Manual,-0.35,Red,Not started,Champion left; new owner unknown,Paula,30,30000,,,,,,,,,
+Brightloop,36000,2026-12-14,Manual,-0.1,Yellow,Negotiation,"Procurement asks: 25% off, net 60, no auto-renew, 3-month TfC",Paula,30,33264,,,,,,,,,
+Tessera Finance,50000,2026-11-18,Manual,0.05,Yellow,Engaging customer,MSA redlines open since Sep; security review,Paula,30,52500,,,,,,,,,
+Lumen Retail,28000,2026-11-21,Auto,0.08,Green,Engaging customer,Invoice to a different legal entity,Paula,30,29400,,,,,,,,,
+Kestrel Analytics,35000,2026-11-28,Manual,0.4,Green,Engaging customer,Close to execution cap,Paula,30,36750,,,,,,,,,
+Marlowe Insurance,46000,2026-12-09,Manual,0,Yellow,Engaging customer,Vendor questionnaire + DPA needed for PO,Paula,30,48300,,,,,,,,,
+Quanta Labs,40000,2026-12-19,Auto,-0.2,Yellow,Not started,Budget cuts in Q1; 2 check-ins unanswered,Paula,30,32000,,,,,,,,,

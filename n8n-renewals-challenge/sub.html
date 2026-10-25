@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>n8n Renewals Specialist challenge: Paula Zabala</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header id="title-block-header" style="display:none">
+<h1 class="title">n8n Renewals Specialist challenge: Paula Zabala</h1>
+</header>
+<h1 id="n8n-renewals-specialist-challenge-submission">n8n Renewals Specialist: challenge submission</h1>
+<p><strong>Paula Zabala.</strong> Scenario date: <strong>Tuesday 20 October 2026.</strong> This keeps the brief’s premise intact: one renewal overdue and nine due within 60 days.</p>
+<h2 id="whats-in-the-pack">What’s in the pack</h2>
+<table>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>What it is</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>01_triage_and_forecast.md</code></td>
+<td><strong>Part 1:</strong> renewals ranked with owner and date for each, today’s escalations, and the forecast (on time / late / lost)</td>
+</tr>
+<tr class="even">
+<td><code>02_brightloop_negotiation.md</code></td>
+<td><strong>Part 2:</strong> reply to Sam, a one-page plan (target, walk-away, gives and gets, who’s involved), and the call playbook with expected surprises</td>
+</tr>
+<tr class="odd">
+<td><code>03_automation.md</code></td>
+<td><strong>Part 3:</strong> a working n8n prototype for daily triage, forecast scoring and escalation</td>
+</tr>
+<tr class="even">
+<td><code>renewal_tracker.xlsx</code></td>
+<td>The CRM model behind the numbers: Pipeline, Products (renewal/upsell/downgrade/churn lines with 5% uplift), Opp summary, Monthly report, Probability matrix, Policy</td>
+</tr>
+<tr class="odd">
+<td><code>n8n/</code></td>
+<td>Workflow source (<code>workflow_sdk.ts</code>), the scoring and brief code, test rows, and a sample brief (<code>sample_digest.html</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-40-minutes-in-summary">The 40 minutes, in summary</h2>
+<p><strong>Part 1 (12 min).</strong> I rank by slack × ARR. Northwind, Vantage and Pixelforge each need about an hour of work today to remove most of their risk. Halden and Tessera get escalated today. <strong>Forecast: €248k on time, €101k late, €26k lost. That is 93% gross retention and 96% net retention after the 5% uplift.</strong> The number I’m least sure of is the lost number, because of Halden.</p>
+<p><strong>Part 2 (18 min).</strong> Brightloop: I decline the termination right, the auto-renewal removal and the 25% discount. I trade <strong>term, structure and right-sizing</strong> instead. Target: 2 years at €36k flat, with no approvals needed. Floor: €33.3k a year on 2 years, with Finance approval. Below that, they move to a smaller plan at list price, not a deeper discount.</p>
+<p><strong>Part 3 (10 min).</strong> An n8n workflow scores the book every weekday morning. It raises nine kinds of alert, writes scores back to the CRM, and sends one brief plus P1 escalations. A person still makes the forecast call and approves anything that goes to a customer.</p>
+<p><strong>Timing I’ll hold:</strong> Part 1 at 0–12 min, Part 2 at 12–30 min (3 min to set up, 15 min live), Part 3 at 30–40 min. I’ll flag the time when each part ends.</p>
+<h2 id="how-i-used-ai-and-automation">How I used AI and automation</h2>
+<ul>
+<li><strong>My process, my judgement:</strong> the renewal stages and their probability logic, the product-line model (renewal/upsell/downgrade with original-versus-new comparison), 5% indexation, the account calls, and the negotiation strategy all come from how I’ve run renewals before.</li>
+<li><strong>An AI assistant (Claude)</strong> helped me pressure-test the triage and the forecast, check the policy maths (discount against the uplifted list price, approval thresholds), draft the email and playbook text I then edited, and generate the Excel model and the n8n workflow code. I checked every number in the workbook.</li>
+<li><strong>n8n:</strong> I built the Part 3 prototype in my own n8n Cloud instance on top of my existing renewal-alert workflow (AI drafting with CSM approval), and tested it on this book with pinned data.</li>
+</ul>
+<h1 id="part-1-portfolio-triage-and-forecast">Part 1: Portfolio triage and forecast</h1>
+<p><strong>As of Tuesday 20 October 2026.</strong> This puts Vantage Freight 5 days overdue and the other nine renewals inside 60 days, as the brief describes. Workbook: <code>renewal_tracker.xlsx</code>. Every number below comes from it.</p>
+<h2 id="how-i-rank">How I rank</h2>
+<p>I rank on <strong>slack</strong>: the days left minus the days the work still needs, weighted by ARR at risk. A €48k renewal that is 9 days out with no quote sent comes before a €50k renewal that is 29 days out. Three of the renewals need only an hour of my time today to remove most of their risk. I do those first, before the long, multi-party ones.</p>
+<p>The book by renewal month (my base report, and what every alert keys off):</p>
+<table>
+<thead>
+<tr class="header">
+<th>Quarter</th>
+<th>Month</th>
+<th>#</th>
+<th>Base ARR</th>
+<th>Overdue</th>
+<th>Manual, no quote, ≤60 days</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Q4 2026</td>
+<td>Oct</td>
+<td>2</td>
+<td>€69k</td>
+<td>€21k</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Q4 2026</td>
+<td>Nov</td>
+<td>5</td>
+<td>€184k</td>
+<td>–</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td>Q4 2026</td>
+<td>Dec</td>
+<td>3</td>
+<td>€122k</td>
+<td>–</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>10</strong></td>
+<td><strong>€375k</strong></td>
+<td><strong>€21k</strong></td>
+<td><strong>5</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The 60-day quote policy has already been missed on at least five manual renewals. That is a process gap, not a problem with individual deals, and Part 3 fixes it.</p>
+<h2 id="ranked-actions">Ranked actions</h2>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Customer</th>
+<th>ARR</th>
+<th>Due</th>
+<th>Why now</th>
+<th>Next action</th>
+<th>Owner</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>Northwind Logistics</strong></td>
+<td>€48k</td>
+<td>29 Oct (9d)</td>
+<td>Biggest near-term ARR, no quote, signed 3 days late last year</td>
+<td>Send quote and order form for e-signature today at <strong>€50.4k</strong> (5% uplift). Ask the champion who signs and whether a PO is needed. Book the signature for 27 Oct.</td>
+<td>Me</td>
+<td><strong>Today</strong></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>Vantage Freight</strong></td>
+<td>€21k</td>
+<td>15 Oct (<strong>overdue</strong>)</td>
+<td>Every day overdue costs credibility and cash. The shared inbox is the blocker, not the price.</td>
+<td>The CSM pulls the instance owner and admin emails from product data. I phone and email a named person and agree a signing date. The manager confirms the grace period before access is restricted.</td>
+<td>Me + CSM</td>
+<td>21 Oct</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>Pixelforge</strong></td>
+<td>€26k</td>
+<td>2 Nov (13d)</td>
+<td>Auto-renewal will fail on the expired card. That is involuntary churn on a green account.</td>
+<td>The CSM gets the billing contact today. I send a secure card-update link, or switch them to invoice. Finance holds dunning. The 30-day uplift-notice date (3 Oct) has passed, so it renews flat. I log it as a known uplift gap.</td>
+<td>CSM + Me + Finance</td>
+<td>22 Oct</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><strong>Halden Health</strong></td>
+<td>€45k</td>
+<td>7 Nov (18d)</td>
+<td>Red account, usage −35%, champion gone, nobody knows the new owner</td>
+<td><strong>Escalate today</strong> to my manager and VP CS. The CSM and an exec sponsor meet the new owner this week, with a value review before any quote. Legal checks whether the cancellation-notice date (8 Oct) passed without notice. I prepare a right-sized option at list price.</td>
+<td>CSM (lead) + Me</td>
+<td>23 Oct</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td><strong>Tessera Finance</strong></td>
+<td>€50k</td>
+<td>18 Nov (29d)</td>
+<td>MSA redlines open since September and a security review not yet started. Both can block the PO.</td>
+<td><strong>Escalate today</strong> to Legal with a deadline of 30 Oct for the redline response. I send the security pack today (SOC 2, pen-test summary, DPA, sub-processors). I propose renewing on the <strong>current MSA</strong> and negotiating the MSA in parallel, so the renewal is not held hostage.</td>
+<td>Legal + Me</td>
+<td>23 Oct</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td><strong>Brightloop</strong></td>
+<td>€36k</td>
+<td>14 Dec (55d)</td>
+<td>Live negotiation, and procurement is setting the pace</td>
+<td>Reply to Sam today (see Part 2). Get Finance pre-approval before the call. Call Sam and Priya on 22–23 Oct. Target signature 30 Nov.</td>
+<td>Me</td>
+<td><strong>Today</strong></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td><strong>Marlowe Insurance</strong></td>
+<td>€46k</td>
+<td>9 Dec (50d)</td>
+<td>Insurance procurement is slow. Without the questionnaire and DPA there is no PO.</td>
+<td>Send the standard DPA and the questionnaire, answered from the trust centre (AI first draft, Security reviews). Send the quote with it. Ask for their PO lead time and work back from 9 Dec.</td>
+<td>Me + Legal</td>
+<td>27 Oct</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td><strong>Kestrel Analytics</strong></td>
+<td>€35k</td>
+<td>28 Nov (39d)</td>
+<td>Usage +40%, close to the execution cap. Expansion, and a risk of throttling.</td>
+<td>The CSM runs a usage review. I send two quotes: like-for-like (€36.75k) and the next execution tier. If the upsell slows things down, we sign the renewal and add the upsell later as an amendment.</td>
+<td>CSM + Me</td>
+<td>28 Oct</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td><strong>Lumen Retail</strong></td>
+<td>€28k</td>
+<td>21 Nov (32d)</td>
+<td>Auto-renewal, but the invoice would go to the wrong entity. Notice date for the uplift is 22 Oct.</td>
+<td>Send the uplift notice by 22 Oct. Get the new entity’s name, VAT number and address. Legal decides whether this is a billing change (affiliate) or an assignment (new order form). Finance updates billing before the invoice run.</td>
+<td>Me + Finance</td>
+<td>22 Oct</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td><strong>Quanta Labs</strong></td>
+<td>€40k</td>
+<td>19 Dec (60d)</td>
+<td>Auto-renewal, usage −20%, budget cuts in Q1, two check-ins unanswered</td>
+<td>The CSM and exec sponsor go in through a new contact (economic buyer or finance). I confirm the cancellation-notice date (~19 Nov). I offer an in-policy <strong>2-year price lock</strong> or a right-size <em>before</em> they decide to cancel.</td>
+<td>CSM + Me</td>
+<td>30 Oct</td>
+</tr>
+</tbody>
+</table>
+<h3 id="escalations-i-raise-today">Escalations I raise today</h3>
+<ol type="1">
+<li><strong>Halden Health (€45k, red, 18 days).</strong> To my manager and VP CS. I need an exec sponsor on a call with the new owner this week.</li>
+<li><strong>Tessera Finance (€50k).</strong> To the Legal lead: redlines have been open for 6+ weeks, and I need a response date of 30 Oct and agreement to renew on the current MSA.</li>
+<li><strong>Vantage Freight (€21k, overdue).</strong> To my manager: what is our grace period before access is restricted? I’d propose day 14 for exec-to-exec contact and day 30 for formal notice under the contract.</li>
+<li><strong>Brightloop.</strong> Not an escalation, but a pre-approval request to Finance (up to 12% on a 2-year deal, net 60). I want room to trade during the call.</li>
+<li><strong>Process.</strong> At least five manual renewals inside 60 days still have no quote, which breaks the quote policy. I’d show my manager the weekday alert (Part 3) as the fix.</li>
+</ol>
+<h2 id="forecast-vs.-375k-base-arr">Forecast (vs. €375k base ARR)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Bucket</th>
+<th>Base ARR</th>
+<th>%</th>
+<th>New ARR incl. uplift</th>
+<th>Accounts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Closes on time</strong></td>
+<td><strong>€248k</strong></td>
+<td>66%</td>
+<td>€256k</td>
+<td>Northwind, Pixelforge, Lumen, Kestrel, Marlowe, Brightloop (€33.3k kept), Quanta (€32k kept)</td>
+</tr>
+<tr class="even">
+<td><strong>Closes late</strong></td>
+<td><strong>€101k</strong></td>
+<td>27%</td>
+<td>€105k</td>
+<td>Vantage (already late), Tessera (MSA/security), Halden (right-sized to €30k)</td>
+</tr>
+<tr class="odd">
+<td><strong>Lost</strong> (churn + contraction)</td>
+<td><strong>€26k</strong></td>
+<td>7%</td>
+<td>–</td>
+<td>Halden −€15k, Quanta −€8k, Brightloop −€2.7k</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Gross retention 93%, net retention 96%.</strong> The 5% uplift adds about €13k, but it is lost on Pixelforge (notice missed) and on the two downgrades.</li>
+<li><strong>Kestrel upsell is upside, not commit.</strong> It is worth roughly +€10–15k if they move up a tier.</li>
+<li><strong>Range:</strong> best case about €400k new ARR (everything renews with uplift, plus the Kestrel upsell). Worst case about €285k (Halden and Quanta churn, Brightloop downgrades to Tier 2).</li>
+<li><strong>Cross-check:</strong> the system-weighted forecast (Renewal Status × days left × health) is only <strong>€89k today</strong>, because statuses lag the dates. If this week’s actions land, it rises to <strong>€224k on time</strong>, which is close to my on-time call. If the two numbers stay more than 10% apart, I review those deals.</li>
+</ul>
+<h3 id="the-number-im-least-sure-about-lost-26k">The number I’m least sure about: Lost (€26k)</h3>
+<p>Halden alone could lose anywhere from €0 to €45k. We have no relationship with the new owner, usage is down 35%, and I don’t yet know whether the notice date legally locked in the renewal. Quanta is second: it auto-renews before the Q1 cuts, so the real risk is a cancellation notice landing before ~19 Nov. My second-least-certain number is <strong>timing on Tessera</strong>: on time versus late depends on Legal and their security team, not on me.</p>
+<h2 id="how-the-crm-supports-this-my-standard-setup">How the CRM supports this (my standard setup)</h2>
+<ul>
+<li><strong>Renewal Status picklist</strong> (Not started → Engaging customer → Negotiation → Quoted → Waiting for PO → PO received, plus Cancelled). I’d add <strong>Closed won</strong>, and give each status written exit criteria so the reps all use it the same way.</li>
+<li><strong>Probability = status × countdown.</strong> A later status closer to the date means a higher probability. An <em>early</em> status close to the date means a <em>lower</em> one, because the cycle can’t finish in time. That is the signal managers usually miss. The value is multiplied by CSM health. Auto-renewals with no blocker get an 80% floor.</li>
+<li><strong>Product lines on each renewal opportunity</strong> are tagged <em>Renewal / Upsell / Downgrade / Cross-sell / Churn</em>. Original ARR is kept for comparison. New ARR adds the 5% uplift to the renewed base, prices any change at list, then applies the discount. The difference shows <strong>green or red</strong>. An approval column reads policy C (Finance or VP). The opportunity roll-up calculates churn, contraction, upsell, discount and new ARR automatically, so the forecast never relies on someone retyping a number.</li>
+<li><strong>Indexation:</strong> the default is a 5% uplift on every 1-year renewal line. On 2-year deals, the uplift can be waived within the multi-year 5% allowance with no approval.</li>
+</ul>
+<h1 id="part-2-brightloop-negotiation">Part 2: Brightloop negotiation</h1>
+<h2 id="a.-my-reply-to-sam-sent-tue-20-oct">A. My reply to Sam (sent Tue 20 Oct)</h2>
+<blockquote>
+<p><strong>Subject:</strong> Brightloop renewal: let’s find the version that fits your budget</p>
+<p>Hi Sam,</p>
+<p>Thank you for being this open about the budget pressure. That makes it much easier to find something that works.</p>
+<p>First, the two support escalations this year. They took longer to resolve than they should have, and I’m sorry. I’ve asked our support lead to review both, and I’ll bring what we find and what we’re changing to our call.</p>
+<p>On procurement’s four points: I can’t agree to them exactly as written. A 25% discount, removing auto-renewal and a termination-for-convenience right are outside what we can offer on any Enterprise renewal. But I don’t think we need them to reach a number your budget can carry. There are a few routes we can price together:</p>
+<ul>
+<li><strong>A multi-year option</strong> that holds your price flat and protects next year’s budget</li>
+<li><strong>Right-sizing</strong>: we’ll look at your actual execution data together and see whether a smaller plan really fits, so you don’t pay for headroom you don’t use, or hit a cap you didn’t expect</li>
+<li><strong>Flexibility on payment terms</strong></li>
+</ul>
+<p>Could we set up 30 minutes with you and Priya on Thursday or Friday? It would help if I came in knowing:</p>
+<ol type="1">
+<li>the budget figure you need to land on,</li>
+<li>who signs, and by when, and</li>
+<li>what “evaluate alternatives” means in practice (self-hosting? another vendor?).</li>
+</ol>
+<p>Your renewal date is 14 December, so if we agree terms by mid-November there is plenty of time for paperwork.</p>
+<p>Best, Paula Renewals, n8n</p>
+</blockquote>
+<p><em>Why this email:</em> it acknowledges the support problem first, and it says no to the four asks once, clearly, without arguing each one in writing. It points towards value and trade-offs rather than a price, and it moves the negotiation onto a call with the decision makers.</p>
+<hr />
+<h2 id="b.-one-page-negotiation-plan">B. One-page negotiation plan</h2>
+<p><strong>The numbers</strong> (current price €36,000; 1-year list renewal with 5% uplift <strong>€37,800</strong>). Discount is measured against €37,800, because policy treats a waived uplift as a discount.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>What they asked for</th>
+<th>What it costs n8n</th>
+<th>Who must approve</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>25% discount</td>
+<td>€27,000 (28.6% off list)</td>
+<td>€10.8k a year, and a precedent visible across 220 other renewals</td>
+<td>VP CS (above 12%)</td>
+</tr>
+<tr class="even">
+<td>Net 60</td>
+<td></td>
+<td>Low (cash timing)</td>
+<td>Finance</td>
+</tr>
+<tr class="odd">
+<td>Remove auto-renewal</td>
+<td></td>
+<td>Turns a renewal into a new sale every year</td>
+<td>Legal + VP CS</td>
+</tr>
+<tr class="even">
+<td>3-month termination for convenience</td>
+<td></td>
+<td>Turns annual ARR into quarterly ARR. It can’t be forecast.</td>
+<td>Legal, normally declined</td>
+</tr>
+<tr class="odd">
+<td>Smaller plan</td>
+<td></td>
+<td>Allowed at list price</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>What’s really going on:</strong> a budget cut (real, according to the CSM), a 10% usage dip (small), and a new procurement lead who needs a visible win. Sam values the product. The two slow support escalations are the emotional lever behind “evaluate alternatives”. For n8n, the realistic alternative is <strong>self-hosting the free Community edition</strong>. Moving off Enterprise means giving up SSO/SAML, RBAC and projects, environments and Git source control, log streaming, external secrets, and SLA-backed support. They’d also take on hosting and DevOps work, which at 0.2 FTE is more than the discount they’re asking for.</p>
+<p><strong>Target outcome (no approvals needed):</strong></p>
+<ul>
+<li><strong>2-year term at €36,000 a year, flat.</strong> The uplift is waived, which is 4.8% off list and inside the 5% multi-year allowance. Contract value €72k, and their budget is protected for 2026–2027.</li>
+<li><strong>Net 45</strong> (allowed), auto-renewal kept, no termination right.</li>
+<li>A <strong>support remediation plan</strong>: a written review of both escalations, a named escalation path, and a quarterly support review with the CSM.</li>
+<li>Signed by <strong>30 November</strong>.</li>
+</ul>
+<p><strong>Options I can trade within (Finance pre-approval secured before the call):</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Option</th>
+<th>Price per year</th>
+<th>vs list</th>
+<th>Approval</th>
+<th>What I ask in return</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A. Target</td>
+<td>€36,000 × 2 years</td>
+<td>−4.8%</td>
+<td>None</td>
+<td>Signed by 30 Nov</td>
+</tr>
+<tr class="even">
+<td>B. Ramp</td>
+<td>Year 1 €32,400 / Year 2 €37,800 (average €35,100)</td>
+<td>−7.1%</td>
+<td>Finance</td>
+<td>2-year term, annual payment upfront</td>
+</tr>
+<tr class="odd">
+<td>C. Floor, same plan</td>
+<td>€33,264 × 2 years</td>
+<td>−12%</td>
+<td>Finance</td>
+<td>2-year term, net 60 only here, case study or reference, signed by 30 Nov</td>
+</tr>
+<tr class="even">
+<td>D. Right-size</td>
+<td>Tier 2 at list (assumed €28,800) × 1 year</td>
+<td>List</td>
+<td>None</td>
+<td>Usage review first. Upgrade path at pro-rata.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Walk-away position:</strong></p>
+<ul>
+<li><strong>Never:</strong> termination for convenience, removing auto-renewal, or more than 12% off the current plan. I won’t take any of these to approval myself.</li>
+<li><strong>Price floor on the current plan:</strong> €33,264 a year on a 2-year term (option C). On a 1-year term, €36,000 flat with Finance approval.</li>
+<li><strong>If they need less than that,</strong> the answer is <strong>right-sizing at list price (D)</strong>, not a deeper discount. I’d rather book €7k of honest contraction than a 25% discount that resets the price.</li>
+<li><strong>Escalate to VP only</strong> if Brightloop brings something new: a 3-year term, or a strategic logo or case study. Even then, my recommendation would be no more than about 15%.</li>
+</ul>
+<p><strong>What I’d give, and what I ask for each time (“if… then…”):</strong></p>
+<ul>
+<li>Uplift waiver → in exchange for a 2-year term</li>
+<li>Net 60 → in exchange for a 2-year term and signature by 30 Nov</li>
+<li>A deeper discount (up to 12%) → in exchange for a 2-year term, payment upfront, a reference, and the deadline</li>
+<li>Concern about auto-renewal → offer a <strong>renewal reminder from us 90 days ahead</strong> and keep the standard notice period. This gives them control without removing the clause. Any change to the notice period goes to Legal.</li>
+<li>Wanting an exit right → the <strong>2-year price lock</strong> is the protection they actually need. The fear is being locked into a price they can’t afford, not being locked into a product they use.</li>
+<li>Free: the support review, an exec sponsor call, and a usage optimisation session from the CSM</li>
+</ul>
+<p><strong>Who I involve:</strong></p>
+<ul>
+<li><strong>Finance:</strong> pre-approve up to 12% on a 2-year term, net 60 and the ramp, before the call.</li>
+<li><strong>Legal:</strong> confirm the wording for declining the termination right and keeping auto-renewal, and sign off any notice-period tweak.</li>
+<li><strong>VP CS:</strong> a heads-up that this is €36k at risk. No approval is needed unless the discount goes above 12%.</li>
+<li><strong>CSM:</strong> owns Sam and the success plan, and brings the usage data.</li>
+<li><strong>Support lead:</strong> a root-cause review of the two escalations by 30 Oct.</li>
+<li><strong>My manager:</strong> a weekly status update.</li>
+</ul>
+<hr />
+<h2 id="c.-call-playbook-15-minutes-i-keep-time">C. Call playbook (15 minutes, I keep time)</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Min</th>
+<th>Segment</th>
+<th>What I do</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0–1</td>
+<td>Open</td>
+<td>Agenda, time check, confirm who decides and who signs</td>
+</tr>
+<tr class="even">
+<td>1–4</td>
+<td>Discovery (Sam)</td>
+<td>Budget figure, dates, what “alternatives” means, what the 10% dip actually is (a seasonal workflow? a migration?)</td>
+</tr>
+<tr class="odd">
+<td>4–6</td>
+<td>Support</td>
+<td>Own the two escalations, share the remediation plan, ask what “good” looks like</td>
+</tr>
+<tr class="even">
+<td>6–10</td>
+<td>Options (Priya joins)</td>
+<td>Show A and D side by side, anchor on A. Keep B and C in reserve.</td>
+</tr>
+<tr class="odd">
+<td>10–13</td>
+<td>Trade</td>
+<td>Only “if… then…”. One concession per thing I get back. Never split the difference.</td>
+</tr>
+<tr class="even">
+<td>13–15</td>
+<td>Close</td>
+<td>Summarise what we agreed, name an owner for each open item, set the date the order form goes out, confirm signature by 30 Nov</td>
+</tr>
+</tbody>
+</table>
+<h3 id="surprises-i-expect-and-how-id-answer">Surprises I expect, and how I’d answer</h3>
+<table>
+<thead>
+<tr class="header">
+<th>They say</th>
+<th>I answer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>“We have a competitor quote 40% cheaper.”</td>
+<td>“Can you share what’s in scope? Most quotes leave out migration, rebuilding the workflows, and Enterprise controls. Let’s compare total cost of ownership.” I don’t match the price. I trade on term and right-sizing.</td>
+</tr>
+<tr class="even">
+<td>“We’ll just self-host the free version.”</td>
+<td>That’s a real option, and I respect it. I walk through what they’d give up (SSO, environments, Git, log streaming, SLA support) and what DevOps would cost them. I offer a technical session with Sam.</td>
+</tr>
+<tr class="odd">
+<td>Priya: “Net 60 is company policy, non-negotiable.”</td>
+<td>“Understood. I can do net 60 on the 2-year structure.” (Finance has pre-approved this.)</td>
+</tr>
+<tr class="even">
+<td>“All four points, or no deal.”</td>
+<td>I take it as an opening position. “I can’t do the exit clause or remove auto-renewal for anyone. What problem are they solving for you?” Then I solve that problem: the price lock and the 90-day reminder.</td>
+</tr>
+<tr class="odd">
+<td>“Fine, 3 years for 25% off.”</td>
+<td>“A 3-year deal changes the picture, and I’ll take it to my VP. I’m not able to commit to 25%.” I don’t concede on the call. I come back within 48 hours.</td>
+</tr>
+<tr class="even">
+<td>Priya reveals a budget of €30k</td>
+<td>Design to the budget. Ramp year 1 to about €32k, or right-size to Tier 2 plus an execution add-on. I show which fits their usage.</td>
+</tr>
+<tr class="odd">
+<td>“Sam is leaving” / “Sam isn’t the decision maker”</td>
+<td>Multi-thread: ask for an intro to the budget owner, and get the CSM and an exec sponsor in front of the new person.</td>
+</tr>
+<tr class="even">
+<td>“We need it signed today, final offer.”</td>
+<td>I only offer what’s already pre-approved (A–C). Anything else, I come back within 24 hours with an answer.</td>
+</tr>
+<tr class="odd">
+<td>“Give us service credits for the escalations.”</td>
+<td>Credits are a discount by another name. I offer the remediation plan and quarterly support review, and point to the SLA.</td>
+</tr>
+<tr class="even">
+<td>“Remove the uplift on a 1-year renewal.”</td>
+<td>That’s a discount under our policy. Two years flat gets you the same thing at no extra cost.</td>
+</tr>
+<tr class="odd">
+<td>Silence or delay until 14 Dec</td>
+<td>I set the date the order form goes out. If nothing is signed by 1 Dec, I escalate exec to exec.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Debrief line I’d use:</strong> “I protected price integrity by moving the conversation from <em>discount</em> to <em>term, structure and right-size</em>, and every concession was traded.”</p>
+<h1 id="part-3-scaling-the-renewal-motion">Part 3: Scaling the renewal motion</h1>
+<h2 id="the-step-i-automate-daily-renewal-triage-forecast-scoring-and-escalation">The step I automate: daily renewal triage, forecast scoring and escalation</h2>
+<p><strong>Why this step:</strong> there are 221 Q4 renewals and four overwhelmed CSMs. The failure in this book is <em>timing</em>, not negotiation skill. Quotes go out late (Northwind has none at 9 days out), auto-renewals fail silently (Pixelforge’s expired card), notice dates pass unnoticed (Halden, Pixelforge, Lumen), and the forecast is a guess. Triage, the first thing I did by hand in Part 1, is the job a machine should do every morning. I built a <strong>working prototype in n8n</strong>.</p>
+<p><strong>Workflow:</strong> <em>Renewal forecast and escalation engine</em> (in my n8n Cloud: https://paulazabala95.app.n8n.cloud/workflow/mvDDTTwQYTpurdtP). The source is in <code>n8n/</code>. It is built on my existing <em>Daily renewal alerts</em> workflow, which drafts customer emails with AI and sends them only after a CSM approves.</p>
+<pre><code>Weekdays 7:30 ─► Read renewal pipeline (CRM / Sheet)
+                 └► Score renewals + raise alerts (Code)
+                     ├► Write scores back to the pipeline (CRM hygiene)
+                     ├► Build daily brief ─► Email to Renewals Specialist
+                     └► P1? ─► Escalation email to owner + manager</code></pre>
+<table>
+<tbody>
+<tr class="odd">
+<td><strong>Trigger</strong></td>
+<td>Schedule, weekdays at 7:30. In production, also a CRM trigger when Renewal Status, Renewal Date or Amount changes.</td>
+</tr>
+<tr class="even">
+<td><strong>Systems</strong></td>
+<td>Prototype: Google Sheets (pipeline) and Gmail. Production: <strong>Salesforce</strong> (renewal opportunities and product lines), <strong>Stripe/billing</strong> (card status, invoice entity), the <strong>product usage warehouse</strong> (90-day execution trend), <strong>Slack</strong> (#renewals-alerts, DMs to owners), and e-signature status.</td>
+</tr>
+<tr class="odd">
+<td><strong>What it calculates</strong></td>
+<td>Days to renewal, 30/60/90 window, month and quarter, the status × countdown probability (the same matrix as the workbook) × health, and weighted new ARR including the 5% uplift.</td>
+</tr>
+<tr class="even">
+<td><strong>Alerts</strong></td>
+<td>OVERDUE · QUOTE_LEAD_TIME (manual, ≤60 days, no quote) · SIGNATURE_RISK (≤14 days, not with procurement) · PAYMENT_BLOCKER (auto-renewal with an expired card or wrong entity) · NOTICE_WINDOW (date to send the uplift notice or watch for cancellation) · HEALTH_RISK · UPSELL_SIGNAL · BLOCKER_OPEN · CRM_HYGIENE (no status, owner or ARR)</td>
+</tr>
+<tr class="odd">
+<td><strong>Output</strong></td>
+<td>One brief per day grouped by quarter and month, with actions sorted P1 → P3. One escalation email per P1 account. The calculated fields are written back to the pipeline so the forecast report is always current.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tested</strong> on the 10 accounts in this book (pinned data, so no emails were sent). It raised 5 P1s (Vantage, Northwind, Pixelforge, Halden, Tessera) and 5 P2s. That matches my manual triage in Part 1, which took me about an hour. The workflow takes seconds and runs every day.</p>
+<h2 id="what-a-human-still-checks">What a human still checks</h2>
+<ul>
+<li><strong>The forecast call.</strong> The workflow gives a <em>system-weighted</em> number. I make the commit / late / lost call and record it in the CRM. When the two differ by more than 10%, I review that deal.</li>
+<li><strong>Every P1:</strong> I confirm an owner and a date by 10:00.</li>
+<li><strong>Anything going to a customer:</strong> AI drafts the emails, and a person approves before sending. This is the approval step in my existing workflow.</li>
+<li><strong>Commercial terms:</strong> discounts, approvals and contract changes are never automated.</li>
+<li><strong>Recalibration:</strong> every quarter I compare the probability matrix with actual outcomes and adjust it.</li>
+</ul>
+<h2 id="how-id-know-it-works">How I’d know it works</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Today</th>
+<th>Target after 1 quarter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Manual renewals quoted by day 60</td>
+<td>about 50% (5 of the 7 manual renewals in this book had no quote)</td>
+<td><strong>100%</strong></td>
+</tr>
+<tr class="even">
+<td>Overdue renewals (count / ARR)</td>
+<td>1 / €21k</td>
+<td><strong>0</strong> at quarter end</td>
+</tr>
+<tr class="odd">
+<td>Forecast accuracy (call vs. actual, by month)</td>
+<td>unknown</td>
+<td>within <strong>±5%</strong></td>
+</tr>
+<tr class="even">
+<td>Auto-renewals failing on payment</td>
+<td>unknown</td>
+<td><strong>0</strong>: caught at day 45</td>
+</tr>
+<tr class="odd">
+<td>P1 alerts actioned within 24 hours</td>
+<td>–</td>
+<td><strong>≥90%</strong>. Below that, the alerts are noise and I tune them.</td>
+</tr>
+<tr class="even">
+<td>Specialist and CSM hours on triage</td>
+<td>~1 hour a day each</td>
+<td><strong>&lt;10 minutes a day</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="next-iterations">Next iterations</h2>
+<ol type="1">
+<li><strong>AI security-questionnaire assistant</strong> (for Marlowe and Tessera): answers drafted from the trust centre and past answers, then reviewed by Security.</li>
+<li><strong>Quote and order-form generation</strong> from the opportunity’s product lines (uplift and approval rules built in), sent for e-signature automatically when the approval column reads “None”.</li>
+<li><strong>A Slack bot</strong> (“/renewal Brightloop”) that returns status, probability, blockers and the next action from the CRM.</li>
+</ol>
+</body>
+</html>
