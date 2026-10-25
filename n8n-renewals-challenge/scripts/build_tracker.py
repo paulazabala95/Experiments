@@ -113,7 +113,7 @@ OV = PE + 2
 pr.cell(row=OV, column=1, value="Overdue rule").font = BOLD
 pr.cell(row=OV + 4, column=1, value="Usage rule").font = BOLD
 pr.cell(row=OV + 4, column=2, value=(
-    "n8n prices by workflow executions (users are unlimited). Usage +20% or more: renew as is, add an Upsell line and a "
+    "n8n prices by workflow executions (users are unlimited). Usage +20% or more: renew as is, open an Upsell opportunity and a "
     "CSM + Renewals task; never auto-charge unless the contract has an overage clause. Usage -20% or more: flag the CSM "
     "for an adoption plan; on an auto-renewal, set At risk.")).alignment = WRAP
 pr.merge_cells(start_row=OV + 4, start_column=2, end_row=OV + 6, end_column=7)
@@ -168,7 +168,7 @@ TRIAGE = {
                           "Me", "Legal, Security", ""),
     "Kestrel Analytics": (8, "Usage +40%, near the execution cap: expansion, and a throttling risk.",
                           "CSM", "Me", ""),
-    "Lumen Retail": (9, "Auto-renewal with the wrong billing entity; uplift notice due 22 Oct (assumed 30-day notice).",
+    "Lumen Retail": (9, "Auto-renewal would invoice the wrong legal entity; cancellation deadline 22 Oct (assumed 30-day notice).",
                      "Me", "Finance, Legal", ""),
     "Quanta Labs": (10, "Auto-renewal, usage -20%, Q1 budget cuts, unresponsive. 60 days, but the notice deadline is ~19 Nov (assumed 30-day notice).",
                     "CSM", "Me", ""),
@@ -200,7 +200,7 @@ P = [
     ("Pixelforge", 26000, date(2026, 11, 2), "Auto", 0.00, "Green", "Waiting for PO",
      "Card expired; billing contact unknown", date(2026, 11, 2),
      "CSM gets the billing contact today; I send a secure card-update link or switch to invoice; Finance holds "
-     "dunning. Uplift notice date passed, renews flat.", "CSM + Me", date(2026, 10, 22)),
+     "dunning. Renews at €27.3k with the contractual 5% uplift.", "CSM + Me", date(2026, 10, 22)),
     ("Halden Health", 45000, date(2026, 11, 7), "Manual", -0.35, "Red", "Engaging customer",
      "Champion left; new owner unknown", date(2026, 11, 20),
      "ESCALATE TODAY. CSM, me and exec sponsor meet the new owner this week. Legal checks the 8 Oct notice date. "
@@ -215,11 +215,11 @@ P = [
      "negotiate the MSA in parallel.", "Legal + Me", date(2026, 10, 23)),
     ("Lumen Retail", 28000, date(2026, 11, 21), "Auto", 0.08, "Green", "Waiting for PO",
      "Invoice to a different legal entity", date(2026, 11, 21),
-     "Uplift notice by 22 Oct. New entity details; Legal: billing change or assignment; Finance updates billing "
-     "before the invoice run.", "Me + Finance", date(2026, 10, 22)),
+     "New entity details (name, VAT, address); Legal: billing change or assignment; Finance updates billing before the "
+     "invoice run. Cancellation deadline 22 Oct (assumed 30 days).", "Me + Finance", date(2026, 10, 22)),
     ("Kestrel Analytics", 35000, date(2026, 11, 28), "Manual", 0.40, "Green", "Quoted",
      "Close to execution cap", date(2026, 11, 28),
-     "CSM usage review; two quotes out: like-for-like (€36.75k) and next execution tier. Upsell is upside.",
+     "CSM usage review; quote like-for-like (€36.75k) and open a linked Upsell opportunity for the next execution tier.",
      "CSM + Me", date(2026, 10, 28)),
     ("Marlowe Insurance", 46000, date(2026, 12, 9), "Manual", 0.00, "Yellow", "Quoted",
      "Vendor questionnaire + DPA needed for PO", date(2026, 12, 9),
@@ -252,14 +252,14 @@ for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, _, due) in
                                      f"MATCH(K{r},Probability!$B$4:$F$4,0))"))
     pl.cell(row=r, column=17, value=f'=IF(I{r}<=O{r},"Yes","No")')
     pl.cell(row=r, column=18, value=f'=IF(Q{r}="Yes",P{r},0)')
-    pl.cell(row=r, column=19, value=f"=SUMIFS(Products!$I:$I,Products!$A:$A,A{r})")
+    pl.cell(row=r, column=19, value=f"=SUMIFS(Products!$K:$K,Products!$A:$A,A{r})")
     pl.cell(row=r, column=20, value=f"=S{r}*R{r}")
     pl.cell(row=r, column=21, value=(f'=IF(G{r}="Cancelled","Lost",IF(Q{r}="No","Slips quarter",'
                                      f'IF(OR(J{r}<0,AND(J{r}<=30,OR(G{r}="--None--",G{r}="Not started",'
                                      f'G{r}="Engaging customer",G{r}="Negotiation",G{r}="Billing blocker",'
                                      f'G{r}="At risk: before notice deadline",G{r}="Notice received"))),"Late","On time")))'))
     pl.cell(row=r, column=30, value=f'=IF(AC{r}="","",C{r}-AC{r})')
-    pl.cell(row=r, column=31, value=(f'=IF(E{r}>=0.2,"Over-usage: upsell line + CSM/Renewals task",'
+    pl.cell(row=r, column=31, value=(f'=IF(E{r}>=0.2,"Over-usage: open Upsell opp + CSM/Renewals task",'
                                      f'IF(E{r}<=-0.2,"Under-usage: flag CSM"&IF(D{r}="Auto","; set At risk",""),""))'))
     tw = (f'IF(C{r}-$E$2<0,"Overdue",IF(C{r}-$E$2<=30,"0-30",IF(C{r}-$E$2<=60,"31-60",'
           f'IF(C{r}-$E$2<=90,"61-90",">90"))))')
@@ -400,124 +400,138 @@ tr.freeze_panes = "C5"
 
 # ------------------------------------------------------------------- Products
 pd_ = wb.create_sheet("Products", 1)
-title(pd_, "Opportunity products: renewal / upsell / downgrade / cross-sell / churn per line")
-pd_["A2"] = ("Original ARR is kept for comparison. Change at list = +upsell / -downgrade. Uplift applies to the renewed "
-             "base only. Discount is measured against the uplifted list price (a waived uplift counts as discount). "
-             "Churn or downgrade replaced by another n8n product (e.g. self-hosted to Cloud) is non-regrettable.")
+title(pd_, "Opportunity products: the CSM only sets the line type and the new numbers; everything else recalculates")
+pd_["A2"] = ("CSM inputs (yellow): line type and change at list. Original ARR comes from the closed renewal. Uplift is "
+             "automatic: 5% on every renewal line in year 1. On multi-year deals paid upfront the price is locked from "
+             "year 2 (no further uplift); paid annually, 5% applies every year. An Upsell line opens a linked Upsell "
+             "opportunity so expansion is forecast separately. Churn category and reason live on the opportunity.")
 pd_["A2"].alignment = WRAP
-pd_.merge_cells("A2:Q2")
-pd_.row_dimensions[2].height = 44
-pcols = ["Opportunity", "Product", "Line type", "Term (yrs)", "Original ARR (€)", "Change at list (€)",
-         "Uplift %", "Discount %", "New ARR (€)", "Δ vs original (€)", "Δ %", "List renewal price (€)",
-         "Approval needed", "Replaced by (n8n product)", "Churn type", "Churn (€)", "Note"]
-header(pd_, 4, pcols, [20, 28, 12, 8, 13, 13, 9, 10, 13, 13, 8, 14, 22, 22, 16, 12, 44])
+pd_.merge_cells("A2:N2")
+pd_.row_dimensions[2].height = 58
+pcols = ["Opportunity", "Product", "Line type", "Term (yrs)", "Payment", "Original ARR (€)", "Change at list (€)",
+         "Uplift % (yr 1)", "Discount %", "List renewal price (€)", "New ARR (€)", "Δ vs original (€)", "Δ %",
+         "Approval needed", "Year 2+ uplift", "Note"]
+header(pd_, 4, pcols, [20, 28, 12, 8, 10, 13, 13, 10, 10, 14, 13, 13, 8, 22, 12, 44])
 L = [
-    ("Vantage Freight", "n8n Cloud Business", "Renewal", 1, 21000, 0, 0.05, 0, "", "Quote of 1 Sep includes 5% uplift"),
-    ("Northwind Logistics", "n8n Cloud Enterprise", "Renewal", 1, 48000, 0, 0.05, 0, "", "Usage +12%: check cap next quarter"),
-    ("Pixelforge", "n8n Cloud Business", "Renewal", 1, 26000, 0, 0, 0, "", "Auto-renewal: uplift notice date passed this cycle"),
-    ("Halden Health", "n8n Enterprise (self-hosted)", "Downgrade", 1, 45000, -15000, 0, 0, "", "Right-sized at list (assumed €30k)"),
-    ("Brightloop", "n8n Enterprise", "Renewal", 2, 36000, 0, 0.05, 0.12, "", "Floor: 2 years at Finance max 12%"),
-    ("Tessera Finance", "n8n Enterprise (self-hosted)", "Renewal", 1, 50000, 0, 0.05, 0, "", ""),
-    ("Lumen Retail", "n8n Cloud Business", "Renewal", 1, 28000, 0, 0.05, 0, "", "Bill to new legal entity"),
-    ("Kestrel Analytics", "n8n Cloud Business", "Renewal", 1, 35000, 0, 0.05, 0, "", "Commit line"),
-    ("Kestrel Analytics", "Next execution tier", "Upsell", 1, 0, 0, 0, 0, "", "Fill in when the customer picks a tier (upside)"),
-    ("Marlowe Insurance", "n8n Cloud Enterprise", "Renewal", 1, 46000, 0, 0.05, 0, "", ""),
-    ("Quanta Labs", "n8n Cloud Enterprise", "Downgrade", 1, 40000, -8000, 0, 0, "", "Budget cut: right-sized in line with -20% usage"),
+    ("Vantage Freight", "n8n Cloud Business", "Renewal", 1, "Annual", 21000, 0, 0, "Quote of 1 Sep includes 5% uplift"),
+    ("Northwind Logistics", "n8n Cloud Enterprise", "Renewal", 1, "Annual", 48000, 0, 0, "Usage +12%: check cap next quarter"),
+    ("Pixelforge", "n8n Cloud Business", "Renewal", 1, "Annual", 26000, 0, 0, "Uplift is contractual (annual notice in January)"),
+    ("Halden Health", "n8n Enterprise (self-hosted)", "Downgrade", 1, "Annual", 45000, -15000, 0, "Right-sized at list (assumed €30k)"),
+    ("Brightloop", "n8n Enterprise", "Renewal", 2, "Annual", 36000, 0, 0.12, "Placeholder until Part 2 is agreed"),
+    ("Tessera Finance", "n8n Enterprise (self-hosted)", "Renewal", 1, "Annual", 50000, 0, 0, ""),
+    ("Lumen Retail", "n8n Cloud Business", "Renewal", 1, "Annual", 28000, 0, 0, "Bill to new legal entity"),
+    ("Kestrel Analytics", "n8n Cloud Business", "Renewal", 1, "Annual", 35000, 0, 0, "Commit line"),
+    ("Kestrel Analytics", "Next execution tier", "Upsell", 1, "Annual", 0, 0, 0, "Opens a linked Upsell opportunity (upside)"),
+    ("Marlowe Insurance", "n8n Cloud Enterprise", "Renewal", 1, "Annual", 46000, 0, 0, ""),
+    ("Quanta Labs", "n8n Cloud Enterprise", "Downgrade", 1, "Annual", 40000, -8000, 0, "Right-sized in line with -20% usage"),
 ]
-for i, (opp, prod, lt, term, orig, chg, up, disc, repl, note) in enumerate(L):
+for i, (opp, prod, lt, term, pay, orig, chg, disc, note) in enumerate(L):
     r = 5 + i
-    for c, v in {1: opp, 2: prod, 3: lt, 4: term, 5: orig, 6: chg, 7: up, 8: disc, 14: repl, 17: note}.items():
+    for c, v in {1: opp, 2: prod, 3: lt, 4: term, 5: pay, 6: orig, 7: chg, 9: disc, 16: note}.items():
         cell = pd_.cell(row=r, column=c, value=v)
-        if c in (3, 4, 5, 6, 7, 8, 14):
+        if c in (3, 4, 5, 7, 9):
             inp(cell)
-    pd_.cell(row=r, column=12, value=f'=IF(C{r}="Churn",0,E{r}*(1+G{r})+F{r})')
-    pd_.cell(row=r, column=9, value=f"=L{r}*(1-H{r})")
-    pd_.cell(row=r, column=10, value=f"=I{r}-E{r}")
-    pd_.cell(row=r, column=11, value=f'=IF(E{r}=0,"new",J{r}/E{r})')
-    pd_.cell(row=r, column=13, value=(
-        f'=IF(H{r}=0,IF(AND(G{r}=0,C{r}="Renewal",D{r}=1),"Finance (uplift waived)","None"),'
-        f'IF(AND(D{r}>=2,H{r}<=0.05),"None (multi-year)",'
-        f'IF(H{r}<=0.12,"Finance","VP Customer Success")))'))
-    pd_.cell(row=r, column=15, value=f'=IF(OR(C{r}="Churn",C{r}="Downgrade"),IF(N{r}<>"","Non-regrettable","Regrettable"),"")')
-    pd_.cell(row=r, column=16, value=f'=IF(C{r}="Churn",-E{r},IF(C{r}="Downgrade",F{r},0))')
-    for c in (5, 6, 9, 10, 12, 16):
+    pd_.cell(row=r, column=8, value=f'=IF(C{r}="Renewal",0.05,0)')
+    pd_.cell(row=r, column=10, value=f'=IF(C{r}="Churn",0,F{r}*(1+H{r})+G{r})')
+    pd_.cell(row=r, column=11, value=f"=J{r}*(1-I{r})")
+    pd_.cell(row=r, column=12, value=f"=K{r}-F{r}")
+    pd_.cell(row=r, column=13, value=f'=IF(F{r}=0,"new",L{r}/F{r})')
+    pd_.cell(row=r, column=14, value=(
+        f'=IF(I{r}=0,"None",IF(AND(D{r}>=2,I{r}<=0.05),"None (multi-year)",'
+        f'IF(I{r}<=0.12,"Finance","VP Customer Success")))'))
+    pd_.cell(row=r, column=15, value=f'=IF(D{r}<2,"n/a",IF(E{r}="Upfront","Locked (0%)","5% a year"))')
+    for c in (6, 7, 10, 11, 12):
         pd_.cell(row=r, column=c).number_format = EUR
-    for c in (7, 8, 11):
+    for c in (8, 9, 13):
         pd_.cell(row=r, column=c).number_format = PCT
 pN = 5 + len(L) - 1
-style_range(pd_, 5, pN, 1, 17)
-dvl = DataValidation(type="list", formula1='"Renewal,Upsell,Downgrade,Cross-sell,Churn"')
-pd_.add_data_validation(dvl)
-dvl.add(f"C5:C{pN + 40}")
-pd_.conditional_formatting.add(f"J5:K{pN + 40}", FormulaRule(formula=["AND(ISNUMBER(J5),J5>0)"], fill=GRN_FILL, font=Font(name=F, color="006100", bold=True)))
-pd_.conditional_formatting.add(f"J5:K{pN + 40}", FormulaRule(formula=["AND(ISNUMBER(J5),J5<0)"], fill=RED_FILL, font=Font(name=F, color="9C0006", bold=True)))
-pd_.conditional_formatting.add(f"M5:M{pN + 40}", FormulaRule(formula=['LEFT(M5,4)<>"None"'], fill=AMB_FILL))
-pd_.conditional_formatting.add(f"O5:O{pN + 40}", FormulaRule(formula=['O5="Regrettable"'], fill=RED_FILL))
-pd_.conditional_formatting.add(f"O5:O{pN + 40}", FormulaRule(formula=['O5="Non-regrettable"'], fill=GRN_FILL))
+style_range(pd_, 5, pN, 1, 16)
+for rng, f1 in (("C", '"Renewal,Upsell,Downgrade,Churn"'), ("E", '"Annual,Upfront"')):
+    dvl = DataValidation(type="list", formula1=f1)
+    pd_.add_data_validation(dvl)
+    dvl.add(f"{rng}5:{rng}{pN + 40}")
+pd_.conditional_formatting.add(f"L5:M{pN + 40}", FormulaRule(formula=["AND(ISNUMBER(L5),L5>0)"], fill=GRN_FILL, font=Font(name=F, color="006100", bold=True)))
+pd_.conditional_formatting.add(f"L5:M{pN + 40}", FormulaRule(formula=["AND(ISNUMBER(L5),L5<0)"], fill=RED_FILL, font=Font(name=F, color="9C0006", bold=True)))
+pd_.conditional_formatting.add(f"N5:N{pN + 40}", FormulaRule(formula=['LEFT(N5,4)<>"None"'], fill=AMB_FILL))
 pd_.cell(row=pN + 2, column=1, value="Total").font = BOLD
-for c in (5, 6, 9, 10, 12, 16):
+for c in (6, 7, 10, 11, 12):
     Lc = get_column_letter(c)
     cell = pd_.cell(row=pN + 2, column=c, value=f"=SUM({Lc}5:{Lc}{pN})")
     cell.font, cell.number_format = BOLD, EUR
-pd_.cell(row=pN + 4, column=1, value="Uplift (indexation)").font = BOLD
+pd_.cell(row=pN + 4, column=1, value="Assumptions").font = BOLD
 pd_.cell(row=pN + 5, column=1, value=(
-    "Default 5% on every 1-year renewal line (policy C). On a 2-year term the uplift can be waived inside the 5% "
-    "multi-year allowance with no approval. Plan names and downgrade prices are assumptions: n8n does not publish "
-    "self-hosted Enterprise prices."))
-pd_.merge_cells(start_row=pN + 5, start_column=1, end_row=pN + 5, end_column=17)
+    "Plan names and downgrade prices are assumptions: n8n does not publish self-hosted Enterprise prices. A year-1 "
+    "uplift waiver is an exception (e.g. three years paid upfront) and counts as a discount under policy C."))
+pd_.merge_cells(start_row=pN + 5, start_column=1, end_row=pN + 5, end_column=16)
 pd_.cell(row=pN + 5, column=1).alignment = WRAP
 pd_.row_dimensions[pN + 5].height = 34
 pd_.freeze_panes = "C5"
 
 # ---------------------------------------------------------------- Opp summary
 os_ = wb.create_sheet("Opp summary", 2)
-title(os_, "Opportunity roll-up: calculated from product lines")
-oc = ["Opportunity", "Original ARR (€)", "Uplift (€)", "Upsell / cross-sell (€)", "Regrettable churn (€)",
-      "Non-regrettable churn (€)", "Replacement revenue (€)", "Price concession below current (€)", "New ARR (€)",
-      "Net change (€)", "Net change %"]
-header(os_, 3, oc, [20, 14, 12, 14, 14, 15, 14, 14, 13, 13, 11])
+title(os_, "Opportunity roll-up: calculated from product lines; churn category and reason set on the opportunity")
+oc = ["Opportunity", "Original ARR (€)", "Uplift (€)", "Upsell (€) → Upsell opp", "Churned amount (€)",
+      "Churn category", "Churn reason", "Price concession below current (€)", "New ARR (€)", "Net change (€)", "Net change %"]
+header(os_, 3, oc, [20, 14, 12, 16, 14, 16, 34, 16, 13, 13, 11])
 PR = "Products!$A$5:$A$200"
-for i in range(len(P)):
+CHURN = {"Halden Health": ("Regrettable", "Low adoption / champion left"),
+         "Quanta Labs": ("Regrettable", "Budget cut")}
+for i, p in enumerate(P):
     r = 4 + i
     n = f"$A{r}"
     os_.cell(row=r, column=1, value=f"=Pipeline!A{r0 + i}").font = GREEN_LINK
-    os_.cell(row=r, column=2, value=f"=SUMIFS(Products!$E:$E,Products!$A:$A,{n})")
-    os_.cell(row=r, column=3, value=f"=SUMPRODUCT(({PR}={n})*(Products!$C$5:$C$200=\"Renewal\")*Products!$E$5:$E$200*Products!$G$5:$G$200)")
-    os_.cell(row=r, column=4, value=(f'=SUMIFS(Products!$F:$F,Products!$A:$A,{n},Products!$C:$C,"Upsell")'
-                                     f'+SUMIFS(Products!$F:$F,Products!$A:$A,{n},Products!$C:$C,"Cross-sell")'))
-    os_.cell(row=r, column=5, value=f'=SUMIFS(Products!$P:$P,Products!$A:$A,{n},Products!$O:$O,"Regrettable")')
-    os_.cell(row=r, column=6, value=f'=SUMIFS(Products!$P:$P,Products!$A:$A,{n},Products!$O:$O,"Non-regrettable")')
-    os_.cell(row=r, column=7, value=f"=-F{r}")
+    os_.cell(row=r, column=2, value=f"=SUMIFS(Products!$F:$F,Products!$A:$A,{n})")
+    os_.cell(row=r, column=3, value=f"=SUMPRODUCT(({PR}={n})*Products!$F$5:$F$200*Products!$H$5:$H$200)")
+    os_.cell(row=r, column=4, value=f'=SUMIFS(Products!$G:$G,Products!$A:$A,{n},Products!$C:$C,"Upsell")')
+    os_.cell(row=r, column=5, value=(f'=SUMIFS(Products!$G:$G,Products!$A:$A,{n},Products!$C:$C,"Downgrade")'
+                                     f'-SUMIFS(Products!$F:$F,Products!$A:$A,{n},Products!$C:$C,"Churn")'))
+    cat, reason = CHURN.get(p[0], ("", ""))
+    for c, v in ((6, cat), (7, reason)):
+        inp(os_.cell(row=r, column=c, value=v))
     # Revenue given up below today's price; the waived uplift alone is not a loss.
-    os_.cell(row=r, column=8, value=f"=MIN(0,C{r}-(SUMIFS(Products!$L:$L,Products!$A:$A,{n})-SUMIFS(Products!$I:$I,Products!$A:$A,{n})))")
-    os_.cell(row=r, column=9, value=f"=SUMIFS(Products!$I:$I,Products!$A:$A,{n})")
+    os_.cell(row=r, column=8, value=f"=MIN(0,C{r}-(SUMIFS(Products!$J:$J,Products!$A:$A,{n})-SUMIFS(Products!$K:$K,Products!$A:$A,{n})))")
+    os_.cell(row=r, column=9, value=f"=SUMIFS(Products!$K:$K,Products!$A:$A,{n})")
     os_.cell(row=r, column=10, value=f"=I{r}-B{r}")
     os_.cell(row=r, column=11, value=f"=IF(B{r}=0,0,J{r}/B{r})")
-    for c in range(2, 11):
+    for c in (2, 3, 4, 5, 8, 9, 10):
         os_.cell(row=r, column=c).number_format = EUR
     os_.cell(row=r, column=11).number_format = PCT
 oN = 4 + len(P) - 1
 style_range(os_, 4, oN, 1, 11)
+REASONS = ("Regrettable: Budget cut,Regrettable: Price,Regrettable: Competitor,Regrettable: Moved to free Community edition,"
+           "Regrettable: Product gaps,Regrettable: Support or service,Regrettable: Low adoption / champion left,"
+           "Regrettable: Company closed,Non-regrettable: Migrated to another n8n product,"
+           "Non-regrettable: Consolidated into another n8n contract,Non-regrettable: Moved to another legal entity")
+for rng, f1 in (("F", '"Regrettable,Non-regrettable"'),):
+    dv = DataValidation(type="list", formula1=f1)
+    os_.add_data_validation(dv)
+    dv.add(f"{rng}4:{rng}{oN}")
 tt = oN + 1  # row 14
 os_.cell(row=tt, column=1, value="Total").font = BOLD
-for c in range(2, 12):
+for c in (2, 3, 4, 5, 8, 9, 10, 11):
     Lc = get_column_letter(c)
     if c == 11:
         os_.cell(row=tt, column=c, value=f"=IF(B{tt}=0,0,J{tt}/B{tt})").number_format = PCT
     else:
         os_.cell(row=tt, column=c, value=f"=SUM({Lc}4:{Lc}{oN})").number_format = EUR
     os_.cell(row=tt, column=c).font = BOLD
-# Row 15 mirrors the totals the Pipeline forecast links to.
+# Row 15: totals the Pipeline forecast links to (E = regrettable, F = non-regrettable, H = price concession).
 os_.cell(row=tt + 1, column=1, value="(linked to Pipeline)").font = Font(name=F, italic=True, color="888888")
-for c in (5, 6, 8):
-    Lc = get_column_letter(c)
-    os_.cell(row=tt + 1, column=c, value=f"={Lc}{tt}").number_format = EUR
-os_.cell(row=tt + 3, column=1, value="Check: new ARR ties to Pipeline")
-os_.cell(row=tt + 3, column=2, value=f'=IF(ABS(I{tt}-Pipeline!S{t})<1,"OK","MISMATCH")')
+os_.cell(row=tt + 1, column=5, value=f'=SUMIFS(E4:E{oN},F4:F{oN},"Regrettable")').number_format = EUR
+os_.cell(row=tt + 1, column=6, value=f'=SUMIFS(E4:E{oN},F4:F{oN},"Non-regrettable")').number_format = EUR
+os_.cell(row=tt + 1, column=8, value=f"=H{tt}").number_format = EUR
+os_.cell(row=tt + 2, column=1, value="Churn reasons").font = BOLD
+os_.cell(row=tt + 2, column=2, value=REASONS.replace(",", " · ")).alignment = WRAP
+os_.merge_cells(start_row=tt + 2, start_column=2, end_row=tt + 2, end_column=11)
+os_.row_dimensions[tt + 2].height = 44
+os_.cell(row=tt + 3, column=1, value="Missing reason").font = BOLD
+os_.cell(row=tt + 3, column=2, value=f'=COUNTIFS(E4:E{oN},"<0",F4:F{oN},"")&" opportunities with churn but no category"')
+os_.cell(row=tt + 4, column=1, value="Check: new ARR ties to Pipeline")
+os_.cell(row=tt + 4, column=2, value=f'=IF(ABS(I{tt}-Pipeline!S{t})<1,"OK","MISMATCH")')
 os_.conditional_formatting.add(f"J4:K{tt}", CellIsRule(operator="greaterThan", formula=["0"], fill=GRN_FILL, font=Font(name=F, color="006100", bold=True)))
 os_.conditional_formatting.add(f"J4:K{tt}", CellIsRule(operator="lessThan", formula=["0"], fill=RED_FILL, font=Font(name=F, color="9C0006", bold=True)))
 os_.conditional_formatting.add(f"E4:E{tt}", CellIsRule(operator="lessThan", formula=["0"], fill=RED_FILL))
-os_.conditional_formatting.add(f"F4:F{tt}", CellIsRule(operator="lessThan", formula=["0"], fill=AMB_FILL))
+os_.conditional_formatting.add(f"F4:F{oN}", FormulaRule(formula=['AND(E4<0,F4="")'], fill=RED_FILL))
 
 # ------------------------------------------------------------- Monthly report
 mr = wb.create_sheet("Monthly report", 3)
@@ -543,7 +557,7 @@ for i, m in enumerate(["2026-10", "2026-11", "2026-12"]):
     mr.cell(row=r, column=8, value=f'=SUMIFS({col("T")},{col("M")},B{r},{col("U")},"Late")')
     mr.cell(row=r, column=9, value=f'=SUMIFS({col("B")},{col("M")},B{r},{col("L")},"YES")')
     mr.cell(row=r, column=10, value=(f"=SUMPRODUCT((TEXT(Pipeline!$C${r0}:$C${rN},\"yyyy-mm\")=B{r})"
-                                     f"*'Opp summary'!$E$4:$E${oN})"))
+                                     f"*('Opp summary'!$F$4:$F${oN}=\"Regrettable\")*'Opp summary'!$E$4:$E${oN})"))
     for c in range(4, 11):
         mr.cell(row=r, column=c).number_format = EUR
 style_range(mr, 4, 6, 1, 10)
@@ -589,17 +603,17 @@ notes = [
                     "Overdue has its own, lower column."),
     ("Auto-renewals", "Own statuses: Renewing: no blockers / Billing blocker / At risk (before or after the notice deadline) / "
                       "Notice received / Renewed. A red status cell means the status does not match the renewal type."),
-    ("Usage rule", "Usage +20%: renew as is plus an Upsell line and task (no automatic charge). Usage -20%: flag the CSM; "
+    ("Usage rule", "Usage +20%: renew as is plus an Upsell opportunity and task (no automatic charge). Usage -20%: flag the CSM; "
                    "auto-renewals move to At risk."),
     ("Forecast of the forecast", "Weighted today vs weighted by 30 Oct if this week's actions move each status to its target."),
     ("Overdue rule", "Overdue renewals are Late. They count in the quarter only if the expected close date is on or before "
                      "quarter end; otherwise 0% for the quarter."),
     ("Forecast", "Weighted new ARR = new ARR from product lines x probability. Buckets: On time, Late (still in quarter), "
                  "Slips quarter. Lost comes from the product lines."),
-    ("Products", "Each line is Renewal / Upsell / Downgrade / Cross-sell / Churn. Original ARR is kept; new ARR adds the 5% "
-                 "uplift to the renewed base, prices changes at list, then applies the discount. Δ is green or red."),
-    ("Churn type", "Regrettable = revenue lost to n8n for good. Non-regrettable = a line churns but is replaced by another "
-                   "n8n product (e.g. self-hosted Enterprise moving to n8n Cloud), so the revenue is kept."),
+    ("Products", "The CSM only sets the line type (Renewal / Upsell / Downgrade / Churn) and the new numbers. Original ARR, "
+                 "uplift, list price, new ARR and Δ (green/red) recalculate. Upsell lines open a linked Upsell opportunity."),
+    ("Churn", "Set on the opportunity: churned amount (from the lines), category (Regrettable = revenue lost for good; "
+              "Non-regrettable = revenue kept, e.g. self-hosted moving to n8n Cloud) and a granular reason."),
     ("Colour code", "Blue on yellow = input. Black = formula. Green text = link to another tab. Red/amber/green fills = risk."),
     ("Source", "Customers, numbers and policies are fictional, from the challenge brief. Plan names and downgrade prices "
                "are assumptions."),
