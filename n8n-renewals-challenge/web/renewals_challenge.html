@@ -1,100 +1,121 @@
 <title>Renewals Challenge: Paula Zabala</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: a renewals desk brief. One reading column, sticky section bar, data in tables; the Renewal Status picklist is the recurring visual device. */
+/* Layout: a workflow canvas. Dotted dark grid, each section is a "node" card with a header strip and connector ports; the top nav is the workflow itself (Triage → Forecast → Brightloop → Automation). Dark-first. */
 :root {
-  --bg: #f6f7f9;
-  --surface: #ffffff;
-  --ink: #1b2130;
-  --muted: #5a6275;
-  --line: #dde1e8;
-  --accent: #0e6f6a;
-  --accent-soft: #e2f1ef;
-  --warn: #9a5b00;
-  --warn-soft: #fbefd9;
-  --bad: #a3243b;
-  --bad-soft: #f8e1e5;
-  --good: #1f6b3a;
-  --good-soft: #dff1e4;
-  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --bg: #1e1f2b;
+  --grid: #2e3040;
+  --surface: #272938;
+  --surface-2: #2f3243;
+  --ink: #eceef5;
+  --muted: #a3a8bb;
+  --line: #3a3d52;
+  --accent: #ff7a59;
+  --accent-soft: #3d2a2a;
+  --link: #7aa7ff;
+  --warn: #f2b14c;
+  --warn-soft: #3b3020;
+  --bad: #ff8a9a;
+  --bad-soft: #3e2330;
+  --good: #6fd39a;
+  --good-soft: #1f3a2c;
+  --display: "Manrope", "Helvetica Neue", Arial, sans-serif;
   --body: "Source Sans 3", "Segoe UI", Arial, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #12161f; --surface: #1a2030; --ink: #e7eaf0; --muted: #a2aabb; --line: #2c3446;
-    --accent: #5cc4bb; --accent-soft: #173a3a; --warn: #f0b45a; --warn-soft: #3a2c14;
-    --bad: #f08a9b; --bad-soft: #3d1d26; --good: #7fd49a; --good-soft: #193524;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #12161f; --surface: #1a2030; --ink: #e7eaf0; --muted: #a2aabb; --line: #2c3446;
-  --accent: #5cc4bb; --accent-soft: #173a3a; --warn: #f0b45a; --warn-soft: #3a2c14;
-  --bad: #f08a9b; --bad-soft: #3d1d26; --good: #7fd49a; --good-soft: #193524;
   color-scheme: dark;
 }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f3f3f7; --grid: #d9dae4; --surface: #ffffff; --surface-2: #f7f7fb; --ink: #1d1e29; --muted: #5d6175; --line: #dcdde7;
+    --accent: #e0553a; --accent-soft: #fde9e3; --link: #2f5fd0; --warn: #8f5a00; --warn-soft: #fbefd9;
+    --bad: #a3243b; --bad-soft: #f8e1e5; --good: #1f6b3a; --good-soft: #dff1e4;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f3f3f7; --grid: #d9dae4; --surface: #ffffff; --surface-2: #f7f7fb; --ink: #1d1e29; --muted: #5d6175; --line: #dcdde7;
+  --accent: #e0553a; --accent-soft: #fde9e3; --link: #2f5fd0; --warn: #8f5a00; --warn-soft: #fbefd9;
+  --bad: #a3243b; --bad-soft: #f8e1e5; --good: #1f6b3a; --good-soft: #dff1e4;
+  color-scheme: light;
+}
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+body {
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--grid) 1.2px, transparent 1.3px);
+  background-size: 22px 22px;
+  color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55;
+}
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
-.wrap { max-width: 980px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-header.top { padding-block: 40px 24px; }
+.wrap { max-width: 1000px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header.top { padding-block: 44px 28px; }
 .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.15; margin: 0; }
-h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 700; margin-top: 8px; }
-h2 { font-size: 26px; font-weight: 700; }
-h3 { font-size: 18px; font-weight: 600; }
+h1 { font-size: clamp(30px, 5vw, 46px); font-weight: 800; margin-top: 8px; letter-spacing: -0.01em; }
+h1 em { font-style: normal; color: var(--accent); }
+h2 { font-size: 22px; font-weight: 800; }
+h3 { font-size: 17px; font-weight: 700; }
 p { margin: 0; max-width: 68ch; }
 .lede { font-size: 18px; color: var(--muted); margin-top: 12px; }
-nav.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-block: 1px solid var(--line); }
-nav.bar .wrap { display: flex; gap: 4px; overflow-x: auto; padding-block: 8px; scrollbar-width: none; }
-nav.bar a { font-family: var(--display); font-weight: 600; font-size: 15px; color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 6px; white-space: nowrap; }
-nav.bar a:hover, nav.bar a:focus-visible { color: var(--ink); background: var(--accent-soft); outline: none; }
-section { padding-block: 40px 8px; scroll-margin-top: calc(56px + env(safe-area-inset-top, 0px)); }
+/* Workflow nav: nodes joined by connectors */
+nav.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(6px); border-block: 1px solid var(--line); }
+nav.bar .wrap { display: flex; align-items: center; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
+nav.bar a { display: inline-flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 14px; color: var(--ink); text-decoration: none; padding: 7px 12px; border-radius: 8px; white-space: nowrap; background: var(--surface); border: 1px solid var(--line); }
+nav.bar a::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+nav.bar a + a { margin-left: 28px; position: relative; }
+nav.bar a + a::after { content: ""; position: absolute; left: -29px; top: 50%; width: 28px; height: 2px; background: var(--line); }
+nav.bar a:hover, nav.bar a:focus-visible { border-color: var(--accent); outline: none; }
+section { padding-block: 36px 4px; scroll-margin-top: calc(64px + env(safe-area-inset-top, 0px)); }
+/* A section is a node: header strip + body */
+.node { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; position: relative; }
+.node::before, .node::after { content: ""; position: absolute; top: 26px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--muted); }
+.node::before { left: -7px; } .node::after { right: -7px; }
+.node > .head { display: flex; flex-direction: column; gap: 6px; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+.node > .head .eyebrow { color: var(--accent); }
+.node > .body { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.connector { height: 28px; width: 2px; background: var(--line); margin: 0 auto; }
 .stack { display: flex; flex-direction: column; gap: 16px; }
-.head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.kpi .v { font-family: var(--display); font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kpi { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.kpi .v { font-family: var(--display); font-size: 28px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .kpi .l { font-size: 14px; color: var(--muted); }
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; min-width: 0; }
-.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.panel { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; min-width: 0; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 14px; }
 ul.tight { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; max-width: 70ch; }
-.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2); }
 table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
 th { text-align: left; font-family: var(--mono); font-size: 11.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
 td { padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 tr:last-child td { border-bottom: 0; }
 td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-td.rank { font-family: var(--mono); color: var(--muted); }
+td.rank { font-family: var(--mono); color: var(--accent); font-weight: 600; }
 tr.total td { font-weight: 700; background: var(--accent-soft); }
 .mono { font-family: var(--mono); font-size: 13px; }
 .small { font-size: 13.5px; color: var(--muted); }
-.pill { display: inline-block; font-family: var(--mono); font-size: 11.5px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
-.pill.warn { background: var(--warn-soft); color: var(--warn); }
-.pill.bad { background: var(--bad-soft); color: var(--bad); }
-.pill.good { background: var(--good-soft); color: var(--good); }
+.pill { display: inline-block; font-family: var(--mono); font-size: 11.5px; padding: 2px 8px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); white-space: nowrap; }
+.pill.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+.pill.bad { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+.pill.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
 .esc { color: var(--bad); font-weight: 600; }
 .heat td.p { text-align: center; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: 13px; }
 .h0 { background: var(--bad-soft); color: var(--bad); }
 .h1 { background: var(--warn-soft); color: var(--warn); }
-.h2 { background: var(--accent-soft); color: var(--accent); }
+.h2 { background: var(--surface); color: var(--ink); }
 .h3 { background: var(--good-soft); color: var(--good); }
-.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; max-width: 70ch; }
-blockquote.email { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; max-width: 72ch; }
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; max-width: 72ch; }
+blockquote.email { margin: 0; background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; max-width: 74ch; }
 blockquote.email p { max-width: none; }
-.flow { font-family: var(--mono); font-size: 13px; white-space: pre; overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; line-height: 1.6; }
+.flow { font-family: var(--mono); font-size: 13px; white-space: pre; overflow-x: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 16px; line-height: 1.6; color: var(--ink); }
 footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
-@media (max-width: 520px) { body { font-size: 15.5px; } .kpi .v { font-size: 24px; } }
+@media (max-width: 520px) { body { font-size: 15.5px; } .kpi .v { font-size: 24px; } .node > .head, .node > .body { padding-left: 16px; padding-right: 16px; } }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 </style>
 
 <header class="top">
   <div class="wrap stack">
     <span class="eyebrow">n8n · Renewals Specialist challenge · scenario date Tue 20 Oct 2026</span>
-    <h1>Ten renewals, one stuck negotiation, and a motion that scales</h1>
+    <h1>Ten renewals, one stuck negotiation, and a renewal motion <em>that scales</em></h1>
     <p class="lede">Paula Zabala. Ten renewals worth €375k, one overdue and nine due within 60 days, plus Brightloop. I set the date to mid-October so the brief's timing holds.</p>
   </div>
 </header>
@@ -113,14 +134,16 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
 <main class="wrap">
 
 <section id="summary">
+  <div class="node">
   <div class="head"><span class="eyebrow">Summary</span><h2>The answers, on one screen</h2></div>
+  <div class="body">
   <div class="kpis">
     <div class="kpi"><span class="v">€138k</span><span class="l">Weighted forecast today (status × days to renewal)</span></div>
     <div class="kpi"><span class="v">€256k</span><span class="l">Weighted by 30 Oct if this week's actions land</span></div>
     <div class="kpi"><span class="v">93% · 96.5%</span><span class="l">Gross and net retention on €375k</span></div>
     <div class="kpi"><span class="v">3</span><span class="l">Escalations today: Halden, Tessera, Vantage (€116k)</span></div>
   </div>
-  <div class="cols" style="margin-top:16px">
+  <div class="cols">
     <div class="panel stack">
       <h3>Part 1: Triage and forecast</h3>
       <ul class="tight">
@@ -146,11 +169,15 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
       </ul>
     </div>
   </div>
+</div>
+  </div>
 </section>
 
 <section id="triage">
+  <div class="node">
   <div class="head"><span class="eyebrow">Part 1</span><h2>What I do first, who owns it, by when</h2>
     <p class="small">The book: October 2 renewals / €69k · November 5 / €184k · December 3 / €122k. Only 1 of 7 manual renewals had its quote out by day 60, against a policy of 60 days.</p></div>
+  <div class="body">
   <div class="tbl">
     <table>
       <thead><tr><th>#</th><th>Customer</th><th class="n">ARR</th><th>Due</th><th>Why now</th><th>Next action</th><th>Owner</th><th>Date</th></tr></thead>
@@ -168,12 +195,16 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
       </tbody>
     </table>
   </div>
-  <p class="small" style="margin-top:10px">Process escalation: 5 of 7 manual renewals had no quote inside 60 days. Fixed with a 60-day quote task in the CRM, plus Part 3.</p>
+  <p class="small">Process escalation: 5 of 7 manual renewals had no quote inside 60 days. Fixed with a 60-day quote task in the CRM, plus Part 3.</p>
+</div>
+  </div>
 </section>
 
 <section id="forecast">
+  <div class="node">
   <div class="head"><span class="eyebrow">Part 1</span><h2>A forecast driven by Renewal Status × days to renewal</h2>
     <p class="small">Status is set from what we know today. Weighted = new ARR from the product lines (5% uplift, downgrades at list) × probability. The second column shows where this week's actions take it by 30 Oct.</p></div>
+  <div class="body">
   <div class="tbl">
     <table>
       <thead><tr><th>Customer</th><th class="n">New ARR</th><th>Status today</th><th class="n">Prob.</th><th class="n">Weighted</th><th>Target by 30 Oct</th><th class="n">Weighted 30 Oct</th></tr></thead>
@@ -193,7 +224,7 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
     </table>
   </div>
 
-  <div class="cols" style="margin-top:16px">
+  <div class="cols">
     <div class="panel stack">
       <h3>Today, by bucket</h3>
       <ul class="tight">
@@ -212,8 +243,8 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
     </div>
   </div>
 
-  <h3 style="margin-top:28px; margin-bottom:10px">The probability matrix</h3>
-  <p class="small" style="margin-bottom:10px">Manual renewals: later statuses rise as the date approaches, early statuses fall. Auto-renewals: a clean renewal rises, an open blocker or risk falls.</p>
+  <h3>The probability matrix</h3>
+  <p class="small">Manual renewals: later statuses rise as the date approaches, early statuses fall. Auto-renewals: a clean renewal rises, an open blocker or risk falls.</p>
   <div class="tbl heat">
     <table>
       <thead><tr><th>Status</th><th class="n">&gt;90d</th><th class="n">61–90</th><th class="n">31–60</th><th class="n">0–30</th><th class="n">Overdue</th></tr></thead>
@@ -231,12 +262,16 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
       </tbody>
     </table>
   </div>
-  <p class="callout" style="margin-top:16px">Least certain: <b>Halden</b>, which could lose anywhere from €0 to €45k. Second is Quanta: a cancellation before ~19 Nov would make it −€40k, not −€8k. Notice periods for the auto-renewals are assumed at 30 days, to confirm against each contract.</p>
+  <p class="callout">Least certain: <b>Halden</b>, which could lose anywhere from €0 to €45k. Second is Quanta: a cancellation before ~19 Nov would make it −€40k, not −€8k. Notice periods for the auto-renewals are assumed at 30 days, to confirm against each contract.</p>
+</div>
+  </div>
 </section>
 
 <section id="brightloop">
+  <div class="node">
   <div class="head"><span class="eyebrow">Part 2</span><h2>Brightloop: trade structure, not discount</h2>
     <p class="small">Today €36,000. List path (5% a year, paid annually): €37,800 in year 1, €39,690 in year 2. Sam's ask: €27,000, which is 28.6% off list.</p></div>
+  <div class="body">
 
   <div class="tbl">
     <table>
@@ -252,7 +287,7 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
     </table>
   </div>
 
-  <div class="cols" style="margin-top:16px">
+  <div class="cols">
     <div class="panel stack">
       <h3>Walk-away</h3>
       <ul class="tight">
@@ -275,7 +310,7 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
     </div>
   </div>
 
-  <h3 style="margin-top:28px; margin-bottom:10px">My reply to Sam</h3>
+  <h3>My reply to Sam</h3>
   <blockquote class="email">
     <p class="mono">Subject: Brightloop renewal: two ways to make it fit your budget</p>
     <p>Hi Sam,</p>
@@ -286,8 +321,8 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
     <p>Best,<br>Paula</p>
   </blockquote>
 
-  <h3 style="margin-top:28px; margin-bottom:10px">Call plan (15 minutes, I keep time) and expected surprises</h3>
-  <p class="small" style="margin-bottom:10px">Open (1) · Discovery: budget, cash or this year's cost, why executions fell (3) · Own the support issue (2) · Both options side by side (4) · Trade, "if… then…" only (3) · Close with owners, dates and signature by 30 Nov (2)</p>
+  <h3>Call plan (15 minutes, I keep time) and expected surprises</h3>
+  <p class="small">Open (1) · Discovery: budget, cash or this year's cost, why executions fell (3) · Own the support issue (2) · Both options side by side (4) · Trade, "if… then…" only (3) · Close with owners, dates and signature by 30 Nov (2)</p>
   <div class="tbl">
     <table>
       <thead><tr><th>They say</th><th>I answer</th></tr></thead>
@@ -303,19 +338,23 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
       </tbody>
     </table>
   </div>
+</div>
+  </div>
 </section>
 
 <section id="automation">
+  <div class="node">
   <div class="head"><span class="eyebrow">Part 3</span><h2>Get the approved quote out, signed and tracked</h2>
     <p class="small">Once a quote is approved, the rest is repetition: email, order form, send, update the CRM, chase. That's the work that doesn't scale to 221 renewals a quarter.</p></div>
+  <div class="body">
   <p class="callout"><b>My rule: the workflow never prices anything.</b> The CRM and CPQ own the quote, the order form and every number; the workflow mirrors them. At my current company there was no CPQ, so I built an agent that ran our quote tool with deterministic pricing and a human approving every quote. Here I assume n8n has a CPQ.</p>
-  <div class="flow" style="margin-top:16px" role="img" aria-label="Workflow: daily trigger reads renewals and approved CPQ quotes, then routes to upsell, on track, chase, risk or quote not ready.">Every day 8:00 ─► Renewals (unsigned, ≤90 days) ─┐
+  <div class="flow" role="img" aria-label="Workflow: daily trigger reads renewals and approved CPQ quotes, then routes to upsell, on track, chase, risk or quote not ready.">Every day 8:00 ─► Renewals (unsigned, ≤90 days) ─┐
                └► Approved quotes from CPQ ──────┴► Match quote to renewal ─► Route
    On track / Upsell ► AI drafts email (offer copied word for word) ► Renewals Manager approves ► send with order form ► Status = Quoted
    Chase signature ──► AI follow-up at day 3 and day 7 ─────────────► Renewals Manager approves ► send
    Risk ─────────────► alert to the CSM, no customer email
    Quote not ready ──► reminder to finish the quote in the CPQ</div>
-  <div class="cols" style="margin-top:16px">
+  <div class="cols">
     <div class="panel stack">
       <h3>Built and tested</h3>
       <ul class="tight">
@@ -333,10 +372,14 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
       </ul>
     </div>
   </div>
+</div>
+  </div>
 </section>
 
 <section id="files">
+  <div class="node">
   <div class="head"><span class="eyebrow">Files &amp; AI use</span><h2>Attached to the email</h2></div>
+  <div class="body">
   <div class="tbl">
     <table>
       <thead><tr><th>File</th><th>What it is</th></tr></thead>
@@ -350,7 +393,9 @@ footer { padding-block: 40px 56px; color: var(--muted); font-size: 14px; }
       </tbody>
     </table>
   </div>
-  <p class="callout" style="margin-top:16px"><b>How I used AI.</b> The process, the rules and the commercial calls are mine. An AI assistant pressure-tested the maths, drafted text I edited, and built the Excel model and n8n workflow from my specifications. I reviewed every number. About 4 hours of my own time.</p>
+  <p class="callout"><b>How I used AI.</b> The process, the rules and the commercial calls are mine. An AI assistant pressure-tested the maths, drafted text I edited, and built the Excel model and n8n workflow from my specifications. I reviewed every number. About 4 hours of my own time.</p>
+</div>
+  </div>
 </section>
 
 </main>
