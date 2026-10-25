@@ -400,8 +400,8 @@ tr.freeze_panes = "C5"
 
 # ------------------------------------------------------------------- Products
 pd_ = wb.create_sheet("Products", 1)
-title(pd_, "Opportunity products: the CSM only sets the line type and the new numbers; everything else recalculates")
-pd_["A2"] = ("CSM inputs (yellow): line type and change at list. Original ARR comes from the closed renewal. Uplift is "
+title(pd_, "Opportunity products: the Renewals Manager only sets the line type and the new numbers; everything else recalculates")
+pd_["A2"] = ("Renewals Manager inputs (yellow): line type and change at list. Original ARR comes from the closed renewal. Uplift is "
              "automatic: 5% on every renewal line in year 1. On multi-year deals paid upfront the price is locked from "
              "year 2 (no further uplift); paid annually, 5% applies every year. An Upsell line opens a linked Upsell "
              "opportunity so expansion is forecast separately. Churn category and reason live on the opportunity.")
@@ -610,7 +610,7 @@ notes = [
                      "quarter end; otherwise 0% for the quarter."),
     ("Forecast", "Weighted new ARR = new ARR from product lines x probability. Buckets: On time, Late (still in quarter), "
                  "Slips quarter. Lost comes from the product lines."),
-    ("Products", "The CSM only sets the line type (Renewal / Upsell / Downgrade / Churn) and the new numbers. Original ARR, "
+    ("Products", "The Renewals Manager only sets the line type (Renewal / Upsell / Downgrade / Churn) and the new numbers. Original ARR, "
                  "uplift, list price, new ARR and Δ (green/red) recalculate. Upsell lines open a linked Upsell opportunity."),
     ("Churn", "Set on the opportunity: churned amount (from the lines), category (Regrettable = revenue lost for good; "
               "Non-regrettable = revenue kept, e.g. self-hosted moving to n8n Cloud) and a granular reason."),

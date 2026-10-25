@@ -6,7 +6,7 @@ The forecast, statuses, product lines, churn and alerts in Part 1 are CRM fields
 |---|---|
 | Triage | List view on Renewal opportunities, sorted by Priority and ARR at risk |
 | Pipeline | Opportunity (Renewal record types: Manual and Auto) |
-| Products | Opportunity Product (line items): the CSM sets the line type and new numbers only |
+| Products | Opportunity Product (line items): the Renewals Manager sets the line type and new numbers only |
 | Opp summary | Roll-ups and the Churn section on the Opportunity |
 | Monthly report | Summary report grouped by Renewal Quarter and Renewal Month, filterable by CSM and Region |
 | Probability | Renewal probability formula (or a Custom Metadata matrix) |
@@ -120,14 +120,14 @@ IF(ISPICKVAL(Renewal_Status__c, "Cancelled"), "Lost",
 | Slips quarter | Pipeline |
 | Cancelled | Omitted |
 
-## 3. Product lines: the CSM's only inputs
+## 3. Product lines: the Renewals Manager's only inputs
 
-The CSM edits **two things per line**: the **Line Type** (Renewal · Upsell · Downgrade · Churn) and the **new numbers** (Change at List, or the new quantity or plan). Salesforce recalculates everything else.
+The Renewals Manager (who owns the renewal) edits **two things per line**: the **Line Type** (Renewal · Upsell · Downgrade · Churn) and the **new numbers** (Change at List, or the new quantity or plan). Salesforce recalculates everything else.
 
 | Field | Who | Logic |
 |---|---|---|
-| Line Type | **CSM** | Renewal · Upsell · Downgrade · Churn |
-| Change at List | **CSM** | + for upsell, − for downgrade, at the list price of the new plan |
+| Line Type | **Renewals Manager** | Renewal · Upsell · Downgrade · Churn |
+| Change at List | **Renewals Manager** | + for upsell, − for downgrade, at the list price of the new plan |
 | Original ARR | Automatic | Copied from the closed renewal. Locked. Kept for comparison. |
 | Uplift % (year 1) | Automatic | **5% on every Renewal line**, on 1-year and multi-year terms alike. A year-1 waiver is an exception (e.g. three years paid upfront), counts as a discount, and goes to approval under policy C. |
 | Year 2+ Uplift | Automatic | Multi-year **paid upfront → price locked** (0% from year 2). Multi-year **paid annually → 5% every year**. |
@@ -137,7 +137,7 @@ The CSM edits **two things per line**: the **Line Type** (Renewal · Upsell · D
 | Δ vs Original, Δ Indicator | Formula | `New_ARR__c - Original_ARR__c`, with `IMAGE(IF(Delta_ARR__c >= 0, "/img/samples/color_green.gif", "/img/samples/color_red.gif"), "", 12, 12)`: **green for growth, red for contraction** |
 | Approval Required | Formula | Policy C, using the line Discount with the opportunity's Term and Payment Terms: None / Finance / VP Customer Success |
 
-**Upsell = its own opportunity.** When the CSM sets a line to Upsell, or Usage Signal = Over-usage, a Flow opens a linked **Upsell opportunity** (Expansion record type) for the added ARR. Expansion is then forecast in its own pipeline and never inflates the renewal number. If it signs together with the renewal, both go on one order form but are booked separately.
+**Upsell = its own opportunity.** When the Renewals Manager sets a line to Upsell, or Usage Signal = Over-usage, a Flow opens a linked **Upsell opportunity** (Expansion record type) for the added ARR. Expansion is then forecast in its own pipeline and never inflates the renewal number. If it signs together with the renewal, both go on one order form but are booked separately.
 
 **Roll-ups on the opportunity:** Original ARR · New ARR · Uplift · Upsell (mirrors the linked Upsell opportunity) · Churned Amount · Price Concession (`MIN(0, Uplift__c - (List_Total__c - New_ARR__c))`, i.e. revenue given up below today's price) · Net Change and Net Change % (red/green).
 
