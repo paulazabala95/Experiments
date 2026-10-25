@@ -1,18 +1,19 @@
-# n8n prototype: renewal quote and order form (Part 3)
+# n8n prototype: daily renewals with CPQ quote send and signature chase (Part 3)
 
 Workflow in my n8n Cloud: https://paulazabala95.app.n8n.cloud/workflow/mvDDTTwQYTpurdtP
 
-| Node | Type | What it does |
+This is a copy of my existing **Daily renewal alerts** workflow, which stays unchanged, extended so that every number mirrors the CRM/CPQ. The workflow never prices anything.
+
+**Prototype data** (Google Sheet, standing in for Salesforce and the CPQ):
+- `Renewals` tab: the existing tab, plus a **QuoteSentDate** column, which the workflow writes after sending.
+- `Quotes` tab: approved quotes from the CPQ. The template is `quotes_sheet.csv` (QuoteId, QuoteStatus, QuoteSummary, QuotePdfUrl).
+
+**Routes, every day at 8:00:**
+
+| Route | Condition | What happens |
 |---|---|---|
-| Quote request | Form trigger | Prototype trigger. Production: the CRM's T−60 task or a "Generate quote" button. |
-| Read product lines | Google Sheets (stand-in for Salesforce) | Reads the renewal's lines from the `Products` tab (`products_sheet.csv`) |
-| Price and build order form (CPQ stand-in) | Code, deterministic | `build_quote.js`: uplift, price lock, discount per year, policy C approver, order form |
-| Draft cover email (AI) | Basic LLM chain + OpenAI model | Writes the cover email; copies the offer sentence verbatim; internal notes for tone only |
-| Review and approve | Gmail, send and wait for approval | The Renewals Manager (Finance or the VP when flagged) approves or rejects |
-| Approved? → Send order form to customer → Mark renewal as Quoted | IF, Gmail, Google Sheets | Production: e-signature, and the quote file attached to the opportunity |
-
-`test_local.js` runs the pricing step against the sample lines:
-
-```
-node test_local.js
-```
+| Upsell | Flag = Upsell and the CPQ quote is Approved | AI renewal email + upsell email → Renewals Manager approves → sent with the order form link → Status = Quoted |
+| Risk | Flag = Risk | Alert to the CSM; nothing goes to the customer |
+| On track | No flag and the CPQ quote is Approved | AI renewal email → Renewals Manager approves → sent with the order form link → Status = Quoted |
+| Chase signature | Quoted 3 or 7 days ago, still unsigned | AI follow-up → Renewals Manager approves → sent |
+| Quote not ready | No approved CPQ quote | Reminder to the Renewals Manager to finish the quote in the CPQ |
