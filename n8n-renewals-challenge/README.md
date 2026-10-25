@@ -38,9 +38,12 @@
 | `brightloop_one_pager.pdf` | The one-page negotiation plan for Part 2 |
 | `renewal_tracker.xlsx` | The model behind the numbers: triage, pipeline, product lines, churn, monthly report, probability matrix |
 | `crm_design_appendix.pdf` | Appendix: how the process lives in Salesforce (fields, formulas, guardrails, alerts, reports) |
+| `ai_use_statement.pdf` | How I used AI: what came from me, what AI did, how I checked it |
 | n8n workflow JSON | Importable into your own n8n |
 
 ## How I used AI and automation
+
+In short (details in `ai_use_statement.pdf`):
 
 - **My process and judgement:** the stage and probability logic, product-line and churn model, uplift and price-lock rules, account calls and the Brightloop packages.
 - **An AI assistant (Claude):** pressure-tested the maths, drafted text I edited, and built the Excel model and n8n workflow from my specifications. I reviewed every number.
