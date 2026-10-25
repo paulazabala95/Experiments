@@ -116,8 +116,33 @@ pl["D2"].font = Font(name=F, italic=True)
 cols = ["Customer", "Base ARR (€)", "Renewal date", "Type", "Usage 90d", "Health", "Renewal Status", "Blocker",
         "Expected close", "Days to renewal", "Window", "Overdue?", "Month", "Quarter", "Quarter end",
         "Probability", "Counts in quarter?", "Forecast prob.", "New ARR (€)", "Weighted new ARR (€)", "Forecast bucket",
-        "Next action", "Owner", "Due"]
-header(pl, 4, cols, [20, 12, 13, 8, 9, 9, 18, 28, 13, 9, 9, 9, 9, 9, 12, 10, 10, 10, 13, 14, 13, 60, 13, 12])
+        "Next action", "Owner", "Due", "Rank", "Why first", "Also involved", "Escalate today"]
+header(pl, 4, cols, [20, 12, 13, 8, 9, 9, 18, 28, 13, 9, 9, 9, 9, 9, 12, 10, 10, 10, 13, 14, 13, 60, 10, 12,
+                     7, 50, 20, 40])
+
+# Triage: rank by slack (days left vs work still needed) x ARR at risk. Owner is one of Me / CSM / Finance / Legal.
+TRIAGE = {
+    "Northwind Logistics": (1, "Biggest near-term ARR, 9 days out, no quote, signed 3 days late last year. One hour of work removes most of the risk.",
+                            "Me", "CSM", ""),
+    "Vantage Freight": (2, "Already overdue. The blocker is a shared inbox, not price: find a named person.",
+                        "Me", "CSM, Manager", "Yes: Manager, to agree the grace period before access is restricted"),
+    "Pixelforge": (3, "Auto-renewal fails in 13 days on an expired card: involuntary churn on a green account.",
+                   "CSM", "Me, Finance", ""),
+    "Halden Health": (4, "Red, usage -35%, champion gone, new owner unknown, 18 days left.",
+                      "CSM", "Me, Manager, VP CS (exec sponsor)", "Yes: Manager + VP CS, exec sponsor meeting with the new owner this week"),
+    "Tessera Finance": (5, "MSA redlines open since September and a security review can block the PO; 29 days left.",
+                        "Legal", "Me, Security", "Yes: Legal lead, redline response by 30 Oct and renew on the current MSA"),
+    "Brightloop": (6, "Live negotiation; procurement sets the pace. Reply and pre-approvals today.",
+                   "Me", "Finance, Legal, CSM", ""),
+    "Marlowe Insurance": (7, "Insurance procurement is slow; no DPA and questionnaire means no PO.",
+                          "Me", "Legal, Security", ""),
+    "Kestrel Analytics": (8, "Usage +40%, near the execution cap: expansion, and a throttling risk.",
+                          "CSM", "Me", ""),
+    "Lumen Retail": (9, "Auto-renewal with the wrong billing entity; uplift notice due 22 Oct.",
+                     "Me", "Finance, Legal", ""),
+    "Quanta Labs": (10, "Auto-renewal, usage -20%, Q1 budget cuts, unresponsive. 60 days, but cancellation notice ~19 Nov.",
+                    "CSM", "Me", ""),
+}
 
 # Status = where each renewal should be given its date (agreed with Paula).
 # Halden and Quanta stay early on purpose: no evidence to move them.
@@ -165,10 +190,11 @@ P = [
 ]
 EARLY = '{"--None--","Not started","Engaging customer","Negotiation"}'
 r0 = 5
-for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, owner, due) in enumerate(P):
+for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, _, due) in enumerate(P):
     r = r0 + i
+    rank, why, owner, involved, esc = TRIAGE[cust]
     for c, v in {1: cust, 2: arr, 3: rdate, 4: typ, 5: use, 6: hl, 7: status, 8: blocker, 9: exp,
-                 22: action, 23: owner, 24: due}.items():
+                 22: action, 23: owner, 24: due, 25: rank, 26: why, 27: involved, 28: esc}.items():
         cell = pl.cell(row=r, column=c, value=v)
         if c != 1:
             inp(cell)
@@ -193,11 +219,11 @@ for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, owner, due
         pl.cell(row=r, column=c).number_format = DATE
     for c in (5, 16, 18):
         pl.cell(row=r, column=c).number_format = PCT
-    for c in (8, 22):
+    for c in (8, 22, 26, 27, 28):
         pl.cell(row=r, column=c).alignment = WRAP
     pl.row_dimensions[r].height = 48
 rN = r0 + len(P) - 1
-style_range(pl, r0, rN, 1, 24)
+style_range(pl, r0, rN, 1, 28)
 t = rN + 1
 pl.cell(row=t, column=1, value="Total").font = BOLD
 for c in (2, 19, 20):
@@ -205,7 +231,8 @@ for c in (2, 19, 20):
     cell = pl.cell(row=t, column=c, value=f"=SUM({L}{r0}:{L}{rN})")
     cell.font, cell.number_format = BOLD, EUR
 
-for rng, f1 in (("G", "=Probability!$A$5:$A$13"), ("F", '"Green,Yellow,Red"'), ("D", '"Manual,Auto"')):
+for rng, f1 in (("G", "=Probability!$A$5:$A$13"), ("F", '"Green,Yellow,Red"'), ("D", '"Manual,Auto"'),
+                ("W", '"Me,CSM,Finance,Legal"')):
     dv = DataValidation(type="list", formula1=f1)
     pl.add_data_validation(dv)
     dv.add(f"{rng}{r0}:{rng}{rN}")
@@ -220,6 +247,7 @@ pl.conditional_formatting.add(f"Q{r0}:Q{rN}", FormulaRule(formula=[f'Q{r0}="No"'
 pl.conditional_formatting.add(f"U{r0}:U{rN}", FormulaRule(formula=[f'U{r0}="Late"'], fill=AMB_FILL))
 pl.conditional_formatting.add(f"U{r0}:U{rN}", FormulaRule(formula=[f'OR(U{r0}="Lost",U{r0}="Slips quarter")'], fill=RED_FILL))
 pl.conditional_formatting.add(f"U{r0}:U{rN}", FormulaRule(formula=[f'U{r0}="On time"'], fill=GRN_FILL))
+pl.conditional_formatting.add(f"AB{r0}:AB{rN}", FormulaRule(formula=[f'LEFT(AB{r0},3)="Yes"'], fill=RED_FILL, font=Font(name=F, bold=True, color="9C0006")))
 pl.freeze_panes = "B5"
 
 # Forecast block
@@ -257,6 +285,40 @@ pl.cell(row=k + 1, column=1, value="Net retention (new ARR / base, incl. 5% upli
 pl.cell(row=k + 1, column=2, value=f"=S{t}/B{t}").number_format = "0.0%"
 style_range(pl, f0 + 2, f0 + 5, 1, 4)
 style_range(pl, lost, k + 1, 1, 2)
+
+# --------------------------------------------------------------------- Triage
+tr = wb.create_sheet("Triage", 1)
+title(tr, "Triage: what I do first, who owns it, by when",
+      "Ranked by slack (days left vs work still needed) x ARR at risk. Linked to Pipeline: change a rank there and "
+      "this list re-sorts.")
+tcols = ["Rank", "Customer", "ARR (€)", "Renewal date", "Days", "Renewal Status", "Why first", "Next action",
+         "Owner", "Also involved", "Due", "Escalate today"]
+header(tr, 4, tcols, [6, 20, 11, 13, 7, 17, 42, 60, 9, 22, 12, 40])
+src = {2: "A", 3: "B", 4: "C", 5: "J", 6: "G", 7: "Z", 8: "V", 9: "W", 10: "AA", 11: "X", 12: "AB"}
+for k in range(1, len(P) + 1):
+    r = 4 + k
+    tr.cell(row=r, column=1, value=k).font = BOLD
+    for c, Lc in src.items():
+        tr.cell(row=r, column=c, value=f'=INDEX(Pipeline!${Lc}${r0}:${Lc}${rN},MATCH($A{r},Pipeline!$Y${r0}:$Y${rN},0))&""'
+                if c in (7, 8, 10, 12) else
+                f"=INDEX(Pipeline!${Lc}${r0}:${Lc}${rN},MATCH($A{r},Pipeline!$Y${r0}:$Y${rN},0))")
+        tr.cell(row=r, column=c).alignment = WRAP
+    tr.cell(row=r, column=3).number_format = EUR
+    tr.cell(row=r, column=4).number_format = DATE
+    tr.cell(row=r, column=11).number_format = DATE
+    tr.row_dimensions[r].height = 62
+tE = 4 + len(P)
+style_range(tr, 5, tE, 1, 12)
+tr.conditional_formatting.add(f"L5:L{tE}", FormulaRule(formula=['LEFT(L5,3)="Yes"'], fill=RED_FILL, font=Font(name=F, bold=True, color="9C0006")))
+tr.conditional_formatting.add(f"E5:E{tE}", CellIsRule(operator="lessThan", formula=["0"], fill=RED_FILL))
+tr.conditional_formatting.add(f"K5:K{tE}", FormulaRule(formula=["K5=Pipeline!$B$2"], fill=AMB_FILL))
+tr.cell(row=tE + 2, column=1, value="Escalations today").font = BOLD
+tr.cell(row=tE + 2, column=3, value=f'=COUNTIF(L5:L{tE},"Yes*")&" accounts, "&TEXT(SUMIF(L5:L{tE},"Yes*",C5:C{tE}),"€#,##0")&" ARR"')
+tr.cell(row=tE + 3, column=1, value="Process").font = BOLD
+tr.cell(row=tE + 3, column=3, value=("5 of 7 manual renewals inside 60 days had no quote (policy: quote at 60 days). Raise with my manager: "
+                                     "60-day quote task in the CRM, and quote generation automated (Part 3)."))
+tr.merge_cells(start_row=tE + 3, start_column=3, end_row=tE + 3, end_column=12)
+tr.freeze_panes = "C5"
 
 # ------------------------------------------------------------------- Products
 pd_ = wb.create_sheet("Products", 1)
@@ -443,6 +505,8 @@ notes = [
     ("Purpose", "Shows the numbers the CRM would hold: renewals by month and quarter, by status, by product line, and a "
                 "forecast driven by Renewal Status x countdown."),
     ("Today", "Pipeline!B2 = 20 Oct 2026 (exercise date). Use =TODAY() in live use."),
+    ("Triage", "Rank, why first, next action, one owner (Me / CSM / Finance / Legal) plus who else is involved, due date, "
+               "and today's escalations. Sorted by rank; edit the rank on the Pipeline tab."),
     ("Probability", "Renewal Status x days to renewal. Late statuses rise as the date gets closer; early statuses fall. "
                     "Overdue has its own, lower column."),
     ("Overdue rule", "Overdue renewals are Late. They count in the quarter only if the expected close date is on or before "
@@ -468,5 +532,8 @@ for ws in wb.worksheets:
         for c in row:
             if c.value is not None and c.font.name != F:
                 c.font = Font(name=F, bold=c.font.bold, italic=c.font.italic, color=c.font.color, size=c.font.size)
+order = ["Read me", "Triage", "Pipeline", "Products", "Opp summary", "Monthly report", "Probability", "Policy"]
+wb._sheets = [wb[n] for n in order]
+wb.active = 1
 wb.save(OUT)
 print("saved", OUT)
