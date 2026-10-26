@@ -41,7 +41,7 @@ The brief mentions a quote only for Vantage and Brightloop, so I treat the other
 2. **Tessera Finance (€50k).** To the Legal lead: redlines have been open for 6+ weeks, and I need a response by 30 Oct, our positions on the PO-blocking clauses agreed in advance, and the extension fallback approved.
 3. **Vantage Freight (€21k, overdue).** To my manager: what is our grace period before access is restricted? I'd propose day 14 for exec-to-exec contact and day 30 for formal notice under the contract.
 4. **Brightloop.** Not an escalation, but a pre-approval request to Finance (up to 12% on a 2-year deal, net 60). I want room to trade during the call.
-5. **Process.** Five manual renewals inside 60 days have no quote on record, which breaks the quote policy. The fix is a 60-day quote task and alert in the CRM, plus Part 3, which sends the approved quote and chases the signature.
+5. **Process.** Five manual renewals inside 60 days have no quote on record, which breaks the quote policy. The fix is a 60-day quote task and alert in the CRM, plus Part 3, my daily alert that drafts each renewal email with the quotation for approval.
 
 ## Forecast: driven by Renewal Status × countdown
 

@@ -26,7 +26,8 @@
 
 **Part 3: Automation**
 
-- I extended my own n8n renewal-alerts workflow. Every morning it takes each renewal with an approved CPQ quote, has AI draft the email, waits for my approval, then sends it with the order form and sets the CRM status to *Quoted*.
+- My own n8n workflow, *Daily renewal alerts*, built before this case for my first recruiter call (sample accounts, so details differ from the brief). Every morning at 8:00 it keeps the unsigned renewals within 90 days and routes them by usage: AI drafts the renewal email with the quotation (plus an upsell email when usage is high) for the CSM to approve before sending, and risky accounts get an alert to a person instead of an email.
+- Shown in a 78-second narrated video. For this book, I'd add the approved CPQ quote and order form, a signature chase on days 3 and 7, and a write-back to the CRM.
 - It chases unsigned order forms on days 3 and 7, alerts the CSM on at-risk accounts, and reminds me when a quote isn't ready. Numbers always come from the approved quote.
 
 ## What's in the pack
@@ -38,12 +39,12 @@
 | `renewal_tracker.xlsx` | The model behind the numbers: triage, pipeline, product lines, churn, monthly report, probability matrix |
 | `crm_design_appendix.pdf` | Appendix: how the process lives in Salesforce (fields, formulas, guardrails, alerts, reports) |
 | `ai_use_statement.pdf` | How I used AI: what came from me, what AI did, how I checked it |
-| n8n workflow JSON | Importable into your own n8n |
+| `renewal_alerts_n8n_walkthrough.mp4` | Part 3: a 78-second narrated walkthrough of my n8n workflow |
 
 ## How I used AI and automation
 
 In short (details in `ai_use_statement.pdf`):
 
 - **My process and judgement:** the stage and probability logic, product-line and churn model, uplift and price-lock rules, account calls and the Brightloop packages.
-- **An AI assistant (Claude):** pressure-tested the maths, drafted text I edited, and built the Excel model and n8n workflow from my specifications. I reviewed every number.
-- **n8n:** Part 3 extends a workflow I'd already built, with the same principles as my renewal quotation agent at Bizzdesign: numbers from the tool of record, AI only for language, a human on every customer-facing output.
+- **An AI assistant (Claude):** pressure-tested the maths, drafted text I edited, and built the Excel model and the PDFs from my specifications. I reviewed every number.
+- **n8n:** Part 3 is a workflow I built before this case, with the same principles as my renewal quotation agent at Bizzdesign: numbers from the tool of record, AI only for language, a human on every customer-facing output.

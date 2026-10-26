@@ -4,7 +4,7 @@
 
 The brief invited any tools, including AI. Here is exactly what I did, what AI did, and how I checked it.
 
-**Time:** about **4 hours** of my own time over two sessions. Part 3 builds on an n8n workflow I created on 13 October, before this exercise.
+**Time:** about **4 hours** of my own time over two sessions. Part 3 is the n8n workflow I built on 13 October for my first recruiter call, before this exercise, and the narrated video I made of it. I didn't change it for this case.
 
 ## What came from me
 
@@ -18,11 +18,11 @@ These are the decisions the work is built on. I specified them, and corrected th
 | **Product lines and churn** | Each line is renewal, upsell, downgrade or churn. Original ARR is kept next to new ARR, and Salesforce recalculates everything else. Churn sits on the opportunity: **regrettable** means revenue lost for good; **non-regrettable** means revenue kept elsewhere at n8n (e.g. self-hosted → Cloud). Upsell is its own opportunity. |
 | **Commercial rules** | The 5% uplift is already in the renewal value (never added on top), announced in one bulk notice each January. The price is locked from year 2 only for upfront multi-year deals. The Renewals Manager owns the numbers. A new renewal opportunity is created when the current one closes won. |
 | **Brightloop** | Two structures instead of a discount: downsize + multi-year lock, or keep the plan with a small buffer. Net 60 only with upfront payment; top SLA tier. |
-| **Automation** | **The workflow never prices; everything mirrors the CRM/CPQ.** Extend my existing workflow rather than build a duplicate. A human approves every customer-facing email. |
+| **Automation** | My own workflow: amounts come from the source of truth, never from the model; a human approves every customer-facing email; risky accounts get an alert to a person, not an email. |
 
 ## What AI (Claude) did
 
-- **Built from my specifications:** the Excel tracker (formulas, tabs, formatting), the n8n workflow, and the PDFs.
+- **Built from my specifications:** the Excel tracker (formulas, tabs, formatting) and the PDFs.
 - **Drafted** text I then edited: the email to Sam, the playbook, the write-ups.
 - **Did and checked the maths:** the policy C approval thresholds and the multi-year discount maths, e.g. why a 10% + 5% ramp is 7.4% overall, not 15%.
 - **Researched** facts about n8n (self-hosted and Cloud editions, pricing by executions) and flagged the assumptions it couldn't verify. One example: the price of a smaller Enterprise tier.
@@ -30,13 +30,11 @@ These are the decisions the work is built on. I specified them, and corrected th
 ## How I checked it
 
 - I reviewed every number in the tracker and documents. The totals tie out across files.
-- I tested the n8n workflow on the challenge accounts (pinned data, no real emails sent).
 - **Where AI got it wrong, and I corrected it:**
   - its first forecast relied on judgement instead of my status × countdown model;
   - it put churn type on the product lines instead of the opportunity;
   - it proposed waiving the uplift on 2-year deals without upfront payment;
-  - its first Part 3 calculated prices in the workflow, which broke my rule that the CRM is the source of truth.
-- **An AI failure I caught in testing:** an early AI-drafted email leaked internal notes ("budget cut", "usage down 10%"). That's why every customer-facing draft goes to a person for approval.
+- **An AI failure I caught while testing an extension of the workflow for this case:** an AI-drafted email leaked internal notes ("budget cut", "usage down 10%"). That's why every customer-facing draft goes to a person for approval.
 
 ## My principle
 
