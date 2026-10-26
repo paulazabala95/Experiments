@@ -219,7 +219,7 @@ P = [
      "invoice run. Cancellation deadline 22 Oct (assumed 30 days).", "Me + Finance", date(2026, 10, 22)),
     ("Kestrel Analytics", 35000, date(2026, 11, 28), "Manual", 0.40, "Green", "Quoted",
      "Close to execution cap", date(2026, 11, 28),
-     "CSM usage review; quote like-for-like (€35k) and open a linked Upsell opportunity for the next execution tier.",
+     "CSM usage review and approves the tier; one quote with renewal (€35k like-for-like) and upsell (next tier) as separate lines; upsell on its own linked Upsell opportunity.",
      "CSM + Me", date(2026, 10, 28)),
     ("Marlowe Insurance", 46000, date(2026, 12, 9), "Manual", 0.00, "Yellow", "Quoted",
      "Vendor questionnaire + DPA needed for PO", date(2026, 12, 9),
