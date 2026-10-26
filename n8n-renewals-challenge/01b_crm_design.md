@@ -167,7 +167,7 @@ The 5% uplift is in every contract. **One bulk notice goes to all customers in J
 | When | Condition | Action |
 |---|---|---|
 | T−90 | Open renewal | CSM task: health and usage review. Manual → Engaging customer. |
-| T−60 | Manual | Renewals task: **create the quote in the CPQ**. Once it's approved, Part 3 sends it. |
+| T−60 | Manual | Renewals task: **create the quote in the CPQ**. Once it's approved, the daily renewal alert (Part 3) drafts the renewal email with it for approval. |
 | T−45 | Manual, still before Quoted | Alert to Renewals and manager: quote lead time missed |
 | T−45 | Auto | Invoice preview check: payment method valid, billing entity correct, uplifted price shown |
 | Notice Deadline − 14 | Auto | CSM and Renewals: check cancellation risk before the customer's last day to give notice |

@@ -426,8 +426,8 @@ tr.conditional_formatting.add(f"K5:K{tE}", FormulaRule(formula=["K5=Pipeline!$B$
 tr.cell(row=tE + 2, column=1, value="Escalations today").font = BOLD
 tr.cell(row=tE + 2, column=3, value=f'=COUNTIF(L5:L{tE},"Yes*")&" accounts, "&TEXT(SUMIF(L5:L{tE},"Yes*",C5:C{tE}),"€#,##0")&" ARR"')
 tr.cell(row=tE + 3, column=1, value="Process").font = BOLD
-tr.cell(row=tE + 3, column=3, value=("5 of 7 manual renewals inside 60 days had no quote (policy: quote at 60 days). Raise with my manager: "
-                                     "60-day quote task in the CRM, and quote generation automated (Part 3)."))
+tr.cell(row=tE + 3, column=3, value=("5 of 7 manual renewals inside 60 days have no quote on record (policy: quote at 60 days). Raise with my manager: "
+                                     "60-day quote task in the CRM, and the daily renewal alert (Part 3) drafting the renewal email with the quotation."))
 tr.merge_cells(start_row=tE + 3, start_column=3, end_row=tE + 3, end_column=12)
 tr.freeze_panes = "C5"
 

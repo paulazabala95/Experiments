@@ -7,7 +7,7 @@
 - Kept time and told the panel when I moved between parts.
 - Never conceded without getting something back. Moved the conversation from discount to term and structure.
 - The forecast had a clear range and named the number I was least sure of, instead of false precision.
-- Tied the automation to the actual failures in this book (late quotes, missed notice dates, failed cards).
+- Tied the automation to the actual failure in this book (late quotes), and was upfront that Part 3 is my own workflow from before the case, with what I'd add for this book.
 
 **Would improve (be honest, keep it specific):**
 
