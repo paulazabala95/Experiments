@@ -19,8 +19,6 @@
 >
 > Could we set up 30 minutes with you and Priya on Thursday or Friday? It would help to know the budget you need to land on (and whether the pressure is on this year's spend or on cash) and who signs. If you're weighing other options, I'm happy to explore together which solution fits best and what it would mean in practice.
 >
-> With your renewal on 14 December, agreeing terms by the end of November leaves plenty of time for the paperwork.
->
 > Best,
 > Paula
 > Renewals, n8n
