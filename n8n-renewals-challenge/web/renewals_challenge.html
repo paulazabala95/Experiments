@@ -71,7 +71,7 @@ section { padding-block: 40px 4px; scroll-margin-top: calc(64px + env(safe-area-
 .kpi .l { font-size: 14px; color: var(--muted); }
 .panel { background: var(--surface-2); border-radius: 14px; padding: 18px 20px; min-width: 0; }
 .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 12px; }
-ul.tight { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; max-width: 70ch; }
+ul.tight, ol.tight { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; max-width: 70ch; }
 .tbl { overflow-x: auto; border-radius: 14px; background: var(--surface-2); }
 table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
 th { text-align: left; font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 400; padding: 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
@@ -96,6 +96,7 @@ tr.total td { font-weight: 600; background: var(--accent-soft); color: var(--acc
 .callout b:first-child { background: var(--accent-soft); color: var(--accent-ink); padding: 0 .25em; border-radius: .25em; }
 blockquote.email { margin: 0; background: var(--surface-2); border-radius: 14px; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; max-width: 76ch; }
 blockquote.email p { max-width: none; }
+.legend { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
 .flow { font-family: var(--mono); font-size: 13px; white-space: pre; overflow-x: auto; background: var(--surface-2); border-radius: 14px; padding: 18px; line-height: 1.7; color: var(--ink); }
 footer { padding-block: 44px 60px; color: var(--muted); font-size: 14px; }
 @media (max-width: 520px) { body { font-size: 15.5px; } .kpi .v { font-size: 24px; } .node > .head, .node > .body { padding-left: 18px; padding-right: 18px; } }
@@ -154,8 +155,8 @@ footer { padding-block: 44px 60px; color: var(--muted); font-size: 14px; }
     <div class="panel stack">
       <h3>Part 3: Automation</h3>
       <ul class="tight">
-        <li>The workflow <b>never prices</b>: everything mirrors the CRM and CPQ.</li>
-        <li>It sends the approved quote with an AI-drafted email after human approval, sets <i>Quoted</i>, and chases the signature.</li>
+        <li>Every morning my n8n workflow takes each approved quote, has AI draft the email, waits for my approval, sends it with the order form, and sets <i>Quoted</i> in the CRM.</li>
+        <li>It chases unsigned order forms on day 3 and 7, alerts the CSM on at-risk accounts, and reminds me when a quote isn't ready.</li>
       </ul>
     </div>
   </div>
@@ -334,35 +335,50 @@ footer { padding-block: 44px 60px; color: var(--muted); font-size: 14px; }
 
 <section id="automation">
   <div class="node">
-  <div class="head"><span class="eyebrow">Part 3</span><h2>Get the approved quote out, signed and tracked</h2>
-    <p class="small">Once a quote is approved, the rest is repetition: email, order form, send, update the CRM, chase. That's the work that doesn't scale to 221 renewals a quarter.</p></div>
+  <div class="head"><span class="eyebrow">Part 3</span><h2>From approved quote to signature, every morning</h2>
+    <p class="small">I extended my own n8n workflow, <i>Daily renewal alerts</i> (built before this challenge), so it covers the part of the renewal that eats the most time once a quote exists: emailing the customer, sending the order form, updating the CRM and chasing the signature. At 221 renewals a quarter, that's where days slip.</p></div>
   <div class="body">
-  <p class="callout"><b>My rule: the workflow never prices anything.</b> The CRM and CPQ own the quote, the order form and every number; the workflow mirrors them. At my current company there was no CPQ, so I built an agent that ran our quote tool with deterministic pricing and a human approving every quote. Here I assume n8n has a CPQ.</p>
-  <div class="flow" role="img" aria-label="Workflow: daily trigger reads renewals and approved CPQ quotes, then routes to upsell, on track, chase, risk or quote not ready.">Every day 8:00 ─► Renewals (unsigned, ≤90 days) ─┐
-               └► Approved quotes from CPQ ──────┴► Match quote to renewal ─► Route
-   On track / Upsell ► AI drafts email (offer copied word for word) ► Renewals Manager approves ► send with order form ► Status = Quoted
-   Chase signature ──► AI follow-up at day 3 and day 7 ─────────────► Renewals Manager approves ► send
-   Risk ─────────────► alert to the CSM, no customer email
-   Quote not ready ──► reminder to finish the quote in the CPQ</div>
+  <div class="tbl" style="padding:14px"><svg viewBox="0 0 1170 600" role="img" aria-label="n8n workflow: a daily trigger reads unsigned renewals from the CRM and approved quotes from the CPQ, matches them, and routes each renewal. Upsell and on-track renewals get an AI-drafted email that the Renewals Manager approves before it is sent with the order form, then the CRM status is set to Quoted. Unsigned order forms get an AI follow-up on day 3 and 7, also approved. At-risk renewals alert the CSM, and renewals without an approved quote trigger a reminder." style="min-width:900px;width:100%;height:auto;display:block"><style>.nl{font:500 11.5px var(--body);fill:var(--ink)}.ns{font:400 10px var(--mono);fill:var(--muted);letter-spacing:.06em}.ng{font:600 15px var(--mono);fill:var(--ink)}.el{font:400 10px var(--mono);fill:var(--muted);letter-spacing:.08em}</style><path d="M76,290 C113.0,290 113.0,198 150,198" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="150" cy="198" r="3.5" fill="var(--accent)"/><path d="M76,290 C113.0,290 113.0,378 150,378" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="150" cy="378" r="3.5" fill="var(--accent)"/><path d="M206,198 C248.0,198 248.0,198 290,198" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="290" cy="198" r="3.5" fill="var(--accent)"/><path d="M346,198 C383.0,198 383.0,290 420,290" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="420" cy="290" r="3.5" fill="var(--accent)"/><path d="M206,378 C313.0,378 313.0,290 420,290" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="420" cy="290" r="3.5" fill="var(--accent)"/><path d="M476,290 C513.0,290 513.0,290 550,290" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="550" cy="290" r="3.5" fill="var(--accent)"/><path d="M606,290 C653.0,290 653.0,68 700,68" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="700" cy="68" r="3.5" fill="var(--accent)"/><path d="M606,290 C653.0,290 653.0,178 700,178" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="700" cy="178" r="3.5" fill="var(--accent)"/><path d="M606,290 C653.0,290 653.0,298 700,298" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="700" cy="298" r="3.5" fill="var(--accent)"/><path d="M606,290 C653.0,290 653.0,418 700,418" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="700" cy="418" r="3.5" fill="var(--accent)"/><path d="M606,290 C653.0,290 653.0,518 700,518" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="700" cy="518" r="3.5" fill="var(--accent)"/><path d="M756,68 C793.0,68 793.0,68 830,68" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="830" cy="68" r="3.5" fill="var(--accent)"/><path d="M886,68 C923.0,68 923.0,68 960,68" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="960" cy="68" r="3.5" fill="var(--accent)"/><path d="M756,178 C793.0,178 793.0,178 830,178" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="830" cy="178" r="3.5" fill="var(--accent)"/><path d="M886,178 C923.0,178 923.0,178 960,178" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="960" cy="178" r="3.5" fill="var(--accent)"/><path d="M756,298 C793.0,298 793.0,298 830,298" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="830" cy="298" r="3.5" fill="var(--accent)"/><path d="M886,298 C923.0,298 923.0,298 960,298" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="960" cy="298" r="3.5" fill="var(--accent)"/><path d="M1016,68 C1053.0,68 1053.0,123 1090,123" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="1090" cy="123" r="3.5" fill="var(--accent)"/><path d="M1016,178 C1053.0,178 1053.0,123 1090,123" fill="none" stroke="var(--grid)" stroke-width="2"/><circle cx="1090" cy="123" r="3.5" fill="var(--accent)"/><text class="el" x="640" y="58">UPSELL</text><text class="el" x="640" y="168">ON TRACK</text><text class="el" x="640" y="288">CHASE</text><text class="el" x="640" y="408">RISK</text><text class="el" x="640" y="508">NO QUOTE</text><g><rect x="20" y="262" width="56" height="56" rx="28" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="48" y="296" text-anchor="middle">⏱</text><text class="nl" x="48" y="334" text-anchor="middle"><tspan x="48" dy="0">Every day</tspan><tspan x="48" dy="13">8:00</tspan></text></g><g><rect x="150" y="170" width="56" height="56" rx="10" fill="var(--warn-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="178" y="204" text-anchor="middle">DB</text><text class="nl" x="178" y="242" text-anchor="middle"><tspan x="178" dy="0">Get renewals</tspan></text><text class="ns" x="178" y="252" text-anchor="middle">CRM</text></g><g><rect x="150" y="350" width="56" height="56" rx="10" fill="var(--warn-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="178" y="384" text-anchor="middle">DB</text><text class="nl" x="178" y="422" text-anchor="middle"><tspan x="178" dy="0">Get approved</tspan><tspan x="178" dy="13">quotes</tspan></text><text class="ns" x="178" y="445" text-anchor="middle">CPQ</text></g><g><rect x="290" y="170" width="56" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="318" y="204" text-anchor="middle">⋯</text><text class="nl" x="318" y="242" text-anchor="middle"><tspan x="318" dy="0">Keep unsigned,</tspan><tspan x="318" dy="13">≤ 90 days</tspan></text></g><g><rect x="420" y="262" width="56" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="448" y="296" text-anchor="middle">⋯</text><text class="nl" x="448" y="334" text-anchor="middle"><tspan x="448" dy="0">Match quote</tspan><tspan x="448" dy="13">to renewal</tspan></text></g><g><rect x="550" y="262" width="56" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="578" y="296" text-anchor="middle">⑂</text><text class="nl" x="578" y="334" text-anchor="middle"><tspan x="578" dy="0">Route</tspan></text></g><g><rect x="700" y="40" width="56" height="56" rx="10" fill="var(--accent-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="728" y="74" text-anchor="middle">AI</text><text class="nl" x="728" y="112" text-anchor="middle"><tspan x="728" dy="0">AI: renewal +</tspan><tspan x="728" dy="13">upsell emails</tspan></text></g><g><rect x="830" y="40" width="56" height="56" rx="10" fill="var(--good-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="858" y="74" text-anchor="middle">✓</text><text class="nl" x="858" y="112" text-anchor="middle"><tspan x="858" dy="0">Renewals Mgr</tspan><tspan x="858" dy="13">approves</tspan></text></g><g><rect x="960" y="40" width="56" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="988" y="74" text-anchor="middle">⋯</text><text class="nl" x="988" y="112" text-anchor="middle"><tspan x="988" dy="0">Send both,</tspan><tspan x="988" dy="13">order form</tspan></text></g><g><rect x="700" y="150" width="56" height="56" rx="10" fill="var(--accent-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="728" y="184" text-anchor="middle">AI</text><text class="nl" x="728" y="222" text-anchor="middle"><tspan x="728" dy="0">AI: renewal</tspan><tspan x="728" dy="13">email</tspan></text></g><g><rect x="830" y="150" width="56" height="56" rx="10" fill="var(--good-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="858" y="184" text-anchor="middle">✓</text><text class="nl" x="858" y="222" text-anchor="middle"><tspan x="858" dy="0">Renewals Mgr</tspan><tspan x="858" dy="13">approves</tspan></text></g><g><rect x="960" y="150" width="56" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="988" y="184" text-anchor="middle">⋯</text><text class="nl" x="988" y="222" text-anchor="middle"><tspan x="988" dy="0">Send with</tspan><tspan x="988" dy="13">order form</tspan></text></g><g><rect x="1090" y="95" width="56" height="56" rx="10" fill="var(--warn-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="1118" y="129" text-anchor="middle">DB</text><text class="nl" x="1118" y="167" text-anchor="middle"><tspan x="1118" dy="0">Status =</tspan><tspan x="1118" dy="13">Quoted</tspan></text><text class="ns" x="1118" y="190" text-anchor="middle">CRM</text></g><g><rect x="700" y="270" width="56" height="56" rx="10" fill="var(--accent-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="728" y="304" text-anchor="middle">AI</text><text class="nl" x="728" y="342" text-anchor="middle"><tspan x="728" dy="0">AI: follow-up</tspan><tspan x="728" dy="13">day 3 and 7</tspan></text></g><g><rect x="830" y="270" width="56" height="56" rx="10" fill="var(--good-soft)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="858" y="304" text-anchor="middle">✓</text><text class="nl" x="858" y="342" text-anchor="middle"><tspan x="858" dy="0">Renewals Mgr</tspan><tspan x="858" dy="13">approves</tspan></text></g><g><rect x="960" y="270" width="56" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="988" y="304" text-anchor="middle">⋯</text><text class="nl" x="988" y="342" text-anchor="middle"><tspan x="988" dy="0">Send</tspan><tspan x="988" dy="13">follow-up</tspan></text></g><g><rect x="700" y="390" width="56" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="728" y="424" text-anchor="middle">⋯</text><text class="nl" x="728" y="462" text-anchor="middle"><tspan x="728" dy="0">Alert</tspan><tspan x="728" dy="13">the CSM</tspan></text></g><g><rect x="700" y="490" width="56" height="56" rx="10" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/><text class="ng" x="728" y="524" text-anchor="middle">⋯</text><text class="nl" x="728" y="562" text-anchor="middle"><tspan x="728" dy="0">Remind: finish</tspan><tspan x="728" dy="13">quote in CPQ</tspan></text></g></svg></div>
+  <div class="legend small"><span class="pill" style="background:var(--accent-soft)">AI</span> AI drafts the email &nbsp; <span class="pill good">✓</span> a person approves &nbsp; <span class="pill warn">DB</span> reads or writes CRM / CPQ</div>
+
+  <h3>What it does, step by step</h3>
+  <ol class="tight">
+    <li><b>Every morning at 8:00</b> it reads the renewals due within 90 days that aren't signed yet, and pulls the quotes already <b>approved in the CPQ</b>.</li>
+    <li><b>It matches each renewal to its approved quote</b>, so every email uses the exact offer, order form and quote number the customer will sign.</li>
+    <li><b>It routes each renewal to one of five paths:</b>
+      <ul class="tight">
+        <li><b>On track:</b> AI drafts the renewal email around the approved offer → I approve it → it goes out with the order form for e-signature.</li>
+        <li><b>Upsell</b> (usage above the plan): AI drafts the renewal email and a separate upsell email → I approve both → both go out.</li>
+        <li><b>Chase signature:</b> 3 and 7 days after sending, if it isn't signed, AI drafts a short follow-up → I approve → it goes out.</li>
+        <li><b>Risk</b> (red health, usage dropping): no customer email. The CSM gets an alert to act first.</li>
+        <li><b>No quote yet:</b> I get a reminder to finish the quote in the CPQ before the deadline slips.</li>
+      </ul>
+    </li>
+    <li><b>Nothing reaches a customer without my click.</b> Each draft arrives in my inbox with Approve and Reject buttons (Gmail send-and-wait), and the workflow waits.</li>
+    <li><b>After sending, it writes back to the CRM:</b> status <i>Quoted</i> and the date sent. That date starts the signature chase.</li>
+  </ol>
+
   <div class="cols">
     <div class="panel stack">
-      <h3>Built and tested</h3>
+      <h3>Why this design</h3>
       <ul class="tight">
-        <li>An extended copy of my existing n8n renewal-alerts workflow. The JSON is attached to the email and can be imported.</li>
-        <li>Prototype data: Google Sheet tabs standing in for Salesforce and the CPQ. In production, the order form goes out for e-signature.</li>
-        <li>Tested on five accounts, one per route, with no real emails sent.</li>
+        <li><b>Numbers come from the approved quote,</b> never from the AI. It copies the offer word for word, so pricing and terms stay in the CRM and CPQ.</li>
+        <li><b>AI does the writing,</b> where it saves the most time. A person keeps every decision that reaches a customer.</li>
+        <li><b>Same principles as the renewal quotation agent I built at my current company:</b> one job per step, a source of truth, and autonomy earned with a track record.</li>
       </ul>
     </div>
     <div class="panel stack">
-      <h3>Human in the loop, and how I'd know it works</h3>
+      <h3>How I'd know it works</h3>
       <ul class="tight">
-        <li>A person approves every customer-facing email. Pricing and terms stay in the CPQ. At-risk accounts go to the CSM.</li>
-        <li>Quoted by day 60: 1 of 7 → <b>100%</b> · approved quote to sent: <b>same day</b> · emails with a wrong number: <b>0</b> · AI drafts approved without edits, tracked weekly.</li>
-        <li>Lesson from testing: an early draft leaked internal notes. Autonomy is earned, not switched on from day one.</li>
+        <li>Manual renewals with the quote out by day 60: 1 of 7 → <b>100%</b></li>
+        <li>Approved quote to email sent: <b>same day</b></li>
+        <li>Order forms signed within 7 days of sending: tracked weekly</li>
+        <li>AI drafts approved without edits: tracked. Once it's consistently high, standard renewals can go out without the approval click.</li>
       </ul>
     </div>
   </div>
-</div>
+  <p class="small">Tested on five accounts, one per path (Northwind, Kestrel, Halden, Tessera, Marlowe), with no real emails sent. In the prototype, Google Sheet tabs stand in for Salesforce and the CPQ; the workflow JSON is attached and can be imported.</p>
+  </div>
   </div>
 </section>
 

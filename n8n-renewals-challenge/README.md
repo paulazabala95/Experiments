@@ -25,10 +25,8 @@
 
 **Part 3: Automation**
 
-- I extended my existing n8n renewal-alerts workflow. It mirrors the CRM/CPQ and **never prices anything**:
-  - the approved quote goes out with an AI-drafted email after my approval;
-  - the CRM status is set to Quoted;
-  - unsigned order forms are chased at days 3 and 7.
+- I extended my own n8n renewal-alerts workflow. Every morning it takes each renewal with an approved CPQ quote, has AI draft the email, waits for my approval, then sends it with the order form and sets the CRM status to *Quoted*.
+- It chases unsigned order forms on days 3 and 7, alerts the CSM on at-risk accounts, and reminds me when a quote isn't ready. Numbers always come from the approved quote.
 
 ## What's in the pack
 

@@ -1,17 +1,26 @@
-# Part 3: Scaling the renewal motion
+# Part 3: From approved quote to signature, every morning
 
-**The step:** getting the approved quote out to the customer, the CRM updated, and the signature chased. In this book, only 1 of 7 manual renewals had its quote out by day 60, and every later step slips with it. Once a quote is approved, the rest is repetition: write the email, attach the order form, send it, update the CRM, chase. That's exactly the work that doesn't scale to 221 renewals a quarter.
+I extended my own n8n workflow, *Daily renewal alerts*, which I built before this challenge. It now covers the part of the renewal that eats the most time once a quote exists: emailing the customer, sending the order form, updating the CRM and chasing the signature. At 221 renewals a quarter, this is where days slip.
 
-**My rule: the workflow never prices anything.** The CRM and CPQ own the quote, the order form, the approvals and every number. The workflow mirrors them. *(At Bizzdesign there was no CPQ, so I built Roberto, an agent that ran our quote tool with deterministic pricing and a human approving every quote. Here I assume n8n has a CPQ.)*
+<img src="n8n/workflow_diagram.png" alt="The n8n workflow: daily trigger, CRM renewals and approved CPQ quotes, match, then five paths" style="display:block;margin:0 auto;width:80%">
 
-**The prototype:** I extended a copy of my existing *Daily renewal alerts* workflow in n8n. The workflow JSON is attached.
+<p style="font-size:9pt;color:#666;margin-top:2px">Pink AI steps draft the email · green ✓ steps wait for a person's approval · DB steps read from or write to the CRM and CPQ.</p>
 
-| | |
-|---|---|
-| **Trigger** | Daily at 8:00. In production, also a CRM event when a quote is approved. |
-| **Systems** | CRM renewal opportunity + **approved CPQ quote** (prototype: Google Sheet tabs) · Gmail (production: e-signature) · AI model for drafting |
-| **Routes** | **On track / Upsell:** AI drafts the email, copying the approved offer word for word → Renewals Manager approves → sent with the order form → status *Quoted*. **Chase:** AI follow-up at days 3 and 7 if unsigned. **Risk:** alert to the CSM, no customer email. **Quote not ready:** reminder to finish the quote in the CPQ. |
-| **What a human still checks** | Every customer-facing email before it goes out, all pricing and terms (in the CPQ), and at-risk accounts (CSM) |
-| **How I'd know it works** | Manual renewals quoted by day 60: 1 of 7 → **100%** · Approved quote to sent: **same day** · Order forms signed within 7 days of sending: tracked · Emails with a wrong number: **0** · AI drafts approved without edits: tracked weekly. Once that's consistently high, standard renewals can go out without the approval step. |
+**What it does, step by step**
 
-**What testing taught me.** An earlier version leaked internal notes into the AI draft ("budget cut", "executions down 10%"). Now the AI only gets the approved offer and strict rules, and a person approves every email. Autonomy is earned once the workflow has a track record. It isn't switched on from day one.
+1. **Every morning at 8:00** it reads the renewals due within 90 days that aren't signed yet, and pulls the quotes already **approved in the CPQ**.
+2. **It matches each renewal to its approved quote**, so every email uses the exact offer, order form and quote number the customer will sign.
+3. **It routes each renewal to one of five paths:**
+   - **On track:** AI drafts the renewal email around the approved offer → I approve it → it goes out with the order form for e-signature.
+   - **Upsell** (usage above the plan): AI drafts the renewal email and a separate upsell email → I approve both → both go out.
+   - **Chase signature:** 3 and 7 days after sending, if it isn't signed, AI drafts a short follow-up → I approve → it goes out.
+   - **Risk** (red health, usage dropping): no customer email. The CSM gets an alert to act first.
+   - **No quote yet:** I get a reminder to finish the quote in the CPQ before the deadline slips.
+4. **Nothing reaches a customer without my click.** Each draft arrives in my inbox with Approve and Reject buttons (Gmail send-and-wait), and the workflow waits.
+5. **After sending, it writes back to the CRM:** status *Quoted* and the date sent. That date starts the signature chase.
+
+<div style="font-size:9.5pt">
+
+**Why this design:** the numbers come from the approved quote, never from the AI, and a person approves everything that reaches a customer. AI does the writing, where it saves the most time. **How I'd know it works:** quote out by day 60, 1 of 7 → **100%** · approved quote to sent: **same day** · signed within 7 days: tracked · AI drafts approved without edits: tracked. **Tested** on five accounts, one per path, with no real emails sent. The prototype uses Google Sheet tabs in place of Salesforce and the CPQ, and the workflow JSON is attached.
+
+</div>
