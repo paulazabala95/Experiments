@@ -38,18 +38,30 @@
   .timeline { display:flex; gap:0; margin:30px 0 10px; }
   .timeline div { flex:1; border-top:4px solid var(--accent); padding:14px 16px 0 0; font-size:18px; }
   .timeline b { display:block; font-size:21px; margin-bottom:4px; }
+  .kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .kpis div { border:1px solid var(--line); border-radius:12px; padding:14px 18px; }
+  .kpis b { display:block; font-size:32px; margin-bottom:4px; }
+  .kpis span { font-size:15px; color:var(--muted); line-height:1.35; display:block; }
+  .kpis .hi { background:var(--soft); border-color:var(--accent); }
+  .kpis .hi b { color:var(--accent); }
+  ul.sm li { font-size:18px; margin-bottom:8px; }
 </style></head><body>
 
 <section class="s"><div class="bar"></div>
   <div class="eyebrow">Brightloop × n8n · renewal 14 December 2026</div>
-  <h2>What we heard, and what we're fixing</h2>
-  <div class="grid2">
+  <h2 style="margin-bottom:18px">What n8n does for you today, and what we heard</h2>
+  <div class="kpis">
+    <div><b>85</b><span>workflows in production, across 6 teams</span></div>
+    <div><b>~180k</b><span>executions a month, down 10% from ~200k</span></div>
+    <div><b>~650 h</b><span>of manual work saved a month, about 4 full-time people</span></div>
+    <div class="hi"><b>~€390k</b><span>a year of time saved, about 11× the €36k plan</span></div>
+  </div>
+  <div class="grid2" style="margin-top:20px">
     <div>
-      <ul>
-        <li>Your budget has been cut.</li>
-        <li>Executions are down about <b>10%</b> over 90 days.</li>
+      <ul class="sm">
+        <li>Your budget has been cut, and executions dipped about <b>10%</b>.</li>
         <li>Procurement shared requirements on price, payment terms, contract flexibility and plan size.</li>
-        <li>Two support escalations took too long. <b>Our support lead reviews both by 30 October</b>, and both options below include our <b>top support tier</b>.</li>
+        <li>Two support escalations took too long. <b>Our support lead reviews both by 30 October</b>, and both options include our <b>top support tier</b>.</li>
       </ul>
     </div>
     <div class="q" style="margin-top:0">
@@ -60,7 +72,7 @@
       <p>· Who signs, and how long your PO takes</p>
     </div>
   </div>
-  <div class="foot"><span>Renewal call · Sam, Priya, Paula</span><span>1</span></div>
+  <div class="foot"><span>Renewal call · Sam, Priya, Paula · time saved valued at €50 an hour</span><span>1</span></div>
 </section>
 
 <section class="s"><div class="bar"></div>
