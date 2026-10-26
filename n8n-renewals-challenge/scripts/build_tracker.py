@@ -144,11 +144,11 @@ pl["G2"].font = Font(name=F, italic=True)
 cols = ["Customer", "Base ARR (€)", "Renewal date", "Type", "Usage 90d", "Health", "Renewal Status", "Blocker",
         "Expected close", "Days to renewal", "Window", "Overdue?", "Month", "Quarter", "Quarter end",
         "Probability", "Counts in quarter?", "Forecast prob.", "New ARR (€)", "Weighted new ARR (€)", "Forecast bucket",
-        "Next action", "Owner", "Due", "Rank", "Why first", "Also involved", "Escalate today",
+        "Next action", "Owner", "Due", "Rank", "Why first", "Who does what", "Escalate today",
         "Notice period (days)", "Notice deadline", "Usage signal", "Target status by 30 Oct", "Target prob.",
         "Weighted after actions (€)", "No-action prob. (30 Oct)", "Weighted, no action (€)"]
 header(pl, 4, cols, [20, 12, 13, 8, 9, 9, 18, 28, 13, 9, 9, 9, 9, 9, 12, 10, 10, 10, 13, 14, 13, 60, 10, 12,
-                     7, 50, 20, 40, 10, 13, 34, 26, 10, 14, 11, 14])
+                     7, 50, 48, 40, 10, 13, 34, 26, 10, 14, 11, 14])
 
 # Triage: rank by slack (days left vs work still needed) x ARR at risk. Owner is one of Me / CSM / Finance / Legal.
 TRIAGE = {
@@ -230,11 +230,26 @@ P = [
      "CSM and exec sponsor via a new contact; I confirm the ~19 Nov notice date; offer right-sizing or a 2-year "
      "price lock before they cancel.", "CSM + Me", date(2026, 10, 30)),
 ]
+# Who does what in each action (one line per person)
+RESP = {
+ "Northwind Logistics": [("Me", "quote, order form, signatory, signature on 27 Oct")],
+ "Vantage Freight": [("CSM", "finds the instance owner and admins"), ("Me", "calls them and agrees a signing date"), ("Manager", "confirms the grace period")],
+ "Pixelforge": [("CSM", "finds the billing contact"), ("Me", "card-update link or switch to invoice"), ("Finance", "pauses the failed-payment process")],
+ "Halden Health": [("CSM (lead)", "meets the new owner, value review"), ("Exec sponsor", "joins that meeting"), ("Legal", "checks the 8 Oct notice date"), ("Me", "escalates, prepares the right-sized option")],
+ "Tessera Finance": [("Legal (lead)", "positions on PO-blocking redlines, joint call, response by 30 Oct"), ("Me", "redline list, quote and security pack, runs the timeline"), ("Finance + Legal", "approve the extension fallback")],
+ "Brightloop": [("Me", "reply to Sam, the call, the order form"), ("Finance", "pre-approves up to 12% and net 60"), ("VP CS", "pre-approves the buffer")],
+ "Marlowe Insurance": [("Me", "quote, questionnaire, PO lead time"), ("Security", "reviews the questionnaire answers"), ("Legal", "the DPA")],
+ "Kestrel Analytics": [("CSM", "usage review, approves the tier"), ("Me", "one quote, renewal and upsell on separate lines; upsell opportunity")],
+ "Lumen Retail": [("Me", "gets the new entity's details"), ("Legal", "billing change or assignment"), ("Finance", "updates billing before the invoice run")],
+ "Quanta Labs": [("CSM + exec sponsor", "reach a new contact"), ("Me", "confirms the notice date, offers the lock or right-size")],
+}
+
 EARLY = '{"--None--","Not started","Engaging customer","Negotiation"}'
 r0 = 5
 for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, _, due) in enumerate(P):
     r = r0 + i
     rank, why, owner, involved, esc = TRIAGE[cust]
+    involved = "\n".join(f"{w}: {t}" for w, t in RESP[cust])
     status, target, notice = STATUS[cust]
     for c, v in {1: cust, 2: arr, 3: rdate, 4: typ, 5: use, 6: hl, 7: status, 8: blocker, 9: exp,
                  22: action, 23: owner, 24: due, 25: rank, 26: why, 27: involved, 28: esc,
@@ -388,8 +403,8 @@ title(tr, "Triage: what I do first, who owns it, by when",
       "Ranked by slack (days left vs work still needed) x ARR at risk. Linked to Pipeline: change a rank there and "
       "this list re-sorts.")
 tcols = ["Rank", "Customer", "ARR (€)", "Renewal date", "Days", "Renewal Status", "Why first", "Next action",
-         "Owner", "Also involved", "Due", "Escalate today"]
-header(tr, 4, tcols, [6, 20, 11, 13, 7, 17, 42, 60, 9, 22, 12, 40])
+         "Owner", "Who does what", "Due", "Escalate today"]
+header(tr, 4, tcols, [6, 20, 11, 13, 7, 17, 42, 60, 9, 48, 12, 40])
 src = {2: "A", 3: "B", 4: "C", 5: "J", 6: "G", 7: "Z", 8: "V", 9: "W", 10: "AA", 11: "X", 12: "AB"}
 for k in range(1, len(P) + 1):
     r = 4 + k
@@ -615,7 +630,7 @@ notes = [
     ("Purpose", "Shows the numbers the CRM would hold: renewals by month and quarter, by status, by product line, and a "
                 "forecast driven by Renewal Status x countdown."),
     ("Today", "Pipeline!B2 = 20 Oct 2026 (exercise date). Use =TODAY() in live use."),
-    ("Triage", "Rank, why first, next action, one owner (Me / CSM / Finance / Legal) plus who else is involved, due date, "
+    ("Triage", "Rank, why first, next action, one lead owner (Me / CSM / Finance / Legal) plus who does what, due date, "
                "and today's escalations. Sorted by rank; edit the rank on the Pipeline tab."),
     ("Probability", "Renewal Status x days to renewal. Late statuses rise as the date gets closer; early statuses fall. "
                     "Overdue has its own, lower column."),
