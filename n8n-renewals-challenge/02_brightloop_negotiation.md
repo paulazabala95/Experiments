@@ -17,12 +17,9 @@
 >
 > Both would come with our highest support tier.
 >
-> Could we set up 30 minutes with you and Priya on Thursday or Friday? It would help if I came in knowing:
-> 1. the budget figure you need to land on, and whether the pressure is on this year's spend or on cash;
-> 2. who signs, and by when;
-> 3. what "evaluate alternatives" means in practice (self-hosting? another vendor?).
+> Could we set up 30 minutes with you and Priya on Thursday or Friday? It would help to know the budget you need to land on (and whether the pressure is on this year's spend or on cash) and who signs. If you're weighing other options, I'm happy to explore together which solution fits best and what it would mean in practice.
 >
-> Your renewal date is 14 December, so if we agree terms by the end of November there is plenty of time for paperwork.
+> With your renewal on 14 December, agreeing terms by the end of November leaves plenty of time for the paperwork.
 >
 > Best,
 > Paula
