@@ -10,7 +10,7 @@
 >
 > First, the two support escalations this year. They took longer to resolve than they should have, and I'm sorry. I've asked our support lead to review both, and I'll bring what we find and what we're changing to our call.
 >
-> On procurement's four points: I can't agree to them exactly as written. A 25% discount, removing auto-renewal and a termination-for-convenience right are outside what we offer on any Enterprise renewal. But I don't think we need them to reach a number your budget can carry. I'd like to walk you and Priya through two options:
+> On procurement's four points: a 25% discount, removing auto-renewal and a termination-for-convenience right are outside what we offer on any Enterprise renewal, so I can't agree to those. Net 60 is possible, depending on the structure we choose. Either way, I'm confident we can bring your cost down to a level that works for your budget. I'd like to walk you and Priya through two options:
 >
 > - **Keep your current plan, with a lower cost this year.** A multi-year structure where this year costs less than today, and over two years you pay no more than you do now.
 > - **Right-size and lock the price.** We look at your actual execution data together, set your plan to what you really use, and lock that price for two or three years.
