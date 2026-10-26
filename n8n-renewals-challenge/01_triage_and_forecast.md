@@ -3,6 +3,8 @@
 **As of Tuesday 20 October 2026.** This puts Vantage Freight 5 days overdue and the other nine renewals inside 60 days, as the brief describes.
 Workbook: `renewal_tracker.xlsx`. Every number below comes from it.
 
+**Uplift:** the contractual 5% is built into the renewal value when the renewal opportunity is created (closed ARR × 1.05), so every number here is what the customer will be billed and nothing is added on top. Multi-year paid annually: +5% each year; paid upfront: price locked from year 2. Any waiver counts as a discount under policy C.
+
 ## How I rank
 
 I rank on **slack**: the days left minus the days the work still needs, weighted by ARR at risk. A €48k renewal that is 9 days out with no quote sent comes before a €50k renewal that is 29 days out. Three of the renewals need only an hour of my time today to remove most of their risk. I do those first, before the long, multi-party ones.

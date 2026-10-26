@@ -6,6 +6,7 @@
 
 **Part 1: Triage and forecast**
 
+- **Uplift:** the contractual 5% is built into the renewal value when the renewal opportunity is created (closed ARR × 1.05), so every number here is what the customer will be billed and nothing is added on top. Multi-year paid annually: +5% each year; paid upfront: price locked from year 2. Any waiver counts as a discount under policy C.
 - I rank by **slack** (days left against the work still needed) × ARR at risk.
 - Northwind, Vantage and Pixelforge each need about an hour of work today to remove most of their risk. Halden (€45k, red) and Tessera (€50k, MSA redlines) get **escalated today**.
 - **The forecast is driven by Renewal Status × days to renewal.**
