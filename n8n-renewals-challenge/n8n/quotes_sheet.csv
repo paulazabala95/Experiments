@@ -1,5 +1,5 @@
 Customer,QuoteId,QuoteStatus,QuoteSummary,QuotePdfUrl
-Northwind Logistics,Q-1042,Approved,"1-year renewal starting 29 October 2026, paid annually (Net 30): €50,400.",https://cpq.example.com/quotes/Q-1042.pdf
-Tessera Finance,Q-1047,Approved,"1-year renewal starting 18 November 2026, paid annually (Net 30): €52,500.",https://cpq.example.com/quotes/Q-1047.pdf
-Kestrel Analytics,Q-1051,Approved,"1-year renewal starting 28 November 2026, paid annually (Net 30): €36,750.",https://cpq.example.com/quotes/Q-1051.pdf
-Brightloop,Q-1055,Draft,"2-year renewal starting 14 December 2026, paid annually (Net 45): year 1 €34,020, year 2 €37,706; total €71,726.",https://cpq.example.com/quotes/Q-1055.pdf
+Northwind Logistics,Q-1042,Approved,"1-year renewal starting 29 October 2026, paid annually (Net 30): €48,000.",https://cpq.example.com/quotes/Q-1042.pdf
+Tessera Finance,Q-1047,Approved,"1-year renewal starting 18 November 2026, paid annually (Net 30): €50,000.",https://cpq.example.com/quotes/Q-1047.pdf
+Kestrel Analytics,Q-1051,Approved,"1-year renewal starting 28 November 2026, paid annually (Net 30): €35,000.",https://cpq.example.com/quotes/Q-1051.pdf
+Brightloop,Q-1055,Draft,"2-year renewal starting 14 December 2026, paid annually (Net 45): year 1 €32,400, year 2 €35,910; total €68,310.",https://cpq.example.com/quotes/Q-1055.pdf

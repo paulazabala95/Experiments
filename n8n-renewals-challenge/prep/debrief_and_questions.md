@@ -29,14 +29,14 @@
 ## Numbers to have to hand
 
 - **Book:** €375k · Oct €69k / Nov €184k / Dec €122k · today = Tue 20 Oct 2026
-- **Forecast (status × countdown):** weighted today €138k (on time €74k, late but still in Q4 €64k) → €256k by 30 Oct if this week's actions land
-- **Lost:** regrettable −€23k (Halden −€15k, Quanta −€8k) + price concession −€2.7k (Brightloop) · GRR 93% · NRR 96.5%
+- **Forecast (status × countdown):** weighted today €133k (on time €72k, late but still in Q4 €61k) → €245k by 30 Oct if this week's actions land
+- **Lost:** regrettable −€23k (Halden −€15k, Quanta −€8k) + price concession −€3.6k (Brightloop ramp yr 1) · GRR 92.9% · NRR 92.9% · new ARR €348.4k
 - **Brightloop:**
-  - list €37,800 (year 1) / €39,690 (year 2) · ask €27,000 (28.6% off list)
-  - **ramp:** €34,020 + €37,706 = €71,726 → 7.4% vs list, Finance; below today's €72,000 over 2 years
+  - renewal value €36,000 (uplift already in) / year 2 indexed €37,800 · ask €27,000 (25% off)
+  - **ramp:** €32,400 + €35,910 = €68,310 → 7.4% vs list path €73,800, Finance; ~5% below 2 × €36,000
   - **downsize + lock:** €28,800 × 2 = €57,600 (2.4%) or × 3 = €86,400 (4.8%), upfront, net 60 (Finance)
-  - **floor on the current plan:** 12% total = a 2-year total of at least €68,191 · buffer (ramp only): up to 10% at the year-2 anniversary, VP pre-approval
-- **Why 7.4% and not 15%:** discounts on different years are averaged, not added. 10% of €37,800 + 5% of €39,690 = €5,764 out of €77,490.
+  - **floor on the current plan:** 12% total = a 2-year total of at least €64,944 (12% of €73,800 = €8,856) · buffer (ramp only): up to 10% at the year-2 anniversary, VP pre-approval
+- **Why 7.4% and not 15%:** discounts on different years are averaged, not added. 10% of €36,000 + 5% of €37,800 = €3,600 + €1,890 = €5,490 out of €73,800.
 - **Notice dates:** Halden 8 Oct (from the brief) · Pixelforge 3 Oct, Lumen 22 Oct, Quanta ~19 Nov (an assumed 30 days)
 
 ## Time spent

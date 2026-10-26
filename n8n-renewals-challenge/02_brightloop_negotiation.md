@@ -41,10 +41,10 @@
 **Attached as `brightloop_one_pager.pdf`.** In short:
 
 - **Target: two structures, procurement chooses.**
-  - **Ramp** (keep the plan, pay annually): €34,020 → €37,706. That's €71,726 over 2 years, less than today's €72,000. 7.4% vs list, Finance approval.
+  - **Ramp** (keep the plan, pay annually): €32,400 → €35,910. That's €68,310 over 2 years, about 5% less than staying at €36,000 a year. 7.4% vs the indexed list path, Finance approval.
   - **Downsize + lock** (pay upfront): a lower execution allowance at list price, €28,800 a year locked for 2 or 3 years, net 60.
   - **Both:** top support tier, no downgrade during the term, auto-renewal applies only after the term.
-- **Walk-away:** no termination right, and auto-renewal stays. On the current plan, no more than 12% off list (a 2-year total of at least €68,191). Below that, they downsize at list price.
+- **Walk-away:** no termination right, and auto-renewal stays. On the current plan, no more than 12% off list (a 2-year total of at least €64,944). Below that, they downsize at list price.
 - **In reserve:** a downgrade buffer on the ramp, up to 10% at the year-2 anniversary, pre-approved by the VP.
 - **What I trade:** every give is tied to a get (multi-year term, upfront payment, signature by 30 Nov).
 - **Who's involved:** Finance, VP CS, Legal, CSM and the support lead are lined up before the call.
@@ -72,7 +72,7 @@
 | "We want the price lock but we pay annually." | "The lock comes with upfront payment. Paying annually, the ramp gives you this year's relief instead." |
 | "All four points, or no deal." | "I can't do the exit clause or remove auto-renewal for anyone. What problem are they solving for you?" Then I solve that problem: the buffer, the reminder, and the clause applying only after the term. |
 | "Fine, 3 years for 25% off." | "3 years changes the picture, and I'll take it to my VP. I can't commit to 25%." I come back within 48 hours. |
-| Priya: "Our budget is €30k." | That fits downsize + lock (€28.8k). If they need the full plan, the ramp's year 1 is €34k, and I check whether a 12% year 1 (still within Finance's limit) closes the gap. |
+| Priya: "Our budget is €30k." | That fits downsize + lock (€28.8k). If they need the full plan, the ramp's year 1 is €32.4k, and I check whether a 12% year 1 (€31,680) (still within Finance's limit) closes the gap. |
 | Silence until 14 Dec | The offers expire on 30 Nov. If nothing is signed by 1 Dec, I escalate exec to exec. |
 
 **Debrief line:** "I moved the conversation from *discount* to *structure*: they chose between keeping the plan with a ramp, or a smaller plan with a locked price. Every concession was traded, and nothing reset the price."

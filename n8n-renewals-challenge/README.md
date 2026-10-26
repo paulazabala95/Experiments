@@ -12,14 +12,14 @@
   - Manual renewals: later statuses rise as the date approaches, early ones fall.
   - Auto-renewals have their own statuses.
   - Overdue renewals only count if they close within the quarter.
-- **Today: €138k weighted. By 30 Oct, if this week's actions land: €256k.**
-- **Lost:** €23k regrettable contraction (Halden, Quanta) and a €2.7k price concession. That's 93% gross retention and 96.5% net retention.
+- **Today: €133k weighted. By 30 Oct, if this week's actions land: €245k.**
+- **Lost:** €23k regrettable contraction (Halden, Quanta) and a €3.6k price concession (Brightloop ramp, year 1). That's 92.9% gross and net retention.
 - The number I'm least sure about: Halden.
 
 **Part 2: Brightloop**
 
-- I decline the termination right, auto-renewal removal and the 25% discount. Procurement chooses between two structures:
-  - **Ramp:** keep the plan, pay annually. €34,020 → €37,706, 7.4% total, Finance approval.
+- I decline the termination right, auto-renewal removal and the 25% discount. Renewal values already include the 5% uplift. Procurement chooses between two structures:
+  - **Ramp:** keep the plan, pay annually. €32,400 → €35,910, 7.4% total, Finance approval.
   - **Downsize + lock:** pay upfront. €28,800 a year for 2 or 3 years, net 60.
 - **Walk-away:** no termination right, and no more than 12% off the current plan. Below that, a smaller plan at list price.
 

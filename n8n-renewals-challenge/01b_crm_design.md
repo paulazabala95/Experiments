@@ -16,7 +16,7 @@ The forecast, statuses, product lines, churn and alerts in Part 1 are CRM fields
 1. When the current renewal is closed won, the owner ticks **Create renewal opportunity** on the close screen. It is required, unless the contract is ending.
 2. A Flow creates the **next renewal opportunity** straight away:
    - Renewal Date = **service start date of the next term** (current contract end + 1 day).
-   - Each product line is copied with **Original ARR = the ARR just closed**.
+   - Each product line is copied with **Original ARR = the ARR just closed × 1.05** (the contractual uplift is in the renewal value from day one).
    - Renewal Type, Notice Period, CSM and Region are copied from the contract and account.
 3. The renewal therefore exists for the whole year. It sits in *Not started* (manual) or *Renewing: no blockers* (auto) until the tasks in section 6 bring it forward.
 
@@ -128,18 +128,18 @@ The Renewals Manager (who owns the renewal) edits **two things per line**: the *
 |---|---|---|
 | Line Type | **Renewals Manager** | Renewal · Upsell · Downgrade · Churn |
 | Change at List | **Renewals Manager** | + for upsell, − for downgrade, at the list price of the new plan |
-| Original ARR | Automatic | Copied from the closed renewal. Locked. Kept for comparison. |
-| Uplift % (year 1) | Automatic | **5% on every Renewal line**, on 1-year and multi-year terms alike. A year-1 waiver is an exception (e.g. three years paid upfront), counts as a discount, and goes to approval under policy C. |
+| Original ARR (renewal value) | Automatic | Set when the opportunity is created: **ARR just closed × 1.05**, so the contractual uplift is already in. Locked. Every report and forecast uses this number; the uplift is never added on top later. |
+| Year-1 uplift waiver | Renewals | The 5% is already in the renewal value. Waiving it is an exception (e.g. three years paid upfront), counts as a discount, and goes to approval under policy C. |
 | Year 2+ Uplift | Automatic | Multi-year **paid upfront → price locked** (0% from year 2). Multi-year **paid annually → 5% every year**. |
-| Discount (standard) | Renewals | Measured against the uplifted list price |
-| List Renewal Price | Formula | `IF(ISPICKVAL(Line_Type__c, "Churn"), 0, Original_ARR__c * (1 + Uplift_Pct__c) + Change_at_List__c)` |
+| Discount (standard) | Renewals | Measured against the renewal value (uplift included) |
+| List Renewal Price | Formula | `IF(ISPICKVAL(Line_Type__c, "Churn"), 0, Original_ARR__c + Change_at_List__c)` |
 | New ARR | Formula | `List_Renewal_Price__c * (1 - BLANKVALUE(Discount, 0))`. A Flow copies it to Sales Price, so the Opportunity Amount equals new ARR. |
 | Δ vs Original, Δ Indicator | Formula | `New_ARR__c - Original_ARR__c`, with `IMAGE(IF(Delta_ARR__c >= 0, "/img/samples/color_green.gif", "/img/samples/color_red.gif"), "", 12, 12)`: **green for growth, red for contraction** |
 | Approval Required | Formula | Policy C, using the line Discount with the opportunity's Term and Payment Terms: None / Finance / VP Customer Success |
 
 **Upsell = its own opportunity.** When the Renewals Manager sets a line to Upsell, or Usage Signal = Over-usage, a Flow opens a linked **Upsell opportunity** (Expansion record type) for the added ARR. Expansion is then forecast in its own pipeline and never inflates the renewal number. If it signs together with the renewal, both go on one order form but are booked separately.
 
-**Roll-ups on the opportunity:** Original ARR · New ARR · Uplift · Upsell (mirrors the linked Upsell opportunity) · Churned Amount · Price Concession (`MIN(0, Uplift__c - (List_Total__c - New_ARR__c))`, i.e. revenue given up below today's price) · Net Change and Net Change % (red/green).
+**Roll-ups on the opportunity:** Original ARR · New ARR · Upsell (mirrors the linked Upsell opportunity) · Churned Amount · Price Concession (`MIN(0, New_ARR__c - List_Total__c)`, i.e. revenue given up below the renewal value) · Net Change and Net Change % (red/green).
 
 ## 4. Annual uplift communication
 

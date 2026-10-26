@@ -83,7 +83,7 @@ MATRIX = [
     ("Cancelled", [0, 0, 0, 0, 0], "Customer gave notice or will not renew."),
     # Auto-renewals: probability depends on whether anything stands between today and a clean renewal.
     ("Renewing: no blockers", [0.40, 0.97, 0.95, 0.92, 0.90],
-     "Valid payment method, correct billing entity, uplift notice sent, usage stable or growing. (Overdue = payment failed: move to Billing blocker.)"),
+     "Valid payment method, correct billing entity, usage stable or growing. (Overdue = payment failed: move to Billing blocker.)"),
     ("Billing blocker", [0.40, 0.60, 0.70, 0.75, 0.80],
      "Expired card, wrong legal entity, PO required. Admin fix, usually recoverable."),
     ("At risk: before notice deadline", [0.20, 0.35, 0.40, 0.45, 0.50],
@@ -195,12 +195,12 @@ P = [
      "date. Manager confirms the grace period before access is restricted.", "Me + CSM", date(2026, 10, 21)),
     ("Northwind Logistics", 48000, date(2026, 10, 29), "Manual", 0.12, "Green", "Waiting for PO",
      "No quote sent; signatory unknown; signed 3 days late last year", date(2026, 10, 29),
-     "Quote and order form out today at €50.4k for e-signature; champion confirms signatory and PO need; signature "
+     "Quote and order form out today at €48k for e-signature; champion confirms signatory and PO need; signature "
      "booked for 27 Oct.", "Me", date(2026, 10, 20)),
     ("Pixelforge", 26000, date(2026, 11, 2), "Auto", 0.00, "Green", "Waiting for PO",
      "Card expired; billing contact unknown", date(2026, 11, 2),
      "CSM gets the billing contact today; I send a secure card-update link or switch to invoice; Finance holds "
-     "dunning. Renews at €27.3k with the contractual 5% uplift.", "CSM + Me", date(2026, 10, 22)),
+     "dunning. Renews at €26k (renewal value).", "CSM + Me", date(2026, 10, 22)),
     ("Halden Health", 45000, date(2026, 11, 7), "Manual", -0.35, "Red", "Engaging customer",
      "Champion left; new owner unknown", date(2026, 11, 20),
      "ESCALATE TODAY. CSM, me and exec sponsor meet the new owner this week. Legal checks the 8 Oct notice date. "
@@ -219,7 +219,7 @@ P = [
      "invoice run. Cancellation deadline 22 Oct (assumed 30 days).", "Me + Finance", date(2026, 10, 22)),
     ("Kestrel Analytics", 35000, date(2026, 11, 28), "Manual", 0.40, "Green", "Quoted",
      "Close to execution cap", date(2026, 11, 28),
-     "CSM usage review; quote like-for-like (€36.75k) and open a linked Upsell opportunity for the next execution tier.",
+     "CSM usage review; quote like-for-like (€35k) and open a linked Upsell opportunity for the next execution tier.",
      "CSM + Me", date(2026, 10, 28)),
     ("Marlowe Insurance", 46000, date(2026, 12, 9), "Manual", 0.00, "Yellow", "Quoted",
      "Vendor questionnaire + DPA needed for PO", date(2026, 12, 9),
@@ -348,7 +348,7 @@ for k, (lbl, f) in enumerate(items):
 k = lost + 3
 pl.cell(row=k, column=1, value="Gross retention (base less regrettable churn and concessions)")
 pl.cell(row=k, column=2, value=f"=(B{t}+B{lost}+B{lost+2})/B{t}").number_format = "0.0%"
-pl.cell(row=k + 1, column=1, value="Net retention (new ARR / base, incl. 5% uplift)")
+pl.cell(row=k + 1, column=1, value="Net retention (new ARR / base)")
 pl.cell(row=k + 1, column=2, value=f"=S{t}/B{t}").number_format = "0.0%"
 ff = k + 3
 pl.cell(row=ff, column=1, value="Forecast of the forecast").font = Font(name=F, bold=True, size=12)
@@ -356,7 +356,7 @@ pl.cell(row=ff + 1, column=1, value="Weighted today (statuses from what we know)
 pl.cell(row=ff + 1, column=2, value=f"=T{t}").number_format = EUR
 pl.cell(row=ff + 2, column=1, value="Weighted by 30 Oct, if this week's actions land")
 pl.cell(row=ff + 2, column=2, value=f"=AH{t}").number_format = EUR
-pl.cell(row=ff + 3, column=1, value="Uplift from this week's actions")
+pl.cell(row=ff + 3, column=1, value="Gain from this week's actions")
 pl.cell(row=ff + 3, column=2, value=f"=B{ff+2}-B{ff+1}").number_format = EUR
 for rr in (ff + 1, ff + 2, ff + 3):
     pl.cell(row=rr, column=2).font = BOLD
@@ -401,23 +401,23 @@ tr.freeze_panes = "C5"
 # ------------------------------------------------------------------- Products
 pd_ = wb.create_sheet("Products", 1)
 title(pd_, "Opportunity products: the Renewals Manager only sets the line type and the new numbers; everything else recalculates")
-pd_["A2"] = ("Renewals Manager inputs (yellow): line type and change at list. Original ARR comes from the closed renewal. Uplift is "
-             "automatic: 5% on every renewal line in year 1. On multi-year deals paid upfront the price is locked from "
+pd_["A2"] = ("Renewals Manager inputs (yellow): line type and change at list. Original ARR is the renewal value and already "
+             "includes the 5% uplift (applied when the renewal opportunity is created), so nothing is added on top. On multi-year deals paid upfront the price is locked from "
              "year 2 (no further uplift); paid annually, 5% applies every year. An Upsell line opens a linked Upsell "
              "opportunity so expansion is forecast separately. Churn category and reason live on the opportunity.")
 pd_["A2"].alignment = WRAP
 pd_.merge_cells("A2:N2")
 pd_.row_dimensions[2].height = 58
 pcols = ["Opportunity", "Product", "Line type", "Term (yrs)", "Payment", "Original ARR (€)", "Change at list (€)",
-         "Uplift % (yr 1)", "Discount %", "List renewal price (€)", "New ARR (€)", "Δ vs original (€)", "Δ %",
+         "Extra uplift %", "Discount %", "List renewal price (€)", "New ARR (€)", "Δ vs original (€)", "Δ %",
          "Approval needed", "Year 2+ uplift", "Note"]
 header(pd_, 4, pcols, [20, 28, 12, 8, 10, 13, 13, 10, 10, 14, 13, 13, 8, 22, 12, 44])
 L = [
-    ("Vantage Freight", "n8n Cloud Business", "Renewal", 1, "Annual", 21000, 0, 0, "Quote of 1 Sep includes 5% uplift"),
+    ("Vantage Freight", "n8n Cloud Business", "Renewal", 1, "Annual", 21000, 0, 0, "Quote of 1 Sep at the renewal value"),
     ("Northwind Logistics", "n8n Cloud Enterprise", "Renewal", 1, "Annual", 48000, 0, 0, "Usage +12%: check cap next quarter"),
-    ("Pixelforge", "n8n Cloud Business", "Renewal", 1, "Annual", 26000, 0, 0, "Uplift is contractual (annual notice in January)"),
+    ("Pixelforge", "n8n Cloud Business", "Renewal", 1, "Annual", 26000, 0, 0, "Renewal value; the contractual uplift is already in it"),
     ("Halden Health", "n8n Enterprise (self-hosted)", "Downgrade", 1, "Annual", 45000, -15000, 0, "Right-sized at list (assumed €30k)"),
-    ("Brightloop", "n8n Enterprise", "Renewal", 2, "Annual", 36000, 0, 0.12, "Placeholder until Part 2 is agreed"),
+    ("Brightloop", "n8n Enterprise", "Renewal", 2, "Annual", 36000, 0, 0.10, "Ramp year 1: 10% off; year 2 €35,910"),
     ("Tessera Finance", "n8n Enterprise (self-hosted)", "Renewal", 1, "Annual", 50000, 0, 0, ""),
     ("Lumen Retail", "n8n Cloud Business", "Renewal", 1, "Annual", 28000, 0, 0, "Bill to new legal entity"),
     ("Kestrel Analytics", "n8n Cloud Business", "Renewal", 1, "Annual", 35000, 0, 0, "Commit line"),
@@ -431,7 +431,7 @@ for i, (opp, prod, lt, term, pay, orig, chg, disc, note) in enumerate(L):
         cell = pd_.cell(row=r, column=c, value=v)
         if c in (3, 4, 5, 7, 9):
             inp(cell)
-    pd_.cell(row=r, column=8, value=f'=IF(C{r}="Renewal",0.05,0)')
+    pd_.cell(row=r, column=8, value=0)  # renewal ARR already includes the 5% uplift
     pd_.cell(row=r, column=10, value=f'=IF(C{r}="Churn",0,F{r}*(1+H{r})+G{r})')
     pd_.cell(row=r, column=11, value=f"=J{r}*(1-I{r})")
     pd_.cell(row=r, column=12, value=f"=K{r}-F{r}")
@@ -611,7 +611,7 @@ notes = [
     ("Forecast", "Weighted new ARR = new ARR from product lines x probability. Buckets: On time, Late (still in quarter), "
                  "Slips quarter. Lost comes from the product lines."),
     ("Products", "The Renewals Manager only sets the line type (Renewal / Upsell / Downgrade / Churn) and the new numbers. Original ARR, "
-                 "uplift, list price, new ARR and Δ (green/red) recalculate. Upsell lines open a linked Upsell opportunity."),
+                 "list price, new ARR and Δ (green/red) recalculate; the renewal value already includes the uplift. Upsell lines open a linked Upsell opportunity."),
     ("Churn", "Set on the opportunity: churned amount (from the lines), category (Regrettable = revenue lost for good; "
               "Non-regrettable = revenue kept, e.g. self-hosted moving to n8n Cloud) and a granular reason."),
     ("Colour code", "Blue on yellow = input. Black = formula. Green text = link to another tab. Red/amber/green fills = risk."),
