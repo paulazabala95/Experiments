@@ -161,7 +161,7 @@ TRIAGE = {
     "Halden Health": (4, "Red, usage -35%, champion gone, new owner unknown, 18 days left.",
                       "CSM", "Me, Manager, VP CS (exec sponsor)", "Yes: Manager + VP CS, exec sponsor meeting with the new owner this week"),
     "Tessera Finance": (5, "MSA redlines open since September and a security review can block the PO; 29 days left.",
-                        "Legal", "Me, Security", "Yes: Legal lead, redline response by 30 Oct and renew on the current MSA"),
+                        "Legal", "Me, Security", "Yes: Legal lead, redline response by 30 Oct; extension fallback approved"),
     "Brightloop": (6, "Live negotiation; procurement sets the pace. Reply and pre-approvals today.",
                    "Me", "Finance, Legal, CSM", ""),
     "Marlowe Insurance": (7, "Insurance procurement is slow; no DPA and questionnaire means no PO.",
@@ -211,8 +211,8 @@ P = [
      "Target signature 30 Nov.", "Me", date(2026, 10, 20)),
     ("Tessera Finance", 50000, date(2026, 11, 18), "Manual", 0.05, "Yellow", "Negotiation",
      "MSA redlines open since Sep; security review", date(2026, 12, 4),
-     "ESCALATE TODAY to Legal: redline response by 30 Oct. Security pack today. Renew on the current MSA and "
-     "negotiate the MSA in parallel.", "Legal + Me", date(2026, 10, 23)),
+     "ESCALATE TODAY to Legal: redline response by 30 Oct. List PO-blocking redlines, agree positions; joint redline call. "
+     "Quote + security pack today. Fallback: 1-2 month extension if MSA not signed by 18 Nov.", "Legal + Me", date(2026, 10, 23)),
     ("Lumen Retail", 28000, date(2026, 11, 21), "Auto", 0.08, "Green", "Waiting for PO",
      "Invoice to a different legal entity", date(2026, 11, 21),
      "New entity details (name, VAT, address); Legal: billing change or assignment; Finance updates billing before the "
