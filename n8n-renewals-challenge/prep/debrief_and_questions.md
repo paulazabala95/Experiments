@@ -29,7 +29,7 @@
 ## Numbers to have to hand
 
 - **Book:** €375k · Oct €69k / Nov €184k / Dec €122k · today = Tue 20 Oct 2026
-- **Forecast (status × countdown):** weighted today €133k (on time €72k, late but still in Q4 €61k) → €245k by 30 Oct if this week's actions land
+- **Forecast (status × countdown):** weighted today €133k (on time €72k, late but still in Q4 €61k) → 30 Oct: €245k with actions (+€112k) vs €119k with no action (−€13.5k); action power €126k
 - **Lost:** regrettable −€23k (Halden −€15k, Quanta −€8k) + price concession −€3.6k (Brightloop ramp yr 1) · GRR 92.9% · NRR 92.9% · new ARR €348.4k
 - **Brightloop:**
   - renewal value €36,000 (uplift already in) / year 2 indexed €37,800 · ask €27,000 (25% off)

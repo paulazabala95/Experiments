@@ -138,7 +138,7 @@ pl["D2"].font = BOLD
 pl["E2"] = date(2026, 10, 30)
 inp(pl["E2"])
 pl["E2"].number_format = DATE
-pl["G2"] = "Blue on yellow = input. Everything else is a formula. Columns AF-AH: the forecast after this week's actions."
+pl["G2"] = "Blue on yellow = input. Everything else is a formula. Columns AF-AJ: the forecast on 30 Oct, with this week's actions (green) and with no action (red)."
 pl["G2"].font = Font(name=F, italic=True)
 
 cols = ["Customer", "Base ARR (€)", "Renewal date", "Type", "Usage 90d", "Health", "Renewal Status", "Blocker",
@@ -146,9 +146,9 @@ cols = ["Customer", "Base ARR (€)", "Renewal date", "Type", "Usage 90d", "Heal
         "Probability", "Counts in quarter?", "Forecast prob.", "New ARR (€)", "Weighted new ARR (€)", "Forecast bucket",
         "Next action", "Owner", "Due", "Rank", "Why first", "Also involved", "Escalate today",
         "Notice period (days)", "Notice deadline", "Usage signal", "Target status by 30 Oct", "Target prob.",
-        "Weighted after actions (€)"]
+        "Weighted after actions (€)", "No-action prob. (30 Oct)", "Weighted, no action (€)"]
 header(pl, 4, cols, [20, 12, 13, 8, 9, 9, 18, 28, 13, 9, 9, 9, 9, 9, 12, 10, 10, 10, 13, 14, 13, 60, 10, 12,
-                     7, 50, 20, 40, 10, 13, 34, 26, 10, 14])
+                     7, 50, 20, 40, 10, 13, 34, 26, 10, 14, 11, 14])
 
 # Triage: rank by slack (days left vs work still needed) x ARR at risk. Owner is one of Me / CSM / Finance / Legal.
 TRIAGE = {
@@ -266,6 +266,14 @@ for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, _, due) in
     pl.cell(row=r, column=33, value=(f"=IF(I{r}<=O{r},INDEX(Probability!$B$5:$F${PE},MATCH(AF{r},Probability!$A$5:$A${PE},0),"
                                      f"MATCH({tw},Probability!$B$4:$F$4,0)),0)"))
     pl.cell(row=r, column=34, value=f"=S{r}*AG{r}")
+    # No action: same 30 Oct countdown, but the status stays where it is today
+    pl.cell(row=r, column=35, value=(f"=IF(I{r}<=O{r},INDEX(Probability!$B$5:$F${PE},MATCH(G{r},Probability!$A$5:$A${PE},0),"
+                                     f"MATCH({tw},Probability!$B$4:$F$4,0)),0)"))
+    pl.cell(row=r, column=36, value=f"=S{r}*AI{r}")
+    pl.cell(row=r, column=35).number_format = PCT
+    pl.cell(row=r, column=36).number_format = EUR
+    pl.cell(row=r, column=34).fill = GRN_FILL
+    pl.cell(row=r, column=36).fill = RED_FILL
     inp(pl.cell(row=r, column=29))
     inp(pl.cell(row=r, column=32))
     pl.cell(row=r, column=30).number_format = DATE
@@ -281,10 +289,10 @@ for i, (cust, arr, rdate, typ, use, hl, status, blocker, exp, action, _, due) in
         pl.cell(row=r, column=c).alignment = WRAP
     pl.row_dimensions[r].height = 48
 rN = r0 + len(P) - 1
-style_range(pl, r0, rN, 1, 34)
+style_range(pl, r0, rN, 1, 36)
 t = rN + 1
 pl.cell(row=t, column=1, value="Total").font = BOLD
-for c in (2, 19, 20, 34):
+for c in (2, 19, 20, 34, 36):
     L = get_column_letter(c)
     cell = pl.cell(row=t, column=c, value=f"=SUM({L}{r0}:{L}{rN})")
     cell.font, cell.number_format = BOLD, EUR
@@ -358,11 +366,21 @@ pl.cell(row=ff + 2, column=1, value="Weighted by 30 Oct, if this week's actions 
 pl.cell(row=ff + 2, column=2, value=f"=AH{t}").number_format = EUR
 pl.cell(row=ff + 3, column=1, value="Gain from this week's actions")
 pl.cell(row=ff + 3, column=2, value=f"=B{ff+2}-B{ff+1}").number_format = EUR
-for rr in (ff + 1, ff + 2, ff + 3):
+pl.cell(row=ff + 4, column=1, value="Weighted by 30 Oct with no action (statuses stay, the countdown runs)")
+pl.cell(row=ff + 4, column=2, value=f"=AJ{t}").number_format = EUR
+pl.cell(row=ff + 5, column=1, value="Cost of doing nothing (vs today)")
+pl.cell(row=ff + 5, column=2, value=f"=B{ff+4}-B{ff+1}").number_format = EUR
+pl.cell(row=ff + 6, column=1, value="Action power: with actions vs no action on 30 Oct")
+pl.cell(row=ff + 6, column=2, value=f"=B{ff+2}-B{ff+4}").number_format = EUR
+for rr in range(ff + 1, ff + 7):
     pl.cell(row=rr, column=2).font = BOLD
+for rr in (ff + 2, ff + 3, ff + 6):
+    pl.cell(row=rr, column=2).fill = GRN_FILL
+for rr in (ff + 4, ff + 5):
+    pl.cell(row=rr, column=2).fill = RED_FILL
 style_range(pl, f0 + 2, f0 + 5, 1, 4)
 style_range(pl, lost, k + 1, 1, 2)
-style_range(pl, ff + 1, ff + 3, 1, 2)
+style_range(pl, ff + 1, ff + 6, 1, 2)
 
 # --------------------------------------------------------------------- Triage
 tr = wb.create_sheet("Triage", 1)

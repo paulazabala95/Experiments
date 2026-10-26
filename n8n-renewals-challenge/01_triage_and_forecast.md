@@ -75,24 +75,29 @@ Each renewal's **Renewal Status** is set from *what we know* today. Its probabil
 | Slips past quarter end | €0 | none today |
 | **Total weighted forecast** | **€133k** | €348k |
 
-### Forecast of the forecast
+### Forecast of the forecast: with action vs no action
 
-Each action in the triage moves a status. If this week's actions land, this is the forecast on **30 Oct**:
+The probability depends on status **and** days to renewal, so the forecast moves even if nobody does anything. On **30 Oct** every renewal is 10 days closer:
 
-| Customer | Today → target by 30 Oct | Weighted today | Weighted 30 Oct |
-|---|---|---|---|
-| Northwind | Engaging → PO received (signature 27 Oct) | €12,000 | €45,600 |
-| Tessera | Negotiation → Quoted (renewal on the current MSA) | €20,000 | €37,500 |
-| Kestrel | Not started → Quoted | €7,000 | €26,250 |
-| Marlowe | Engaging → Quoted | €16,100 | €32,200 |
-| Pixelforge | Billing blocker → Renewing: no blockers (card updated) | €15,600 | €25,220 |
-| Lumen | Billing blocker → Renewing: no blockers (entity fixed) | €19,600 | €27,160 |
-| Vantage | Quoted → Waiting for PO (named signer) | €10,500 | €14,700 |
-| Halden | Not started → Engaging customer (new owner met) | €3,000 | €7,500 |
-| Brightloop, Quanta | No change this week | €29,000 | €29,000 |
-| **Total** | | **€133k** | **€245k** |
+- <span style="color:#1e7b34">**With this week's actions**</span>, each status moves to the target below.
+- <span style="color:#b42318">**With no action**</span>, statuses stay where they are and the countdown alone lowers the early ones.
 
-**This week's actions are worth about €112k of weighted forecast.** Northwind, Tessera, Kestrel and Marlowe carry about €86k of that, which is why they sit at the top of the triage.
+| Customer | Today → target by 30 Oct | Weighted today | 🔴 No action, 30 Oct | 🟢 With actions, 30 Oct |
+|---|---|---|---|---|
+| Northwind | Engaging → PO received (signature 27 Oct) | €12,000 | <span style="color:#b42318">€4,800</span> | <span style="color:#1e7b34">€45,600</span> |
+| Tessera | Negotiation → Quoted (renewal on the current MSA) | €20,000 | <span style="color:#b42318">€20,000</span> | <span style="color:#1e7b34">€37,500</span> |
+| Kestrel | Not started → Quoted | €7,000 | <span style="color:#b42318">€3,500</span> | <span style="color:#1e7b34">€26,250</span> |
+| Marlowe | Engaging → Quoted | €16,100 | <span style="color:#b42318">€16,100</span> | <span style="color:#1e7b34">€32,200</span> |
+| Pixelforge | Billing blocker → Renewing: no blockers (card updated) | €15,600 | <span style="color:#b42318">€15,600</span> | <span style="color:#1e7b34">€25,220</span> |
+| Lumen | Billing blocker → Renewing: no blockers (entity fixed) | €19,600 | <span style="color:#b42318">€16,800</span> | <span style="color:#1e7b34">€27,160</span> |
+| Vantage | Quoted → Waiting for PO (named signer) | €10,500 | <span style="color:#b42318">€10,500</span> | <span style="color:#1e7b34">€14,700</span> |
+| Halden | Not started → Engaging customer (new owner met) | €3,000 | <span style="color:#b42318">€3,000</span> | <span style="color:#1e7b34">€7,500</span> |
+| Brightloop, Quanta | No change this week | €29,000 | <span style="color:#b42318">€29,000</span> | <span style="color:#1e7b34">€29,000</span> |
+| **Total** | | **€133k** | <span style="color:#b42318">**€119k**</span> | <span style="color:#1e7b34">**€245k**</span> |
+
+- **Doing nothing costs about €13.5k of forecast in 10 days** (€133k → €119k). Northwind turns overdue and Kestrel and Lumen move into their last 30 days.
+- **This week's actions add about €112k** (€133k → €245k). Against doing nothing, that's **€126k of difference on 30 Oct**.
+- Northwind, Tessera, Kestrel and Marlowe carry about €86k of the gain, which is why they sit at the top of the triage.
 
 **Lost.** This comes from the product lines, and churn is split by type:
 
