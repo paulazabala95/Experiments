@@ -42,3 +42,16 @@
 ## Time spent
 
 The brief says about 2 hours. Be honest in the debrief: say how long you spent, and that AI let you go further than 2 hours of manual work would. Say you prioritised Parts 1 and 2 and kept the automation small.
+
+## Known inconsistencies in the sent pack (checked 26 Oct; the pack stays as sent)
+
+All numbers were re-checked across the README, the main PDF, the web page, the one-pager and `renewal_tracker.xlsx`: they match (€133k / €245k / €119k, €348.4k, 92.9%, the Brightloop maths). Wording differences to be ready for:
+
+1. **Escalations.** The README and PDF summaries say Halden and Tessera are escalated today. Part 1, the web page and the tracker say **3 escalations, €116k: Halden, Tessera and Vantage** (Vantage: the grace-period question to my manager). Say: "three, €116k. Vantage is an hour of work today *and* a grace-period escalation."
+2. **Least sure.** The summaries say Halden. The Part 1 heading says *Lost (€23k regrettable)*. Same answer: Halden drives the lost number (€0–45k), Quanta second, Tessera on timing.
+3. **Quotes.** "5 of 7 manual renewals have no quote" (Part 1) and "only 1 of 7 had its quote out by day 60" (Part 3) are both true: Vantage and Brightloop were quoted, but Vantage's quote went out 44 days before the date, not 60.
+4. **Downgrade buffer vs. walk-away.** The walk-away is "no more than 12% off the current plan", but the one-pager says that with the buffer used in full they pay 12.3% less than list. It's a reduction in the execution allowance, not a discount, so it's below the floor only on paper. "Year-2 anniversary" means the start of year 2.
+5. **Halden: 10% probability but only −€15k lost.** Lost is the expected contraction if it renews right-sized; the 10% is the chance it closes on time. That gap is why it's the number I'm least sure about.
+6. **Northwind on 30 Oct** shows €45,600 (PO received, 95%) even though the target is signature on 27 Oct. Deliberately conservative: once signed it's €48k.
+7. **Time spent.** The brief asks for about 2 hours; the AI statement and web page say about 4 hours of my own time. Say it plainly.
+8. **Date.** The brief says December 2026; the pack uses Tue 20 Oct 2026 so that one renewal is overdue and nine are within 60 days. Explained on the first page.
