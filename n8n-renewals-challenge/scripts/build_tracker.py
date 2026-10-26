@@ -191,7 +191,7 @@ STATUS = {
 P = [
     ("Vantage Freight", 21000, date(2026, 10, 15), "Manual", 0.00, "Yellow", "Quoted",
      "No named contact (shared inbox)", date(2026, 11, 6),
-     "CSM pulls instance owner/admin emails from product data; I call and email the named person and agree a signing "
+     "CSM looks up the instance owner and admin users (names, emails) in product data, to replace the shared inbox; I call and email the named person and agree a signing "
      "date. Manager confirms the grace period before access is restricted.", "Me + CSM", date(2026, 10, 21)),
     ("Northwind Logistics", 48000, date(2026, 10, 29), "Manual", 0.12, "Green", "Waiting for PO",
      "No quote sent; signatory unknown; signed 3 days late last year", date(2026, 10, 29),
