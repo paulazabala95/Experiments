@@ -35,6 +35,7 @@
 
 **Attached as `brightloop_one_pager.pdf`.** In short:
 
+- **Value first, with the CSM:** before any price, the CSM and I show what n8n runs for Brightloop today (workflows, executions, the processes behind them, hours saved) and what rebuilding or self-hosting would cost. A concession only comes after that, and only in exchange for something.
 - **Target: two structures, procurement chooses.**
   - **Ramp** (keep the plan, pay annually): €32,400 → €35,910. That's €68,310 over 2 years, about 5% less than staying at €36,000 a year. 7.4% vs the indexed list path, Finance approval.
   - **Downsize + lock** (pay upfront): a lower execution allowance at list price, €28,800 a year locked for 2 or 3 years, net 60.
@@ -52,8 +53,8 @@
 |---|---|---|
 | 0–1 | Open | Agenda, time check, confirm who decides and who signs |
 | 1–4 | Discovery (Sam) | Budget figure; **cash or this year's cost?**; fiscal year; why executions fell 10% (seasonal, a project ended, moving work elsewhere) |
-| 4–6 | Support | Own the two escalations, share the remediation plan and the top support tier |
-| 6–10 | Options (Priya joins) | Show both options side by side; lead with the one discovery points to |
+| 4–7 | Value and support (CSM joins) | The CSM shows what n8n runs for them today and the hours it saves. I own the two escalations and share the remediation plan and the top support tier |
+| 7–10 | Options (Priya joins) | Show both options side by side; lead with the one discovery points to |
 | 10–13 | Trade | Only "if… then…". One concession for each thing I get back. Never split the difference. |
 | 13–15 | Close | Summarise, name an owner for each open item, set the date the order form goes out, confirm signature by 30 Nov |
 
@@ -70,4 +71,4 @@
 | Priya: "Our budget is €30k." | That fits downsize + lock (€28.8k). If they need the full plan, the ramp's year 1 is €32.4k, and I check whether a 12% year 1 (€31,680) (still within Finance's limit) closes the gap. |
 | Silence until 14 Dec | The offers expire on 30 Nov. If nothing is signed by 1 Dec, I escalate exec to exec. |
 
-**Debrief line:** "I moved the conversation from *discount* to *structure*: they chose between keeping the plan with a ramp, or a smaller plan with a locked price. Every concession was traded, and nothing reset the price."
+**Debrief line:** "With the CSM, I anchored on value first, then moved the conversation from *discount* to *structure*: they chose between keeping the plan with a ramp, or a smaller plan with a locked price. Every concession was traded, and nothing reset the price."
