@@ -13,7 +13,7 @@
   - Auto-renewals have their own statuses.
   - Overdue renewals only count if they close within the quarter.
 - **Today: €133k weighted. By 30 Oct: €245k if this week's actions land, €119k if nothing is done.** The countdown lowers early statuses on its own, so this week's work is worth about €126k of forecast.
-- **Lost:** €23k regrettable contraction (Halden, Quanta) and a €3.6k price concession (Brightloop ramp, year 1). That's 92.9% gross and net retention.
+- **Lost:** €23k regrettable contraction (Halden, Quanta) and a €3.6k price concession (Brightloop ramp, year 1). That's 92.9% gross and net retention: net equals gross until Kestrel's upsell signs (then about 96%).
 - The number I'm least sure about: Halden.
 
 **Part 2: Brightloop**

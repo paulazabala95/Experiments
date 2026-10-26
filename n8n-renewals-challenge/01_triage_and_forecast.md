@@ -108,6 +108,7 @@ The probability depends on status **and** days to renewal, so the forecast moves
 | Price concession below current price | −€3.6k | Brightloop (ramp year 1, 10% off) |
 
 - **Gross retention 92.9%** (base less regrettable churn and concessions). Every renewal value already includes the 5% uplift, so nothing is added on top.
+- **Net retention is also 92.9% today**, because I only count expansion once it's signed. Kestrel's upsell sits in its own opportunity. If it closes (+€10–15k), net retention rises to about 96%, while gross stays at 92.9%: an upsell shouldn't hide the Halden and Quanta losses.
 - **Kestrel upsell is upside, not in the forecast.** It's worth roughly +€10–15k if they move up a tier.
 - The gap between €348k and the €133k weighted forecast is **risk, not loss**. Moving each deal to the next status closes it, which is what the ranked actions above are for.
 
