@@ -16,7 +16,7 @@ The book by renewal month (my base report, and what every alert keys off):
 | Q4 2026 | Dec | 3 | €122k | – | 1 |
 | **Total** | | **10** | **€375k** | **€21k** | **5** |
 
-The 60-day quote policy has already been missed on at least five manual renewals. That is a process gap, not a problem with individual deals. The CRM's 60-day quote task and Part 3 address it.
+The brief mentions a quote only for Vantage and Brightloop, so I treat the other five manual renewals as not quoted. On that basis, the 60-day quote policy has already been missed on five of them. That is a process gap, not a problem with individual deals. The CRM's 60-day quote task and Part 3 address it.
 
 ## Ranked actions
 
@@ -39,7 +39,7 @@ The 60-day quote policy has already been missed on at least five manual renewals
 2. **Tessera Finance (€50k).** To the Legal lead: redlines have been open for 6+ weeks, and I need a response date of 30 Oct and agreement to renew on the current MSA.
 3. **Vantage Freight (€21k, overdue).** To my manager: what is our grace period before access is restricted? I'd propose day 14 for exec-to-exec contact and day 30 for formal notice under the contract.
 4. **Brightloop.** Not an escalation, but a pre-approval request to Finance (up to 12% on a 2-year deal, net 60). I want room to trade during the call.
-5. **Process.** At least five manual renewals inside 60 days still have no quote, which breaks the quote policy. The fix is a 60-day quote task and alert in the CRM, plus Part 3, which sends the approved quote and chases the signature.
+5. **Process.** Five manual renewals inside 60 days have no quote on record, which breaks the quote policy. The fix is a 60-day quote task and alert in the CRM, plus Part 3, which sends the approved quote and chases the signature.
 
 ## Forecast: driven by Renewal Status × countdown
 
@@ -61,7 +61,7 @@ Each renewal's **Renewal Status** is set from *what we know* today. Its probabil
 
 **Overdue rule.** Overdue renewals use their own, lower probability column and are always **Late**. They still count in the quarter **only if the expected close date is on or before quarter end**. Vantage is overdue since 15 Oct but expected by 6 Nov, so it counts in Q4. A renewal that slips past quarter end counts 0% for that quarter and returns next quarter as a late renewal. So I report two numbers: **quarter retention** (did we keep the revenue?) and **on-time rate** (did we close by the renewal date?).
 
-**Notice deadlines.** The brief gives a 30-day cancellation notice only for Halden (deadline 8 Oct, already passed). For the three auto-renewals I've **assumed 30 days**, to confirm against each contract. That gives Pixelforge 3 Oct and Lumen 22 Oct (both effectively passed), and Quanta ~19 Nov. The 5% uplift is contractual, announced to all customers in one notice each January, and already included in every renewal value.
+**Notice deadlines.** The brief gives a 30-day cancellation notice only for Halden (deadline 8 Oct, already passed). For the three auto-renewals I've **assumed 30 days**, to confirm against each contract. That gives Pixelforge 3 Oct (passed), Lumen 22 Oct (in two days; low risk, as they are green and growing) and Quanta ~19 Nov. The 5% uplift is contractual, announced to all customers in one notice each January, and already included in every renewal value.
 
 **Usage rule.** n8n prices by workflow executions, not users.
 

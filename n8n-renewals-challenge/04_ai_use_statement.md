@@ -16,7 +16,7 @@ These are the decisions the work is built on. I specified them, and corrected th
 | **Overdue renewals** | A separate league: they only count if they close within the quarter. Otherwise they count as zero for that quarter. |
 | **Auto-renewals** | Their own statuses: blockers, at risk before or after the notice deadline. Over-usage opens an upsell opportunity, never an automatic charge. Under-usage flags the CSM. |
 | **Product lines and churn** | Each line is renewal, upsell, downgrade or churn. Original ARR is kept next to new ARR, and Salesforce recalculates everything else. Churn sits on the opportunity: **regrettable** means revenue lost for good; **non-regrettable** means revenue kept elsewhere at n8n (e.g. self-hosted → Cloud). Upsell is its own opportunity. |
-| **Commercial rules** | 5% uplift in year 1, announced in one bulk notice each January. The price is locked from year 2 only for upfront multi-year deals. The Renewals Manager owns the numbers. A new renewal opportunity is created when the current one closes won. |
+| **Commercial rules** | The 5% uplift is already in the renewal value (never added on top), announced in one bulk notice each January. The price is locked from year 2 only for upfront multi-year deals. The Renewals Manager owns the numbers. A new renewal opportunity is created when the current one closes won. |
 | **Brightloop** | Two structures instead of a discount: downsize + multi-year lock, or keep the plan with a small buffer. Net 60 only with upfront payment; top SLA tier. |
 | **Automation** | **The workflow never prices; everything mirrors the CRM/CPQ.** Extend my existing workflow rather than build a duplicate. A human approves every customer-facing email. |
 

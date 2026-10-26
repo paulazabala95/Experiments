@@ -470,7 +470,7 @@ pd_.freeze_panes = "C5"
 # ---------------------------------------------------------------- Opp summary
 os_ = wb.create_sheet("Opp summary", 2)
 title(os_, "Opportunity roll-up: calculated from product lines; churn category and reason set on the opportunity")
-oc = ["Opportunity", "Original ARR (€)", "Uplift (€)", "Upsell (€) → Upsell opp", "Churned amount (€)",
+oc = ["Opportunity", "Original ARR (€)", "Extra uplift (€)", "Upsell (€) → Upsell opp", "Churned amount (€)",
       "Churn category", "Churn reason", "Price concession below current (€)", "New ARR (€)", "Net change (€)", "Net change %"]
 header(os_, 3, oc, [20, 14, 12, 16, 14, 16, 34, 16, 13, 13, 11])
 PR = "Products!$A$5:$A$200"
