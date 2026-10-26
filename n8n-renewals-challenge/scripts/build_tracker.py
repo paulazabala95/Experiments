@@ -199,8 +199,8 @@ P = [
      "booked for 27 Oct.", "Me", date(2026, 10, 20)),
     ("Pixelforge", 26000, date(2026, 11, 2), "Auto", 0.00, "Green", "Waiting for PO",
      "Card expired; billing contact unknown", date(2026, 11, 2),
-     "CSM gets the billing contact today; I send a secure card-update link or switch to invoice; Finance holds "
-     "dunning. Renews at €26k (renewal value).", "CSM + Me", date(2026, 10, 22)),
+     "CSM gets the billing contact today; I send a secure card-update link or switch to invoice; Finance pauses the "
+     "automatic failed-payment process (reminders, retries, suspension) until the card is fixed. Renews at €26k (renewal value).", "CSM + Me", date(2026, 10, 22)),
     ("Halden Health", 45000, date(2026, 11, 7), "Manual", -0.35, "Red", "Engaging customer",
      "Champion left; new owner unknown", date(2026, 11, 20),
      "ESCALATE TODAY. CSM, me and exec sponsor meet the new owner this week. Legal checks the 8 Oct notice date. "
