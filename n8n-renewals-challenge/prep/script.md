@@ -1,152 +1,181 @@
-# Interview script: the story, part by part
+# Interview script, following the story on the page
 
-The thread: **the book looks fine on paper but it's slipping quietly. One focused week fixes most of it, the one hard negotiation is about structure rather than discount, and an automation stops it happening again.**
+Each step below matches a numbered step in the story block at the top of each section of the live page. Scroll to the block, point at the step, say the line. Short sentences, one number at a time.
 
-The web page is the support on screen. Learn the first line of each beat and its number, not the words.
+**Clock:** Part 1 at 0:00 · Part 2 at 0:12 · Part 3 at 0:30 · debrief at 0:40.
 
 ---
 
-## Part 1 · Triage and forecast · 12 min (talk ~9:30, leave ~2:30 for questions)
+## Part 1 · 12 minutes (talk until 9:30, then questions)
 
-### Beat 1 · Set-up (0:00–0:45) · screen: Summary
-> "I'll take 12 minutes for the book, 18 for Brightloop and 10 for automation, and I'll keep us on time.
-> I set the date to Tuesday 20 October. That's the only date where the brief holds: one renewal overdue and nine within 60 days."
+### Opening (0:00–0:30) · screen: top of the page
+> "I'll take 12 minutes for the portfolio, 18 for Brightloop and 10 for automation, and I'll keep us on time.
+> I've set the date to Tuesday 20 October. That's when the brief works: one renewal overdue, nine due in the next 60 days."
 
-### Beat 2 · The answer first (0:45–2:00)
-> "Ten renewals, **€375k**. Here's where I expect it to land:
-> **€173k on time, €175k late but still within Q4, and €27k lost.** That's 92.9% retention."
+### Triage story (0:30–5:00) · screen: 1a Triage, story block
+Headline to read out:
+> "My message is simple: the book looks healthy on paper, but it is slipping quietly. Most of it can be fixed this week."
 
-Check: 173.4 + 175 + 26.6 = **375**.
+**Step 1 · The book (0:30–1:30)**
+> "Ten renewals, €375k.
+> If every deal closes: €173k lands on time, €175k lands late but still in Q4, and €27k is lost.
+> That's 92.9% retention."
 
-> "The €27k is two things: **€23k** of real churn, Halden and Quanta renewing smaller, and **€3.6k** that I choose to give Brightloop in year one."
+**Step 2 · Why it slips (1:30–2:15)**
+> "Why is so much late? Five of the seven manual renewals have no quote yet, and all are due within 60 days.
+> That's one process gap, not five problems. I'll fix it in Part 3."
 
-### Beat 3 · Why it's slipping (2:00–2:45) · screen: 1a Triage
-> "Half the book is landing late for one simple reason: **5 of the 7 manual renewals have no quote**, and they're all inside 60 days. That's a process gap, not five separate problems. I'll come back to it in Part 3."
+**Step 3 · What I do first (2:15–3:15)**
+> "Three renewals need about an hour each, today.
+> Northwind, €48k: no quote and only 9 days left, so the quote goes out today and the signature is booked for the 27th.
+> Pixelforge, €26k: the card expired, so I send a card-update link.
+> Vantage, €21k: already overdue, so I find a named contact instead of the shared inbox."
 
-### Beat 4 · What I do first (2:45–6:30)
-> "I rank by slack: the days left against the work still needed, weighted by how much ARR is at risk. That gives three groups."
+**Step 4 · What I escalate today (3:15–4:30)**
+> "Three escalations today, €116k.
+> Halden, €45k: the champion left and nobody knows the new owner. I ask my VP for an exec sponsor.
+> Tessera, €50k: legal redlines open since September. I ask Legal for answers by 30 October.
+> Vantage again: I need my manager to set a grace period."
 
-**Group 1, an hour each today:**
-> "**Northwind, €48k**, 9 days left, no quote, and they signed late last year. The quote goes out today and I book the signature for the 27th.
-> **Pixelforge, €26k**, is a green account that would churn only because the card expired. A card-update link today, and Finance pauses the failed-payment process.
-> **Vantage, €21k**, is already 5 days overdue and we only have a shared inbox. The CSM finds the people who run their n8n instance, and I call one of them."
+**Step 5 · The rest (4:30–5:00)**
+> "The rest have time, and each has a date. Kestrel is the good news: usage is up 40%, so there's a €10–15k upsell I'm not counting yet. Brightloop is Part 2."
 
-**Group 2, three escalations today, €116k:**
-> "**Halden, €45k**: red, usage down 35%, the champion left and nobody has met the new owner. To my manager and VP for an exec sponsor this week. Legal checks whether the 8 October notice date passed.
-> **Tessera, €50k**, the biggest: legal redlines open since September. To Legal, with a response by 30 October and a short extension agreed as a fallback.
-> **Vantage again**: I need my manager to set the grace period before we restrict access."
+### Forecast story (5:00–9:30) · screen: 1b Forecast, story block
+Headline:
+> "Now the forecast. Only €133k is secure today. One week of work turns that into €245k."
 
-Check: 45 + 50 + 21 = **116**.
+**Step 1 · How confident I am (5:00–6:15)**
+> "The numbers so far assume every deal closes. To show how confident I am, I weight each deal by its status and the days left.
+> Today that gives €133k: €72k from the on-time deals, €61k from the late ones.
+> The gap to €348k isn't lost money. It's deals nobody has moved forward yet."
 
-**Group 3, time, but each with a date:**
-> "Brightloop is Part 2. Marlowe needs the DPA and questionnaire before they can raise a PO. Lumen wants the invoice on a different entity. Quanta is quiet with budget cuts coming, so the CSM finds a new contact before their notice date around 19 November. And Kestrel is the good news: usage up 40%, so there's an upsell of €10–15k that I don't count yet."
+**Step 2 · The clock works against us (6:15–7:00)**
+> "The closer a deal gets to its date without progress, the lower its probability.
+> So if nobody does anything, by 30 October the forecast falls to €119k."
 
-### Beat 5 · How confident am I (6:30–8:30) · screen: 1b Forecast
-> "The €173k and €175k assume every deal closes. To say how confident I am, I weight each one by its probability, from its status and the days left.
-> Today that gives **€133k**: €72k of the on-time deals and €61k of the late ones.
-> That's not €215k lost. It's deals nobody has moved forward yet: risk, not loss."
+**Step 3 · This week's work (7:00–8:00)**
+> "If this week's actions land, it rises to €245k.
+> The gap between doing nothing and doing the work is €126k. That's what this one week is worth.
+> Four deals carry €86k of it: Northwind, Kestrel, Tessera and Marlowe. That's why they're at the top of my list."
 
-Check: 72 + 61 = **133**. 348.4 − 133 = **215.4**.
+**Step 4 · What I expect to lose (8:00–8:45)**
+> "What I expect to lose is €26.6k.
+> €23k because Halden and Quanta renew on smaller plans. €3.6k is a discount I choose to give Brightloop in year one."
 
-> "Because the probability depends on days left, the forecast falls even if nobody does anything. On 30 October, ten days from now:
-> - **Doing nothing gives €119k.** Northwind goes overdue, Kestrel and Lumen enter their last 30 days.
-> - **If this week's actions land, it's €245k.**
-> That **€126k gap** is what this one week is worth. Four deals make up €86k of it: Northwind, Kestrel, Tessera and Marlowe. That's why they're at the top."
+**Step 5 · What I'm least sure about (8:45–9:30)**
+> "The number I'm least sure about is Halden. If it renews smaller, we lose €15k. If it leaves, we lose €45k. That's why it's escalated today."
 
-Check: 133 − 13.5 = **119** · 133 + 112 = **245** · 245 − 119 = **126** · 33.6 + 19.25 + 17.5 + 16.1 = **86.45**.
-
-### Beat 6 · What I'm least sure about (8:30–9:30)
-> "The number I'm least sure about is the loss, and that's because of Halden. I've assumed it renews at €30k after right-sizing, so −€15k. But if it churns completely, it's −€45k. Quanta is second: −€8k if they cut back, −€40k if they give notice. That's why both are escalated or worked this week."
-
-**Handover:**
-> "One deal left that needs a real negotiation. That's 12 minutes, moving to Brightloop."
+**Hand over to questions:**
+> "That's the portfolio. Any questions before Brightloop?"
 
 ### If they ask
 | Question | Answer |
 |---|---|
-| €375k vs €348.4k? | €348.4k is what all ten renew at. The difference is the €26.6k lost: Halden 15, Quanta 8, Brightloop 3.6. |
-| Halden is 10% but you lose only €15k? | Two questions. The 10% is how likely it closes on time today. The €15k is what we lose if it renews smaller. If it churns, it's €45k. |
-| Worst case? | Halden and Quanta both churn: €375k − €45k − €40k − €3.6k = **€286.4k, 76.4%**. |
-| Why is Pixelforge late? | Its card is blocking it. Once fixed this week, it renews on 2 Nov. |
-| Northwind is €45.6k on 30 Oct, not €48k? | One day past its date the matrix gives 95%. Once signed on the 27th, it's €48k. |
-| How good is your matrix? | Not calibrated yet. I'd back-test it on last year's Q4. |
+| Why €348k and not €375k? | €348.4k is what all ten renew at. The €26.6k difference is the loss: Halden 15, Quanta 8, Brightloop 3.6. |
+| Halden is 10%, but you only lose €15k? | Two questions. 10% is the chance it closes on time. €15k is the loss if it renews smaller. If it leaves, it's €45k. |
+| Worst case? | Halden and Quanta both leave: €286.4k, 76.4% retention. |
+| Why is Pixelforge late? | The expired card blocks it. Once fixed this week, it renews on 2 November. |
+| How good is the probability matrix? | Not calibrated yet. I'd test it on last year's Q4. |
+
+**At 12:00:** "That's 12 minutes. Moving to Brightloop."
 
 ---
 
-## Part 2 · Brightloop · 18 min (2 min set-up, 15 min call, 1 min out of character)
+## Part 2 · 18 minutes (2 set-up, 15 call, 1 wrap-up)
 
-### Set-up to the panel (2 min) · screen: 2 Brightloop
-> "Brightloop sends four demands, but that's not really what's going on. The budget was cut, usage only dropped 10%, Sam values the product, and we were slow on two support escalations.
-> So I start with value and support, and I turn the conversation from **discount** to **structure**. They choose between two options:
-> - **A, keep the plan**, two years paid annually: **€32,400** in year one, then **€35,910**. That's **€68,310**, €3,690 less than staying at €36,000 a year.
-> - **B, right-size and lock**, a smaller plan paid upfront: **€28,800 a year**, fixed for two or three years, with net 60.
-> My limits: no exit right, auto-renewal stays, and no more than 12% off the current plan. Below that, they move to a smaller plan at list price. A 25% discount here would set the price for the other 220 renewals."
+### Set-up for the panel (12:00–14:00) · screen: 2 Brightloop, story block
+Headline:
+> "Brightloop isn't a discount problem. It's a budget problem and a trust problem."
 
-Check: 32,400 + 35,910 = **68,310** · 2 × 36,000 − 68,310 = **3,690**.
+**Step 1 · What's going on**
+> "Their budget was cut, but usage only dropped 10%. Sam likes the product. And we were slow on two support escalations."
 
-### The call (15 min) · screen: the 3-slide deck
+**Step 2 · Value and support first**
+> "So before any price, I show the value and I own the support problem."
 
-**0–1 · Open:**
-> "Thanks for making time. In 15 minutes I'd like to understand where you are, show you two options, and leave with a preferred option and a date. Who besides you two decides, and who signs?"
+**Step 3 · Discount to structure**
+> "Then I offer two options instead of a discount.
+> A: keep the plan, two years paid annually, €32,400 then €35,910.
+> B: a smaller plan at €28,800 a year, paid upfront, net 60."
 
-**1–4 · Discovery with Sam (slide 1):**
-> "When you say the budget was cut, is it that you have a fixed amount to land under this year, or that Finance wants to hold on to cash and pay later?"
+**Step 4 · One question decides**
+> "One question tells me which to lead with: is it a cash problem or a budget problem? Cash points to A, a fixed budget to B."
 
-Their answer decides which option you lead with:
-- **Budget** ("we have €X for this") → **lead with B**, €28,800 a year.
-- **Cash** ("we need to pay later", net 60) → **lead with A**: paid annually, €32,400 to start. Don't push B: paying 2 years upfront is the opposite of what they need.
+**Step 5 · My line**
+> "My limits: no exit right, auto-renewal stays, and no more than 12% off. Every concession gets something back."
 
-Also ask: when their fiscal year starts, why executions dropped, and how long their PO takes.
+> "I'll now switch to what I'd share with Sam and Priya."
 
-**4–7 · Value and support (slide 1):**
-> "Before price: you run 85 workflows across six teams, about 180,000 executions a month. That saves roughly 650 hours a month, about €390k a year at €50 an hour, so about 11 times what you pay.
-> And on support: two escalations took too long, and I'm sorry. Our support lead reviews both by 30 October, and both options include our top support tier."
+### The call (14:00–29:00) · screen: the 3-slide call deck
 
-Check: 650 × 12 × 50 = **390,000** · 390 ÷ 36 ≈ **11**.
+**Open (14:00–15:00) · slide 1**
+> "Thanks for your time. In 15 minutes, I'd like to understand where you are, show you two options, and agree next steps. Who decides, and who signs?"
 
-**7–10 · Options (slide 2):** show both, lead with the one discovery pointed to.
-> "Both options give you lower cost now, and both include top support. A keeps your full plan; B sizes it to what you actually use, around 180k a month."
+**Discovery (15:00–18:00) · slide 1, right-hand box**
+> "When you say the budget was cut: do you have a fixed amount to fit under this year, or does Finance want to hold on to cash and pay later?"
+- **"We have €X"** → a budget problem → lead with **B**.
+- **"We need to pay later"** → a cash problem → lead with **A**.
 
-**10–13 · Trade (slide 3):** only "if… then…".
-> "If you can commit to two years, then I can bring year one down to €32,400."
-> "If you can pay upfront, then I can lock the price and give you net 60."
+Then: "Why did executions drop? When does your fiscal year start? How long does your PO take?"
 
-**13–15 · Close:**
-> "So, to confirm: you prefer option __, you'll confirm the signatory by __, I send the order form, and we aim to sign by 30 November, ahead of 14 December."
+**Value and support (18:00–21:00) · slide 1, the four numbers**
+> "Before price, a quick look at what you get today. 85 workflows across six teams, about 180,000 executions a month. That saves around 650 hours a month, roughly €390k a year, about 11 times what you pay.
+> On support: two escalations took too long, and I'm sorry. Our support lead reviews both by 30 October, and both options include our top support tier."
 
-### Pushbacks and the numbers behind them
+**Options (21:00–24:00) · slide 2**
+> "Two ways to lower your cost.
+> A keeps your full plan: €32,400 this year, €35,910 next year.
+> B sizes the plan to what you actually use: €28,800 a year, fixed, paid upfront with net 60."
+
+Lead with the option discovery pointed to.
+
+**Trade (24:00–27:00) · slide 3**
+Only "if… then…":
+> "If you commit to two years, then I can bring this year down to €32,400."
+> "If you pay upfront, then I can lock the price and give you net 60."
+
+**Close (27:00–29:00) · slide 3, timeline**
+> "So: you'll choose an option and confirm who signs. I'll send the order form. We aim to sign by 30 November, ahead of the 14 December renewal."
+
+### Pushbacks
 | They say | You say |
 |---|---|
-| "Our budget is €30k." | "Option B is €28,800. If you need the full plan, I can look at a lower first year and come back to you." (Internal: 12% off year 1 = **€31,680**, total €67,590, still within Finance.) |
-| "Why commit to two years?" | "Year two is known now, €35,910, so no surprise next year. The year-one relief comes with the two-year term." |
-| "Then just one year." | "That's possible at the standard price, €36,000." |
-| "We need an exit right." | "What would it protect you from?" If it's usage dropping: the reserve buffer (up to 10% smaller from year 2, VP-approved), only in exchange for dropping the exit right. |
-| "Net 60 with two years upfront makes no sense if we're short of cash." | "Agreed. Then Option A fits you better: you pay annually and start at €32,400." |
-| "3 years at 25% off." | "That changes the picture. I'll take it to my VP and come back within 48 hours." |
-| "Competitor is 40% cheaper." | "What's in scope? Rebuilding 85 workflows isn't free." Don't match. |
-| "10% plus 5% is 15%." | "It's 7.4% over the two years: €3,600 + €1,890 = €5,490 on €73,800." |
+| "Our budget is €30k." | "Option B is €28,800." If they need the full plan: "Let me look at a lower first year and come back to you." |
+| "Why two years?" | "You know next year's price now, so no surprise. The lower first year comes with the two-year term." |
+| "Just one year then." | "That's possible at the standard price, €36,000." |
+| "We need an exit right." | "What would it protect you from?" Then solve that concern. |
+| "Upfront makes no sense if we're short of cash." | "Agreed. Then A fits better: you pay annually." |
+| "Three years at 25% off." | "That changes things. I'll take it to my VP and come back in 48 hours." |
+| "A competitor is 40% cheaper." | "What's included? Rebuilding 85 workflows has a cost." Don't match. |
 
-### Out of character (1 min)
-> "With the CSM, I anchored on value first, then moved the conversation from discount to structure. Every concession was traded for something, and nothing reset the price."
+### Wrap-up, out of character (29:00–30:00)
+> "I started with value and support, moved the conversation from discount to structure, and only gave something when I got something back."
+
+**At 30:00:** "That's 30 minutes. Last part: automation."
 
 ---
 
-## Part 3 · Automation · 10 min (talk ~6, leave ~4 for questions) · screen: 3 Automation
+## Part 3 · 10 minutes (talk until 36:00, then questions)
 
-### Beat 1 · Connect back (0–1 min)
-> "In Part 1, **5 of 7** manual renewals had no quote, and only **1 of 7** went out on time, by day 60. With **221 renewals a quarter**, nobody can catch that by hand every morning. So I'm not showing a new idea. I'm showing something I've already built."
+### Automation story · screen: 3 Automation, story block
+Headline:
+> "This is about stopping it happening again: catching the late quotes from Part 1, every morning."
 
-### Beat 2 · Show it (1–3 min)
-> "I built this on 13 October, before I got the case, so it uses sample data, not these ten accounts."
+**Step 1 · The problem (30:00–31:00)**
+> "Only one of the seven manual renewals was quoted on time. At 221 renewals a quarter, nobody can catch that by hand."
 
-Play the **78-second** video.
+**Step 2 · What I built (31:00–33:30)**
+> "I built this on 13 October, before I received the case, so it uses sample data."
+> Play the 78-second video.
+> "Every day at 8:00 it picks the unsigned renewals due within 90 days and sends each one down a route: a renewal email, a renewal plus upsell, or a risk alert to a person."
 
-### Beat 3 · Where people stay in control (3–5 min)
-> "Every morning at 8:00 it picks the unsigned renewals within 90 days and routes them three ways: a standard renewal email, a renewal plus an upsell email, or, for risky accounts, an alert to a person and no email at all.
-> AI only writes the words. The amounts come from the sheet, never from the model, and every email waits for a person to click Approve."
+**Step 3 · People stay in control (33:30–35:00)**
+> "AI only writes the words. The amounts come from the sheet, never from the AI. And a person approves every email before it goes out."
 
-### Beat 4 · How I'd know it works (5–6 min)
-> "One number: quotes out by day 60 go from **1 in 7 to 100%**. For this book I'd add the real quote and order form, chase unsigned forms on days 3 and 7, and update the CRM automatically. It would have caught Northwind on day 60, not day 9."
+**Step 4 · How I'd know it works (35:00–36:00)**
+> "One measure: quotes sent by day 60, from one in seven to 100%. It would have caught Northwind two months ago, not 9 days before."
 
-### Closing line before the debrief
-> "So: one week of focused work takes the forecast from €119k to €245k, Brightloop stays without a discount that resets the price, and the late-quote problem gets fixed for the next 221 renewals."
+**Closing (36:00):**
+> "To sum up: one week of focused work takes the forecast from €119k to €245k. Brightloop stays without a discount that resets the price. And the late-quote problem is fixed for the next 221 renewals. Happy to take questions."
+
+**At 40:00:** "That's 40 minutes. Over to you."
