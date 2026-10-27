@@ -173,7 +173,7 @@ Headline:
 > "AI only writes the words. The amounts come from the sheet, never from the AI. And a person approves every email before it goes out."
 
 **Step 4 · How I'd know it works (35:00–36:00)**
-> "One measure: quotes sent by day 60, from one in seven to 100%. It would have caught Northwind two months ago, not 9 days before."
+> "One measure: quotes sent by day 60, from one in seven to 100%. It would have flagged Northwind 60 days before its renewal, not 9."
 
 **Closing (36:00):**
 > "To sum up: one week of focused work takes the forecast from €119k to €245k. Brightloop stays without a discount that resets the price. And the late-quote problem is fixed for the next 221 renewals. Happy to take questions."
