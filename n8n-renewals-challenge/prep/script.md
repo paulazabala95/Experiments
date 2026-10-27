@@ -179,3 +179,43 @@ Headline:
 > "To sum up: one week of focused work takes the forecast from €119k to €245k. Brightloop stays without a discount that resets the price. And the late-quote problem is fixed for the next 221 renewals. Happy to take questions."
 
 **At 40:00:** "That's 40 minutes. Over to you."
+
+---
+
+## Debrief · 20 minutes (they lead)
+
+### Self-reflection (3–4 min)
+Structure: "One thing that went well was X, because Y. One thing I'd do differently is Z: next time I'd…"
+Pick 1–2 of each after the session, based on what actually happened.
+
+**Went well**
+- **Time:** "I kept to the timing and said when I moved between parts, so we had time for every section."
+- **The story:** "I opened Part 1 with the answer (€173k on time, €175k late, €27k lost), then explained how confident I was. That kept the numbers easy to follow."
+- **Negotiation:** "I didn't concede anything without getting something back. I moved Brightloop from discount to structure and let them choose."
+- **Discovery:** "I asked whether it was a cash or a budget problem before showing options, and that decided which one I led with."
+- **Honest about uncertainty:** "I named Halden as my least-sure number instead of giving false precision."
+
+**Would improve**
+- **Discovery:** "I'd ask Priya for her budget figure earlier, before showing any options."
+- **Escalation timing:** "On Tessera, in a real week I'd send the Legal escalation before the quotes. It's the longest lead time."
+- **My forecast model:** "My probability matrix isn't calibrated yet. I'd test it against last year's actual Q4: if 'Quoted' deals closed 55% of the time and not 70%, I'd adjust it, so the forecast rests on our real history."
+- **Time spent:** "The brief said 2 hours, and I spent about 4. AI helped me go further, but in the role I'd keep the output lighter and get to the decision faster."
+- **Simplicity:** "I'd lead with fewer numbers. The weighted and unweighted forecasts can confuse people if I don't separate them clearly."
+
+### Taking the panel's feedback
+- Listen fully and take notes. Don't interrupt.
+- Thank them and repeat the point in one sentence: "So you'd want me to get to the budget figure earlier."
+- One follow-up if useful: "What would that have looked like done well?"
+- Don't defend or explain.
+
+### Questions to ask (pick 3–4, in this order)
+1. "What would make the first 90 days in this role a success for you?"
+2. "What does the handoff between CSMs and Renewals look like today, and where does it break?"
+3. "How does the VP want the renewal forecast reported: commit and best case, or weighted? And how accurate has it been?"
+4. "Which systems do renewals run on today (CRM, CPQ, billing)? And does the team use n8n internally for this?"
+5. "How often are policy exceptions requested, and who usually decides: Finance or CS?"
+6. "When a customer threatens to move to the free self-hosted version, how do you usually handle it?"
+7. "Since this is the first Renewals role, how do you see the team growing, and how would renewals connect with the Scaled CSMs?"
+8. If time allows: "Is there anything from today that you'd like me to clarify, or that gives you hesitation?"
+
+Skip salary, benefits and holidays (that's for the recruiter), and anything on n8n's website.
