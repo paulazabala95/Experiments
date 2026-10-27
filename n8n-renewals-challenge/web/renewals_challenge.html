@@ -104,6 +104,13 @@ footer { padding-block: 44px 60px; color: var(--muted); font-size: 14px; }
 td.own{min-width:190px;font-size:.92em;line-height:1.45}
 .more{font-size:.85em;margin:0 0 14px;padding:8px 12px;border-left:3px solid #ff5c8a;background:rgba(255,92,138,.06);border-radius:4px}
 .more code{font-size:.95em}
+.story{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;counter-reset:st}
+.story .st{background:var(--surface-2);border-radius:14px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;border-top:3px solid var(--accent);min-width:0}
+.story .st .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.story .st .k::before{counter-increment:st;content:counter(st);display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-weight:600;margin-right:8px;font-size:11px}
+.story .st .v{font-family:var(--display);font-stretch:110%;font-size:22px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.15}
+.story .st .l{font-size:14px;color:var(--muted);line-height:1.45}
+.story-h{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin:0 0 -6px}
 </style>
 
 <header class="top">
@@ -174,6 +181,13 @@ td.own{min-width:190px;font-size:.92em;line-height:1.45}
   <div class="head"><span class="eyebrow">Part 1</span><h2>What I do first, who owns it, by when</h2>
     <p class="small">The book: October 2 renewals / €69k · November 5 / €184k · December 3 / €122k. Only 1 of 7 manual renewals had its quote out by day 60 (the brief mentions quotes only for Vantage and Brightloop), against a policy of 60 days.</p></div>
   <div class="body">
+  <p class="story-h">The story · Part 1</p>
+  <div class="story">
+    <div class="st"><span class="k">Where it lands</span><span class="v">€173k · €175k · €27k</span><span class="l">On time · late but in Q4 · lost. Adds up to €375k: 92.9% retention.</span></div>
+    <div class="st"><span class="k">Why it slips</span><span class="v">5 of 7</span><span class="l">Manual renewals with no quote inside 60 days. A process gap, fixed in Part 3.</span></div>
+    <div class="st"><span class="k">Today, an hour each</span><span class="v">€95k</span><span class="l">Northwind €48k (quote today, sign 27 Oct) · Pixelforge €26k (card) · Vantage €21k (named contact).</span></div>
+    <div class="st"><span class="k">Escalated today</span><span class="v">3 · €116k</span><span class="l">Halden €45k (exec sponsor) · Tessera €50k (Legal by 30 Oct) · Vantage €21k (grace period).</span></div>
+  </div>
   <p class="more">📄 <b>Full detail:</b> main PDF, Part 1 (pp. 3–5): every next action, who does what, and the escalations · <code>renewal_tracker.xlsx</code>, Triage tab.</p>
   <div class="tbl">
     <table>
@@ -202,6 +216,13 @@ td.own{min-width:190px;font-size:.92em;line-height:1.45}
   <div class="head"><span class="eyebrow">Part 1</span><h2>A forecast driven by Renewal Status × days to renewal</h2>
     <p class="small">Status is set from what we know today. Weighted = new ARR from the product lines × probability. <b>Uplift:</b> the contractual 5% is built into the renewal value when the renewal opportunity is created (closed ARR &times; 1.05), so every number here is what the customer will be billed and nothing is added on top. Multi-year paid annually: +5% each year; paid upfront: price locked from year 2. Any waiver counts as a discount under policy C. Downgrades are at list. On 30 Oct every renewal is 10 days closer. <span style="color:#b42318;font-weight:600">No action</span>: statuses stay and the countdown alone takes the forecast to €119k (−€13.5k). <span style="color:#1e7b34;font-weight:600">With this week's actions</span>: €245k (+€112k). That's €126k of difference.</p></div>
   <div class="body">
+  <p class="story-h">The story · Part 1, forecast</p>
+  <div class="story">
+    <div class="st"><span class="k">Confidence today</span><span class="v">€133k</span><span class="l">Weighted by status × days left: €72k on time + €61k late. The gap to €348.4k is risk, not loss.</span></div>
+    <div class="st"><span class="k">By 30 Oct</span><span class="v">€119k → €245k</span><span class="l">No action vs this week's actions: a €126k gap. Northwind, Kestrel, Tessera, Marlowe = €86k of it.</span></div>
+    <div class="st"><span class="k">Lost</span><span class="v">€26.6k</span><span class="l">€23k regrettable (Halden −€15k, Quanta −€8k) + €3.6k Brightloop year-1 concession.</span></div>
+    <div class="st"><span class="k">Least sure</span><span class="v">Halden</span><span class="l">−€15k if it renews smaller, −€45k if it churns. Quanta next: −€8k or −€40k.</span></div>
+  </div>
   <p class="more">📄 <b>Full detail:</b> main PDF, Part 1 (pp. 5–8): forecast table, with vs no action, lost and the number I'm least sure about · <code>renewal_tracker.xlsx</code>, Pipeline, Products and Opp summary tabs · <code>crm_design_appendix.pdf</code>: how statuses, probabilities, product lines and churn live in Salesforce.</p>
   <div class="tbl">
     <table>
@@ -270,6 +291,14 @@ td.own{min-width:190px;font-size:.92em;line-height:1.45}
   <div class="head"><span class="eyebrow">Part 2</span><h2>Brightloop: trade structure, not discount</h2>
     <p class="small">Renewal value €36,000 (the 5% uplift is already in). List path paid annually: €36,000 in year 1, €37,800 in year 2. Sam's ask: €27,000, which is 25% off.</p></div>
   <div class="body">
+  <p class="story-h">The story · Part 2</p>
+  <div class="story">
+    <div class="st"><span class="k">What's really going on</span><span class="v">Budget, not value</span><span class="l">Budget cut, executions only −10%, Sam values the product, two slow support escalations.</span></div>
+    <div class="st"><span class="k">Option A · keep the plan</span><span class="v">€32,400 → €35,910</span><span class="l">2 years, paid annually: €68,310, €3,690 less than 2 × €36,000.</span></div>
+    <div class="st"><span class="k">Option B · right-size</span><span class="v">€28,800 / yr</span><span class="l">Smaller plan, price locked 2–3 years, paid upfront, net 60.</span></div>
+    <div class="st"><span class="k">Cash or budget?</span><span class="v">Decides the lead</span><span class="l">Cash problem → Option A. Fixed budget line → Option B.</span></div>
+    <div class="st"><span class="k">My limits</span><span class="v">≤ 12% · €64,944</span><span class="l">No exit right, auto-renewal stays. Below the floor: a smaller plan at list.</span></div>
+  </div>
   <p class="more">📄 <b>Full detail:</b> <code>brightloop_one_pager.pdf</code> (the one-page plan) · main PDF, Part 2 (pp. 9–10): the full email, the call playbook and the surprises I expect.</p>
 
   <div class="tbl">
@@ -347,6 +376,13 @@ td.own{min-width:190px;font-size:.92em;line-height:1.45}
   <div class="head"><span class="eyebrow">Part 3</span><h2>Daily renewal alerts, my own n8n workflow</h2>
     <p class="small">Every morning, someone has to check which renewals need action, write the renewal email with the quotation, and flag risky accounts. At 221 renewals a quarter, that's where quotes go out late: in this book, only 1 of 7 manual renewals had its quote out by day 60.</p></div>
   <div class="body">
+  <p class="story-h">The story · Part 3</p>
+  <div class="story">
+    <div class="st"><span class="k">The problem</span><span class="v">1 of 7</span><span class="l">Manual renewals quoted on time, at 221 renewals a quarter.</span></div>
+    <div class="st"><span class="k">What I built</span><span class="v">Daily, 8:00</span><span class="l">Unsigned renewals within 90 days, three routes: renewal, renewal + upsell, risk alert.</span></div>
+    <div class="st"><span class="k">People stay in control</span><span class="v">Approve / Reject</span><span class="l">AI writes the words, amounts come from the sheet, a person approves every email.</span></div>
+    <div class="st"><span class="k">How I know it works</span><span class="v">1/7 → 100%</span><span class="l">Quotes out by day 60. Next: CPQ quote, chase on days 3 and 7, CRM write-back.</span></div>
+  </div>
   <p class="more">📄 <b>Full detail:</b> main PDF, Part 3 (p. 11) · <code>renewal_alerts_n8n_walkthrough.mp4</code>, the 78-second walkthrough below.</p>
   <p class="callout"><b>Note:</b> I built this workflow on 13 October for my first recruiter call, before I received this case. It runs on sample accounts, not the ten in the brief, so names, dates and amounts differ, and a Google Sheet stands in for the CRM. The logic is what I'd run on this book.</p>
   <video controls preload="metadata" poster="alerts_workflow.png" style="display:block;width:100%;max-width:960px;margin:14px auto;border-radius:10px;background:#111" src="renewal_alerts_n8n_walkthrough.mp4"></video>
